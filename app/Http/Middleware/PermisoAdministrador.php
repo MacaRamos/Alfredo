@@ -17,11 +17,16 @@ class PermisoAdministrador
     {
         if($this->permiso())
         return $next($request);
-        return redirect('/')->with('mensaje','No tiene permiso para entrar aquí');
+        $notificacion = array(
+            'mensaje' => 'No tiene permiso para entrar aquí',
+            'tipo' => 'success',
+            'titulo' => 'Receta'
+        );
+        return redirect('/')->with($notificacion);
     }
 
     private function permiso()
     {
-        return session()->get('Rol_nombre')=='administrador';
+        return session()->get('Rol_nombre')=='Administrador';
     }
 }

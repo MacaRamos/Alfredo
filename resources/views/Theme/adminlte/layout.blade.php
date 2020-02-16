@@ -30,7 +30,7 @@
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
     <!-- Mis estilos -->
     <link rel="stylesheet" href="{{asset("assets/css/custom.css")}}">
-    <link rel="stylesheet" href="http://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
     <script src="https://kit.fontawesome.com/7379ba20a1.js" crossorigin="anonymous"></script>
 
     @yield('header')
@@ -67,7 +67,6 @@
                     </div>
                 </div><!-- /.container-fluid -->
             </section>
-            @include("theme/$theme/modal")
             <section class="content">
                 @yield('contenido')
             </section>
@@ -96,66 +95,11 @@
     <script src="{{asset("assets/js/jquery-validation/jquery.validate.min.js")}}"></script>
     <script src="{{asset("assets/js/jquery-validation/localization/messages_es.min.js")}}"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-    <script src="http://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script src="{{asset("assets/js/scripts.js")}}"></script>
     <script src="{{asset("assets/js/funciones.js")}}"></script>
     @yield('scripts')
-   <script>
-    $('#18').click(function(){
-        $('#formModel').attr('action', '{{route('libroPreparaciones')}}');
-        $('#modalFechas').modal('show');
-    });
-    $('#17').click(function(){
-        $('#formModel').attr('action', '{{route('libroRecetas')}}');
-        $('#modalFechas').modal('show');
-    });
-    $(function() {
-        var start = moment();
-        var end = moment();
-
-        $('#rangoFecha').daterangepicker(
-        {
-            startDate: start,
-            endDate  : end,
-            maxDate: end,
-            locale: {
-                    "format": "DD/MM/YYYY",
-                    "separator": " - ",
-                    "applyLabel": "Aplicar",
-                    "cancelLabel": "Cancelar",
-                    "fromLabel": "Desde",
-                    "toLabel": "Hasta",
-                    "customRangeLabel": "Manual",
-                    "daysOfWeek": [
-                        "Do",
-                        "Lu",
-                        "Ma",
-                        "Mi",
-                        "Ju",
-                        "Vi",
-                        "Sa"
-                    ],
-                    "monthNames": [
-                        "Enero",
-                        "Febrero",
-                        "Marzo",
-                        "Abril",
-                        "Mayo",
-                        "Junio",
-                        "Julio",
-                        "Agosto",
-                        "Septiembre",
-                        "Octubre",
-                        "Noviembre",
-                        "Diciembre"
-                    ],
-                    "firstDay": 1
-                }
-        }
-        );
-
-    });
-   </script>
+   
 </body>
 
 </html>

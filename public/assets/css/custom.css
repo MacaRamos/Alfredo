@@ -96,7 +96,10 @@ body{
     border-bottom: 3px solid;
 }
 .card{
-    box-shadow: 0 0 4px rgba(0,0,0,.4) !important;
+    box-shadow: 1px 1px 2px 1px rgba(235,235,235,1) !important;
+    border-color: #eae8e8 !important;
+    border-style: solid;
+    border-width: 1px;
 }
 .font-weight-bold{
     font-weight: 600 !important;
@@ -195,4 +198,44 @@ li.user-header{
 }
 .hover-brightness:hover{
     filter: brightness(0.8);
+}
+.nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+    color: #fff;
+    background-color: #000;
+}
+.label{
+    font-size: 14px;
+    color: #707070;
+}
+input[type="text"],
+input[type="password"],
+select.form-control {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid;
+  border-color: #b7b7b7;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  border-radius: 0;
+  padding: 0;
+  width: 20em;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+select.form-control:focus {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+.content-wrapper {
+    background: #fff;
+}
+body{
+    color: #464646;
+}
+.input-group-text{
+    border-top: none;
+    border-right: none;
+    border-color: #b7b7b7;
 }

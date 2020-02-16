@@ -20,12 +20,18 @@ class UsuariosTSEG02 extends Seeder
 
         foreach ($usuarios as $usuario){
             DB::table('Usuario')->insert([
-                'Usu_usuario' => trim($usuario->Seg_usuari),
-                'password' => bcrypt('INS'.trim($usuario->Seg_clave)),
+                'Usu_usuario' => trim($usuario->Seg_usuario),
+                'password' => bcrypt('ALF'.trim($usuario->Seg_clave)),
                 'Usu_nombre' => trim($usuario->Seg_Nombre),
                 'created_at' =>  Carbon::now()->format('d-m-y h:i:s')
             ]);
-
+            if ($usuario->Seg_sup == 'A'){
+                DB::table('UsuarioRol')->insert([
+                    'Rol_codigo' => 1,
+                    'URol_estado' => 1,
+                    'created_at' =>  Carbon::now()->format('d-m-y h:i:s')
+                ]);
+            }
             if ($usuario->Seg_sup == 'G'){
                 DB::table('UsuarioRol')->insert([
                     'Rol_codigo' => 2,
@@ -40,7 +46,7 @@ class UsuariosTSEG02 extends Seeder
                     'created_at' =>  Carbon::now()->format('d-m-y h:i:s')
                 ]);
             }
-            if ($usuario->Seg_sup == 'N' && trim($usuario->Seg_usuari) != 'DIRECCION.TECNICA'){
+            if ($usuario->Seg_sup == 'N' && trim($usuario->Seg_usuario) != 'DIRECCION.TECNICA'){
                 DB::table('UsuarioRol')->insert([
                     'Rol_codigo' => 4,
                     'URol_estado' => 1,
@@ -54,7 +60,7 @@ class UsuariosTSEG02 extends Seeder
                     'created_at' =>  Carbon::now()->format('d-m-y h:i:s')
                 ]);
             }
-            if (trim($usuario->Seg_usuari) == 'DIRECCION.TECNICA'){
+            if (trim($usuario->Seg_usuario) == 'DIRECCION.TECNICA'){
                 DB::table('UsuarioRol')->insert([
                     'Rol_codigo' => 5,
                     'URol_estado' => 1,

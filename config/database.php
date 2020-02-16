@@ -78,7 +78,7 @@ return [
             'sslmode' => 'prefer',
         ],
 
-        'DBComercial' => [
+        'sqlsrv' => [
             'driver' => 'sqlsrv',
             'url' => env('DATABASE_URL'),
             'host' => env('DB_HOST', 'localhost'),
@@ -89,33 +89,7 @@ return [
             'charset' => 'utf8',
             'prefix' => '',
             'prefix_indexes' => true,
-        ],
-
-        'DBFinanzas' => [
-            'driver' => 'sqlsrv',
-            'url' => env('DATABASE_URL'),
-            'host' => env('DBFinanzas_HOST', 'localhost'),
-            'port' => env('DBFinanzas_PORT', '1433'),
-            'database' => env('DBFinanzas_DATABASE', 'forge'),
-            'username' => env('DBFinanzas_USERNAME', 'forge'),
-            'password' => env('DBFinanzas_PASSWORD', ''),
-            'charset' => 'utf8',
-            'prefix' => '',
-            'prefix_indexes' => true,
-        ],
-
-        'DATA_SII' => [
-            'driver' => 'sqlsrv',
-            'url' => env('DATABASE_URL'),
-            'host' => env('DATA_SII_HOST', 'localhost'),
-            'port' => env('DATA_SII_PORT', '1433'),
-            'database' => env('DATA_SII_DATABASE', 'forge'),
-            'username' => env('DATA_SII_USERNAME', 'forge'),
-            'password' => env('DATA_SII_PASSWORD', ''),
-            'charset' => 'utf8',
-            'prefix' => '',
-            'prefix_indexes' => true,
-        ],
+        ]
     ],
 
     /*
