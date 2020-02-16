@@ -239,3 +239,10 @@ body{
     border-right: none;
     border-color: #b7b7b7;
 }
+.border-black{
+    border-color: rgba(0,0,0,.8) !important;
+}
+.layout-navbar-fixed.sidebar-collapse .wrapper .brand-link {
+    height: calc(3.5rem);
+    width: 4.6rem;
+}

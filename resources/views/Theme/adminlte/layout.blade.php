@@ -38,7 +38,7 @@
     @yield('styles')
 </head>
 
-<body class="hold-transition sidebar-mini layout-fixed">
+<body class="hold-transition sidebar-mini layout-navbar-fixed">
     <!-- Site wrapper -->
     <div class="wrapper">
         <!--Inicio header-->
@@ -68,17 +68,17 @@
                 </div><!-- /.container-fluid -->
             </section>
             <section class="content">
-                @yield('contenido')
+                <div class="container-fluid">
+                    @yield('contenido')
+                </div>
             </section>
             <!-- /.content -->
         </div>
-
         <!--Inicio Footer-->
         @include("theme/$theme/footer")
         <!--Fin Footer-->
     </div>
     <!-- ./wrapper -->
-
     <!-- jQuery -->
     <script src="{{asset("assets/$theme/plugins/jquery/jquery.min.js")}}"></script>
     <!-- Bootstrap 4 -->
@@ -99,7 +99,7 @@
     <script src="{{asset("assets/js/scripts.js")}}"></script>
     <script src="{{asset("assets/js/funciones.js")}}"></script>
     @yield('scripts')
-   
+
 </body>
 
 </html>

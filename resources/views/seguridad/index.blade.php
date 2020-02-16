@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Insuval | Incio Sesión</title>
+    <title>Alfredo | Incio Sesión</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Font Awesome -->
@@ -24,7 +24,7 @@
         <!-- /.login-logo -->
         <div class="card card-login">
             <div class="card-body login-card-body">
-                <img src="{{asset("assets/img/logo-insuval.png")}}" class="mx-auto d-block" alt="">
+                <img src="{{asset("assets/img/logo_black.png")}}" class="mx-auto d-block" alt="Alfredo" width="auto" height="60">
                 @if ($errors->any())
                 <div class="alert alert-danger alert-dismissible">
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>
@@ -35,7 +35,7 @@
                     </div>
                 </div>
                 @endif
-                <form action="{{route('login_post')}}" method="post" class="m-4" autocomplete="off">
+                <form action="{{route('login_post')}}" method="post" class="mx-4 mt-5" autocomplete="off">
                     @csrf
                     <div class="input-group mb-3">
                         <input type="text" name="Usu_usuario" class="form-control" placeholder="Usuario">
@@ -63,8 +63,8 @@
                         <!-- /.col -->
                     </div>
                     <div class="row mt-2">
-                        <div class="col-lg-5">
-                            <button type="submit" class="btn btn-primary btn-block float-right">Inciar sesión</button>
+                        <div class="col-lg-12">
+                            <button type="submit" class="btn bg-black float-right">Inciar sesión</button>
                         </div>
                         <!-- /.col -->
                     </div>
