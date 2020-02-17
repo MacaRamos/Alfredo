@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>@yield('titulo','Recetario Insuval') | Insuval</title>
+    <title>@yield('titulo','Alfredo') | Agenda</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Font Awesome -->
@@ -38,7 +38,7 @@
     @yield('styles')
 </head>
 
-<body class="hold-transition sidebar-mini layout-navbar-fixed">
+<body class="hold-transition sidebar-mini sidebar-collapse">
     <!-- Site wrapper -->
     <div class="wrapper">
         <!--Inicio header-->

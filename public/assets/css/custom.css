@@ -34,20 +34,24 @@ label.requerido:after{
     line-height: 25px !important;
 }
 
-
-.icon-circle:hover{
-    filter: brightness(0.8);
-    border-top-left-radius: 25px;
-    border-top-right-radius: 25px;
-    border-bottom-right-radius: 25px;
-    border-bottom-left-radius: 25px;
-    padding-left: 6px;
-    padding-right: 6px;
-    width: 25px;
-    font-size: 12px;
+.icon-circle-small{
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    padding-left: 1px;
+    padding-right: 1px;
+    width: 20px;
+    font-size: 9px;
     color: white;
     text-align: center;
-    line-height: 25px !important;
+    line-height: 20px !important;
+}
+
+
+.icon-circle:hover
+,.icon-circle-small:hover{
+    filter: brightness(0.8);
 }
 .tag-success, .tag-danger, .tag-warning, .tag-info, .tag-lightslategray{
     padding-bottom: .3em !important;
@@ -245,4 +249,7 @@ body{
 .layout-navbar-fixed.sidebar-collapse .wrapper .brand-link {
     height: calc(3.5rem);
     width: 4.6rem;
+}
+.opacity{
+    opacity: 0.8;
 }

@@ -13,6 +13,7 @@
 
 
 Route::get('/', 'InicioController@index')->name('inicio');
+Route::post('/', 'InicioController@index')->name('inicio');
 Route::get('seguridad/login', 'Seguridad\LoginController@index')->name('login');
 Route::post('seguridad/login', 'Seguridad\LoginController@login')->name('login_post');
 Route::get('seguridad/logout', 'Seguridad\LoginController@logout')->name('logout');
