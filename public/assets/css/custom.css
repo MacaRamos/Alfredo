@@ -85,7 +85,7 @@ label.requerido:after{
     background-color: lightslategray;
 }
 body{
-    font-size: 12pt;
+    font-size: 14px;
 }
 
 .form-control:disabled, .form-control[readonly]{
@@ -253,3 +253,27 @@ body{
 .opacity{
     opacity: 0.8;
 }
+.ui-widget{
+    z-index: 9999 !important;
+}
+
+legend{
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.label-title{
+    text-transform: uppercase;
+    font-size: 14px;
+    font-weight: 600;
+}
+.bootstrap-switch-black{
+    background: #000;
+    color: #fff;
+}
+
+@media (min-width: 576px){
+    .col-sm-6 {
+        padding-top: 1.5rem !important;
+    }
+}
+    

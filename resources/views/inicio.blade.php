@@ -9,21 +9,228 @@ Inicio
 @section('scripts')
 <script src="{{asset("assets/pages/scripts/admin/index.js")}}" type="text/javascript"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<!-- Bootstrap Switch -->
+<script src="{{asset("assets/$theme/plugins/bootstrap-switch/js/bootstrap-switch.min.js")}}"></script>
+@include('includes.mensaje')
 <script>
-  $("#sede").change(function(){
+  $(function(){
+    $('#modalAgenda').on('hidden.bs.modal', function (e) {
+      $('.modal-body').find('input').val("");
+      $('#tablaServicios').children('tbody').html("");
+      $('#cliente-checkbox').bootstrapSwitch('state', false, false);
+    })
+
+
+    var mHorDur = 0;
+    var mMinDur = 0;
+
+    $('#especialistaOficial').text($('#especialista :selected').text());
+    $("input[data-bootstrap-switch]").focus();
+    $("#sede").change(function(){
         $('form#cambiarFiltros').submit();    
     });
     $("#especialista").change(function(){        
-        $('form#cambiarFiltros').submit();    
+        $('form#cambiarFiltros').submit();
     });
-  $('#anterior').click(function(){
-    $('#accion').val('anterior');
-    $('form#cambiarFiltros').submit();
+    $('#anterior').click(function(){
+      $('#accion').val('anterior');
+      $('form#cambiarFiltros').submit();
+    });
+    $('#siguiente').click(function(){
+      $('#accion').val('siguiente');
+      $('form#cambiarFiltros').submit();
+    });
+    $('#mSede').text($('#sede :selected').text());
+    $('input[name=mSede]').val($('#sede :selected').val());
+    
+    
+    $('.agendar').click(function(){
+      
+      $('input[name=mfechaAgenda]').val($(this).parent().data('fecha'));
+      $('#mHoraInicio').text($(this).parent().data('horainicio'));
+      $('input[name=mHoraInicio]').val($('#mHoraInicio').text());
+      $('#mHoraFin').text($(this).parent().data('horafin'));
+      $('#mHoraFin').text($(this).parent().data('horafin'));
+
+      console.log('Fecha: '+$('input[name=mfechaAgenda]').val());
+      console.log($(this).parent().data('horainicio'));
+
+      if ($('#especialista :selected').text() != 'Local'){
+        $('#mEspecialista').html($('#especialista :selected').text());
+      }else{
+        $('#mEspecialista').css('display', 'none');
+        $('#mOpcionEspecialista').css('display', 'block');
+      }
+    });
+    var switchSelector = 'input[data-bootstrap-switch]';
+  
+    // Convert all checkboxes with className `bs-switch` to switches. 
+    $(switchSelector).bootstrapSwitch();
+
+    // Attach `switchChange` event to all switches.
+    $(switchSelector).on('switchChange.bootstrapSwitch', function(event, state) {
+      // console.log(this);  // DOM element
+      // console.log(event); // jQuery event
+      // console.log(state); // true | false
+
+      if (state){
+        $('#viejoCliente').css('display', 'none');
+        $('#nuevoCliente').css('display', 'block');
+      }else{
+        $('#viejoCliente').css('display', 'block');
+        $('#nuevoCliente').css('display', 'none');
+      }
+    });
+    $("#Cli_NomCli").autocomplete({
+        source: function(request, response) {
+            $.ajax({
+                url: "{{route('buscarCliente')}}",
+                data: {
+                    term : request.term
+                },
+                dataType: "json",
+                success: function(data){
+                    var resp = $.map(data,function(Cliente){
+                        return {
+                                label: Cliente.Cli_NomCli.trim(),
+                                id: Cliente.Cli_CodCli.trim()
+                            };
+                    }); 
+                    response(resp);
+                }
+            });
+        },
+        select: function (event, ui) {
+            $("#Cli_NomCli").val(ui.item.label); // display the selected text
+            $("#Cli_CodCli").val(ui.item.id); // save selected id to hidden input
+        },
+        minLength: 1
+    });
+
+    $("#Art_nom_externo").autocomplete({
+        source: function(request, response) {
+            $.ajax({
+                url: "{{route('buscarServicio')}}",
+                data: {
+                    term : request.term,
+                    especialista : $("#mOpcionEspecialista :selected").val().trim()
+                },
+                dataType: "json",
+                success: function(data){
+                  console.log(data);
+                    response(data);
+                }
+            });
+        },
+        select: function (event, ui) {
+          console.log(ui.item.horDur);
+          console.log(ui.item.minDur);
+            $("#Art_nom_externo").val(ui.item.label); // display the selected text
+            $("#Art_cod").val(ui.item.id); // save selected id to hidden input
+            mHorDur = parseInt(ui.item.horDur);
+            mMinDur = parseInt(ui.item.minDur);
+            console.log(mMinDur);
+        },
+        minLength: 1
+    });
+    //recibe un date
+    function verificarHoraFinal(duracionServicio)
+    {
+      var duracionTotalReserva = new Date("1700-01-01 "+$('input[name=mHoraInicio]').val());
+      $('input.hora').each(function(index, item)
+      {
+          var duracionServicioTd = new Date("1700-01-01 "+$(item).val());
+          //establesco la nueva duración total de la reserva usando milisegundos
+          duracionTotalReserva.setTime(duracionTotalReserva.getTime() +  //obtiene los milisegundos de la fecha actual
+                                       (duracionServicioTd.getHours()*60*60*1000) + //obtiene la hora y la convierte en milisegundos
+                                        (duracionServicioTd.getMinutes()*60*1000)); //obtiene los minutos y los convierte en milisegundos
+          
+      });
+      duracionTotalReserva.setTime(duracionTotalReserva.getTime() +  //obtiene los milisegundos de la fecha actual
+                                       (duracionServicio.getHours()*60*60*1000) + //obtiene la hora y la convierte en milisegundos
+                                        (duracionServicio.getMinutes()*60*1000)); //obtiene los minutos y los convierte en milisegundos
+      return duracionTotalReserva;
+    }
+    function calculaHoraFinal()
+    {
+      var duracionTotalReserva = new Date("1700-01-01 "+$('input[name=mHoraInicio]').val());
+      $('input.hora').each(function(index, item)
+      {
+          var duracionServicioTd = new Date("1700-01-01 "+$(item).val());
+          //establesco la nueva duración total de la reserva usando milisegundos
+          duracionTotalReserva.setTime(duracionTotalReserva.getTime() +  //obtiene los milisegundos de la fecha actual
+                                       (duracionServicioTd.getHours()*60*60*1000) + //obtiene la hora y la convierte en milisegundos
+                                        (duracionServicioTd.getMinutes()*60*1000)); //obtiene los minutos y los convierte en milisegundos
+          
+      });
+      var date = duracionTotalReserva;
+      if (date.getHours() < 10){
+            if (date.getMinutes() < 10){
+              $("#mHoraFin").text('0'+date.getHours()+':0'+date.getMinutes());
+            }else{
+              $("#mHoraFin").text('0'+date.getHours()+':'+date.getMinutes());
+            }
+        }else{
+            if (date.getMinutes() < 10){
+              $("#mHoraFin").text(date.getHours()+':0'+date.getMinutes());
+            }else{
+              $("#mHoraFin").text(date.getHours()+':'+date.getMinutes());
+            }
+        }
+        $('input[name=mHoraFin]').val($("#mHoraFin").text());
+       // console.log($("#mHoraFin").text());
+      //$("#mHoraFin").text(duracionTotalReserva.getHours()+':'+duracionTotalReserva.getMinutes());
+    }
+
+    //recibe un date
+    function estableceHoraFinal(duracionTotalReserva)
+    {
+      var date = duracionTotalReserva;
+      if (date.getHours() < 10){
+            if (date.getMinutes() < 10){
+              $("#mHoraFin").text('0'+date.getHours()+':0'+date.getMinutes());
+            }else{
+              $("#mHoraFin").text('0'+date.getHours()+':'+date.getMinutes());
+            }
+        }else{
+            if (date.getMinutes() < 10){
+              $("#mHoraFin").text(date.getHours()+':0'+date.getMinutes());
+            }else{
+              $("#mHoraFin").text(date.getHours()+':'+date.getMinutes());
+            }
+        }
+        $('input[name=mHoraFin]').val($("#mHoraFin").text());
+       // console.log($("#mHoraFin").text());
+      //$("#mHoraFin").text(duracionTotalReserva.getHours()+':'+duracionTotalReserva.getMinutes());
+    }
+    
+    var servicio = 0
+    $('#asignar').click(function(){
+      if($('#Art_nom_externo').val() != '')
+      {
+        //mHorDur = parseInt($("#mHoraFin").text().substring(0,2))+mHorDur;
+        //mMinDur = parseInt($("#mHoraFin").text().substring(3,5))+mMinDur;
+        //$("#mHoraFin").text(mHorDur.toString()+':'+mMinDur.toString()); // save selected id to hidden input
+        var duracionServicio = new Date('1700-01-01 '+mHorDur+':'+mMinDur);
+        var duracionTotalServicios = verificarHoraFinal(duracionServicio);
+        if(duracionTotalServicios.getHours()*60+duracionTotalServicios.getMinutes()  <= 19*60)
+        {        
+          $('#tablaServicios').children('tbody').append('<tr><td>'+$('#Art_nom_externo').val()+'<input type="hidden" name="servicios['+servicio+']" value="'+$('#Art_cod').val()+'"/><input class="hora" style="display: none;" name="mDuracion['+servicio+']" value="'+mHorDur+':'+mMinDur+'"/><a class="btn-accion-tabla float-right quitarServicio"><i class="fas fa-times icon-circle-small bg-danger"></i></a></td></tr>');
+          servicio++;
+          $('a.quitarServicio').click(function(){
+            event.preventDefault();
+            $(this).closest('tr').remove();
+            calculaHoraFinal();  
+          });
+          estableceHoraFinal(duracionTotalServicios);      
+        }else{
+          //#TODO: poner mensaje de error si se pasa de las 19 de la tarde
+        }
+      }      
+    });
+    
   });
-  $('#siguiente').click(function(){
-    $('#accion').val('siguiente');
-    $('form#cambiarFiltros').submit();
-  });
+  
 </script>
 @endsection
 
@@ -50,15 +257,23 @@ Inicio
     <div class="col-sm-6">
       <!-- select -->
       <div class="form-group p-2">
-        <span class="label">Especialista</span>
+        <span class="label">Especialista {{$request->especialista}}</span>
         <select class="form-control" id="especialista" name="especialista">
+          @if (!$request->especialista)
+          <option value="" selected>Local</option>
           @foreach ($especialistas as $especialista)
-          @if ($especialista->Ve_cod_ven == $request->especialista)
+          <option value="{{$especialista->Ve_cod_ven}}">{{$especialista->Ve_nombre_ven}}</option>
+          @endforeach
+          @else
+          <option value="">Local</option>
+          @foreach ($especialistas as $especialista)
+          @if (trim($especialista->Ve_cod_ven) == $request->especialista)
           <option value="{{$especialista->Ve_cod_ven}}" selected>{{$especialista->Ve_nombre_ven}}</option>
           @else
           <option value="{{$especialista->Ve_cod_ven}}">{{$especialista->Ve_nombre_ven}}</option>
           @endif
           @endforeach
+          @endif
         </select>
       </div>
     </div>
@@ -74,18 +289,20 @@ Inicio
               <input type="hidden" name="accion" id="accion" value="">
               <input type="hidden" name="fechaInicio" value="{{$fechaInicio->format('d-m-Y')}}">
               <input type="hidden" name="fechaTermino" value="{{$fechaTermino->format('d-m-Y')}}">
-              <button type="button" id="anterior" class="btn btn-default btn-flat"><i
+              <button type="button" id="anterior" class="btn btn-default btn-flat tooltipsC" title="Anterior"><i
                   class="fas fa-chevron-left"></i></button>
-              <button type="button" id="siguiente" class="btn btn-default btn-flat"><i
+              <button type="button" id="siguiente" class="btn btn-default btn-flat tooltipsC" title="Siguiente"><i
                   class="fas fa-chevron-right"></i></button>
             </div>
             <div class="col-lg-5">
               @if ($fechaInicio->format('m') == $fechaTermino->format('m'))
-              <p class="text-center">{{ucwords(strftime("%h",$fechaInicio->getTimestamp()))}}</p>
+              <p class="text-center p-0">{{ucwords(strftime("%h %d",$fechaInicio->getTimestamp()))}} -
+                {{strftime("%d",$fechaTermino->getTimestamp())}}</p>
               @else
-              <p class="text-center">{{ucwords(strftime("%h %d",$fechaInicio->getTimestamp()))}} -
+              <p class="text-center p-0">{{ucwords(strftime("%h %d",$fechaInicio->getTimestamp()))}} -
                 {{ucwords(strftime("%h %d",$fechaTermino->getTimestamp()))}}</p>
               @endif
+              <p class="text-center font-weight-bold p-0" id="especialistaOficial"></p>
             </div>
             <div class="col-lg-4 mb-n1">
               <ul class="nav nav-pills float-right">
@@ -103,14 +320,20 @@ Inicio
             </div>
             <!-- /.tab-pane -->
             <div class="tab-pane active" id="tab_2">
-              <table class="table table-bordered">
+              <table class="table table-bordered" id="tablaSemana">
                 <thead>
+                  @php
+                  setlocale(LC_ALL, "es_CL.UTF-8", "es_CL", "esp", "ISO-8859-1","es_CL.UTF-8");
+                  $diaSemana = array("Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb");
+                  @endphp
                   <tr>
                     @foreach ($semana[0] as $key =>$item)
+                    @if ($key != 'HoraInicio' && $key != 'HoraFin' && $key != 'Estado' && $key != 'Age_AgeCod')
                     @if ($key == "Hora")
                     <th style="width: 150px;">{{$key}}</th>
                     @else
-                    <th>{{$key}}</th>
+                    <th>{{$diaSemana[intval(date('w',strtotime($key)))]}} {{date('d-m',strtotime($key))}}</th>
+                    @endif
                     @endif
                     @endforeach
                   </tr>
@@ -119,18 +342,30 @@ Inicio
                   @foreach ($semana as $key => $horas)
                   <tr>
                     @foreach ($semana[$key] as $index => $datos)
+                    @if ($index != 'HoraInicio' && $index != 'HoraFin' && $index != 'Estado' && $index != 'Age_AgeCod')
                     @switch($datos)
                     @case("Ocupado")
-                    <td class="bg-warning opacity">
-                      {{$datos}}
-                      <a href="" class="btn-accion-tabla tooltipsC pl-2" title="Confirmar">
+                    <td class="bg-gray opacity">
+                      {{trim($datos)}}
+                      <a href="{{route('confirmarAgenda', ['Age_AgeCod' => $semana[$key]["Age_AgeCod"]])}}" class="btn-accion-tabla tooltipsC float-right" title="Confirmar">
                         <i class="fas fa-check icon-circle-small bg-success"></i>
                       </a>
                     </td>
                     @break
+                    @case("Confirmado")
+                    <td class=" bg-warning opacity">
+                      {{trim($datos)}}
+                      {{-- <a href="{{route('confirmarAgenda', ['Age_AgeCod' => $semana[$key]["Age_AgeCod"]])}}" class="btn-accion-tabla tooltipsC float-right" title="Confirmar">
+                        <i class="fas fa-check icon-circle-small bg-success"></i>
+                      </a> --}}
+                    </td>
+                    @break
                     @case("Disponible")
-                    <td class="">{{$datos}}
-                      <a class="btn-accion-tabla tooltipsC pl-2" title="Agendar" data-toggle="modal" data-target="#modalAgenda">
+                    <td data-fecha="{{$index}}" data-horainicio="{{date('H:i',strtotime($semana[$key]["HoraInicio"]))}}"
+                      data-horafin="{{date('H:i',strtotime($semana[$key]["HoraFin"]))}}">{{trim($datos)}}
+
+                      <a class="btn-accion-tabla tooltipsC float-right agendar" title="Agendar" data-toggle="modal"
+                        data-target="#modalAgenda">
                         <i class="fas fa-calendar-check icon-circle-small bg-info"></i>
                       </a>
                     </td>
@@ -138,6 +373,7 @@ Inicio
                     @default
                     <td>{{$datos}}</td>
                     @endswitch
+                    @endif
                     @endforeach
                   </tr>
                   @endforeach

@@ -1,18 +1,19 @@
 <?php
 
-namespace App\Models\Departamento;
+namespace App\Models\Cliente;
 
 use Awobaz\Compoships\Compoships;
 use Illuminate\Database\Eloquent\Model;
 use LaravelTreats\Model\Traits\HasCompositePrimaryKey;
 
-class Departamento extends Model
+class Cliente extends Model
 {
+    //Cliente
     use HasCompositePrimaryKey;
     use Compoships;
     protected $dateFormat = 'd-m-Y H:i:s';
-    protected $table = "DEPARTAMENTO";
-    protected $guarded = ['Mb_Cod_Dep', 'Mb_Nom_Dep'];
-    protected $primaryKey = ['Mb_Cod_Dep'];
+    protected $table = "CLIENTES";
+    protected $guarded = ['Cli_CodCli', 'Cli_NomCli'];
+    protected $primaryKey = ['Cli_CodCli'];
     public $timestamps = false;
 }
