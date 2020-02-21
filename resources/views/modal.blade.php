@@ -2,7 +2,7 @@
   aria-labelledby="myLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <form id="formModel" action="{{route('agendar')}}">
+      {{-- <form id="formModel" action="{{route('agendar')}}"> --}}
         <div class="modal-header border-bottom-3 border-black py-2 pl-3">
           <h6 class="label-title modal-title" id="modalAgendaLongTitle">Agendar Hora</h6>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -101,9 +101,9 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-          <button type="submit" class="btn bg-black text-white" id="mostrarPDF">Guardar</button>
+          <button type="button" class="btn bg-black text-white" id="guardarReserva">Guardar</button>
         </div>
-      </form>
+      {{-- </form> --}}
     </div>
   </div>
 </div>

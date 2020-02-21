@@ -9,11 +9,10 @@ use LaravelTreats\Model\Traits\HasCompositePrimaryKey;
 class Cliente extends Model
 {
     //Cliente
-    use HasCompositePrimaryKey;
-    use Compoships;
+
     protected $dateFormat = 'd-m-Y H:i:s';
     protected $table = "CLIENTES";
     protected $guarded = ['Cli_CodCli', 'Cli_NomCli'];
-    protected $primaryKey = ['Cli_CodCli'];
+    protected $primaryKey = 'Cli_CodCli';
     public $timestamps = false;
 }

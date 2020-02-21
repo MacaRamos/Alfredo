@@ -43,6 +43,18 @@ Inicio
     $('#mSede').text($('#sede :selected').text());
     $('input[name=mSede]').val($('#sede :selected').val());
     
+    $('#guardarReserva').click(function(){
+      $('#accion').val('agendar');
+      $('form#cambiarFiltros').submit();
+    });
+
+    $('.confirmar').click(function(e)
+    {
+        e.preventDefault();        
+        $('#accion').val('confirmar');        
+        $('#Age_AgeCod').val($(this).data('agecod'));
+        $('form#cambiarFiltros').submit();
+    });
     
     $('.agendar').click(function(){
       
@@ -235,8 +247,10 @@ Inicio
 @endsection
 
 @section('contenido')
-@include('modal')
 <form class="form-horizontal" id="cambiarFiltros" method="POST" action="{{route('inicio')}}">
+  <input type="hidden" name="accion" id="accion" value="">
+  <input type="hidden" name="Age_AgeCod" id="Age_AgeCod" value="">
+  @include('modal')
   @csrf
   <div class="card">
     <div class="col-sm-6">
@@ -257,7 +271,7 @@ Inicio
     <div class="col-sm-6">
       <!-- select -->
       <div class="form-group p-2">
-        <span class="label">Especialista {{$request->especialista}}</span>
+        <span class="label">Especialista</span>
         <select class="form-control" id="especialista" name="especialista">
           @if (!$request->especialista)
           <option value="" selected>Local</option>
@@ -286,7 +300,6 @@ Inicio
         <div class="card-header">
           <div class="row">
             <div class="col-lg-3">
-              <input type="hidden" name="accion" id="accion" value="">
               <input type="hidden" name="fechaInicio" value="{{$fechaInicio->format('d-m-Y')}}">
               <input type="hidden" name="fechaTermino" value="{{$fechaTermino->format('d-m-Y')}}">
               <button type="button" id="anterior" class="btn btn-default btn-flat tooltipsC" title="Anterior"><i
@@ -320,65 +333,7 @@ Inicio
             </div>
             <!-- /.tab-pane -->
             <div class="tab-pane active" id="tab_2">
-              <table class="table table-bordered" id="tablaSemana">
-                <thead>
-                  @php
-                  setlocale(LC_ALL, "es_CL.UTF-8", "es_CL", "esp", "ISO-8859-1","es_CL.UTF-8");
-                  $diaSemana = array("Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb");
-                  @endphp
-                  <tr>
-                    @foreach ($semana[0] as $key =>$item)
-                    @if ($key != 'HoraInicio' && $key != 'HoraFin' && $key != 'Estado' && $key != 'Age_AgeCod')
-                    @if ($key == "Hora")
-                    <th style="width: 150px;">{{$key}}</th>
-                    @else
-                    <th>{{$diaSemana[intval(date('w',strtotime($key)))]}} {{date('d-m',strtotime($key))}}</th>
-                    @endif
-                    @endif
-                    @endforeach
-                  </tr>
-                </thead>
-                <tbody>
-                  @foreach ($semana as $key => $horas)
-                  <tr>
-                    @foreach ($semana[$key] as $index => $datos)
-                    @if ($index != 'HoraInicio' && $index != 'HoraFin' && $index != 'Estado' && $index != 'Age_AgeCod')
-                    @switch($datos)
-                    @case("Ocupado")
-                    <td class="bg-gray opacity">
-                      {{trim($datos)}}
-                      <a href="{{route('confirmarAgenda', ['Age_AgeCod' => $semana[$key]["Age_AgeCod"]])}}" class="btn-accion-tabla tooltipsC float-right" title="Confirmar">
-                        <i class="fas fa-check icon-circle-small bg-success"></i>
-                      </a>
-                    </td>
-                    @break
-                    @case("Confirmado")
-                    <td class=" bg-warning opacity">
-                      {{trim($datos)}}
-                      {{-- <a href="{{route('confirmarAgenda', ['Age_AgeCod' => $semana[$key]["Age_AgeCod"]])}}" class="btn-accion-tabla tooltipsC float-right" title="Confirmar">
-                        <i class="fas fa-check icon-circle-small bg-success"></i>
-                      </a> --}}
-                    </td>
-                    @break
-                    @case("Disponible")
-                    <td data-fecha="{{$index}}" data-horainicio="{{date('H:i',strtotime($semana[$key]["HoraInicio"]))}}"
-                      data-horafin="{{date('H:i',strtotime($semana[$key]["HoraFin"]))}}">{{trim($datos)}}
-
-                      <a class="btn-accion-tabla tooltipsC float-right agendar" title="Agendar" data-toggle="modal"
-                        data-target="#modalAgenda">
-                        <i class="fas fa-calendar-check icon-circle-small bg-info"></i>
-                      </a>
-                    </td>
-                    @break
-                    @default
-                    <td>{{$datos}}</td>
-                    @endswitch
-                    @endif
-                    @endforeach
-                  </tr>
-                  @endforeach
-                </tbody>
-              </table>
+              @include('semana')
             </div>
             <!-- /.tab-pane -->
             <div class="tab-pane" id="tab_3">

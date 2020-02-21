@@ -17,7 +17,8 @@ Route::post('/', 'InicioController@index')->name('inicio');
 Route::get('buscarCliente', 'InicioController@buscarCliente')->middleware(['auth', 'superadmin'])->name('buscarCliente');
 Route::get('buscarServicio', 'InicioController@buscarServicio')->middleware(['auth', 'superadmin'])->name('buscarServicio');
 Route::get('agendar', 'InicioController@agendar')->middleware(['auth', 'superadmin'])->name('agendar');
-Route::get('confirmarAgenda/{Age_AgeCod}', 'InicioController@confirmarAgenda')->middleware(['auth', 'superadmin'])->name('confirmarAgenda');
+Route::post('agendar', 'InicioController@agendar')->middleware(['auth', 'superadmin'])->name('agendar');
+
 Route::get('seguridad/login', 'Seguridad\LoginController@index')->name('login');
 Route::post('seguridad/login', 'Seguridad\LoginController@login')->name('login_post');
 Route::get('seguridad/logout', 'Seguridad\LoginController@logout')->name('logout');

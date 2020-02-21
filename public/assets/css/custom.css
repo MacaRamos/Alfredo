@@ -168,8 +168,8 @@ li.user-header{
     border:1px solid rgb(70, 70, 77) !important;
     padding: 0;
 }
-.bg-gris-claro{
-    background-color: #cfcfcf;
+.bg-gray{
+    background-color: #cfcfcf !important;
 }
 .hover-default:hover{
     background-color: #dadada;
@@ -179,6 +179,9 @@ li.user-header{
 }
 .table-border-none > tbody > tr > td{
     border: none !important;
+}
+.table-bordered-calendar td, .table-bordered-calendar th {
+    border: 1px solid #f3f7fb;
 }
 .page-item.active .page-link{
     background-color:  #08c !important;
@@ -276,4 +279,10 @@ legend{
         padding-top: 1.5rem !important;
     }
 }
-    
+
+.td-radius td{
+    border-radius: 5px;
+}
+.text-black{
+    color: #000 !important;
+}
