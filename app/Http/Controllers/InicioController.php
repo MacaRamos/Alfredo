@@ -51,13 +51,29 @@ class InicioController extends Controller
                     $fechaInicio = $fechaTemporal->sub(new DateInterval('P7D'));
                     break;
                 case 'agendar':
-                    //$agenda = Agenda::where()
-                    $notificacion = $this->agendar($request);                    
+                    $agenda = Agenda::get();
+                    if($agenda){
+                        $agenda = Agenda::where('Age_EmpCod', '=', $this->Emp)
+                        ->where('Age_SedCod', '=', $request->mSede)
+                        ->where('Age_EspCod', '=', $request->mOpcionEspecialista)
+                        ->where('Age_Fecha', '=', date('d-m-Y', strtotime($request->mfechaAgenda)))
+                        ->where('Age_Inicio', '=', date('d-m-Y H:i', strtotime(date('d-m-Y', strtotime($request->mfechaAgenda)) . " " . $request->mHoraInicio)))
+                        ->where('Age_Fin', '=', date('d-m-Y H:i', strtotime(date('d-m-Y', strtotime($request->mfechaAgenda)) . " " . $request->mHoraFin)))
+                        ->first();
+                        if (!$agenda){
+                            $notificacion = $this->agendar($request);   
+                        } 
+                    }                   
+                                    
                     $fechaInicio = new DateTime(date('d-m-Y', strtotime($request->fechaInicio)));
                     $fechaTermino = new DateTime(date('d-m-Y', strtotime($request->fechaTermino)));
                     break;
                 case 'confirmar':
-                    $notificacion = $this->confirmarAgenda($request);                    
+                    $agenda = Agenda::where('Age_AgeCod', '=', $request->Age_AgeCod)
+                                    ->where('Age_Estado', '=', 'C')->first();
+                    if (!$agenda){
+                        $notificacion = $this->confirmarAgenda($request);   
+                    }                  
                     $fechaInicio = new DateTime(date('d-m-Y', strtotime($request->fechaInicio)));
                     $fechaTermino = new DateTime(date('d-m-Y', strtotime($request->fechaTermino)));
                     break;
@@ -82,7 +98,7 @@ class InicioController extends Controller
 
         
 
-            $semana = $this->llenarSemana($fechaInicio, $fechaTermino, $request->sede, $request->especialista);
+            $semana = $this->llenarSemana($fechaInicio, $fechaTermino, $request->sede ?? '', $request->especialista ?? '');
 
             return view('inicio', compact('sedes', 'especialistas', 'fechaInicio', 'fechaTermino', 'semana', 'request'))->with($notificacion);
         } else {
@@ -112,7 +128,11 @@ class InicioController extends Controller
                 $dia["HoraFin"] = $dateEnd;
 
                 $agenda = Agenda::where('Age_EmpCod', '=', $this->Emp)
-                    ->where('Age_SedCod', '=', $sede)
+                    ->where(function ($q) use ($sede) {
+                        if ($sede) {
+                            $q->where('Age_SedCod', $sede);
+                        }
+                    })                    
                     ->where(function ($q) use ($especialista) {
                         if ($especialista) {
                             $q->where('Age_EspCod', $especialista);
@@ -148,7 +168,7 @@ class InicioController extends Controller
             $cliente->save();
             $codigoCliente = $cliente->Cli_CodCli;
         }else{
-            $codigoCliente = $request->Age_CliCod;
+            $codigoCliente = $request->Cli_CodCli;
         }
         $parametroAgenda = Parametro::where('Nombre', '=', 'Agenda')->first();
 

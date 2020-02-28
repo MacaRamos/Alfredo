@@ -66,7 +66,7 @@ Inicio
       $('#mHoraFin').text($(this).data('horafin'));
 
       console.log('Fecha: '+$('input[name=mfechaAgenda]').val());
-      console.log($(this).data('horainicio'));
+      console.log('Hora inicio'+$(this).data('horainicio'));
 
       if ($('#especialista :selected').text() != 'Local'){
         $('#mEspecialista').text($('#especialista :selected').text());
@@ -106,7 +106,7 @@ Inicio
                     var resp = $.map(data,function(Cliente){
                         return {
                                 label: Cliente.Cli_NomCli.trim(),
-                                id: Cliente.Cli_CodCli.trim()
+                                id: Cliente.Cli_CodCli
                             };
                     }); 
                     response(resp);
