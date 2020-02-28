@@ -31,7 +31,8 @@
       {{-- IF PARA AGREGAR BOTON AL FINAL --}}
       @if (!isset($semana[$key+1]["Age_AgeCod"]) || (isset($semana[$key+1]["Age_AgeCod"]) &&
       $semana[$key+1]["Age_AgeCod"] != $semana[$key]["Age_AgeCod"]))
-      <td class="bg-gray text-center text-black">RESERVADO
+      <td class="bg-gray text-center text-black"
+        style="border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">RESERVADO
         {{-- BOTONES DROPDOWN OPCIONES --}}
         <div class="btn-group float-right">
           <button type="button" class="btn-accion-tabla icon-circle-small bg-gray-light dropdown-toggle dropdown-icon"
@@ -53,14 +54,22 @@
         {{-- FIN BOTONES DROPDOWN OPCIONES --}}
       </td>
       @else
+      @if (!isset($semana[$key-1]["Age_AgeCod"]) || (isset($semana[$key-1]["Age_AgeCod"]) &&
+      $semana[$key-1]["Age_AgeCod"] != $semana[$key]["Age_AgeCod"]))
+      <td class="bg-gray text-center text-black"
+        style="border-bottom: none; border-top-left-radius: 10px; border-top-right-radius: 10px;"></td>
+      @else
       <td class="bg-gray text-center text-black" style="border-bottom: none;"></td>
+      @endif
+
       @endif
       @break
       {{--CONFIRMADO--}}
       @case("C")
       @if (!isset($semana[$key+1]["Age_AgeCod"]) || (isset($semana[$key+1]["Age_AgeCod"]) &&
       $semana[$key+1]["Age_AgeCod"] != $semana[$key]["Age_AgeCod"]))
-      <td class="bg-success text-center">CONFIRMADO {{$semana[$key]["Age_AgeCod"]}}
+      <td class="bg-success text-center" style="border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
+        CONFIRMADO
         {{-- BOTONES DROPDOWN OPCIONES --}}
         <div class="btn-group float-right">
           <button type="button" class="btn-accion-tabla icon-circle-small bg-gray-light dropdown-toggle dropdown-icon"
@@ -79,7 +88,13 @@
         {{-- FIN BOTONES DROPDOWN OPCIONES --}}
       </td>
       @else
+      @if (!isset($semana[$key-1]["Age_AgeCod"]) || (isset($semana[$key-1]["Age_AgeCod"]) &&
+      $semana[$key-1]["Age_AgeCod"] != $semana[$key]["Age_AgeCod"]))
+      <td class="bg-success text-center"
+        style="border-bottom: none; border-top-left-radius: 10px; border-top-right-radius: 10px;"></td>
+      @else
       <td class="bg-success text-center" style="border-bottom: none;"></td>
+      @endif
       @endif
       @break
       {{--DISPONIBLE--}}
@@ -109,7 +124,20 @@
       new DateTime(date('d-m-Y H:i', strtotime($semana[$key]["HoraFin"]))))
       <td class="bg-olive">EN CURSO</td>
       @else
-      <td class="bg-black text-center" style="border-bottom: none;">FINALIZADO</td>
+      @if (!isset($semana[$key-1]["Age_AgeCod"]) || (isset($semana[$key-1]["Age_AgeCod"]) &&
+      $semana[$key-1]["Age_AgeCod"] != $semana[$key]["Age_AgeCod"]))
+      <td class="bg-black text-center"
+        style="border-bottom: none; border-top-left-radius: 10px; border-top-right-radius: 10px;"></td>
+      @else
+      @if (!isset($semana[$key+1]["Age_AgeCod"]) || (isset($semana[$key+1]["Age_AgeCod"]) &&
+      $semana[$key+1]["Age_AgeCod"] != $semana[$key]["Age_AgeCod"]))
+      <td class="bg-black text-center" style="border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
+        FINALIZADO</td>
+      @else
+      <td class="bg-black text-center" style="border-bottom: none;"></td>
+      @endif
+      @endif
+
       @endif
       @break
       {{--DISPONIBLE--}}
