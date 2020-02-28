@@ -21,69 +21,68 @@
     <tr>
       @foreach ($semana[$key] as $index => $datos)
       @if ($index != 'HoraInicio' && $index != 'HoraFin' && $index != 'Estado' && $index != 'Age_AgeCod')
+
       @switch($datos)
       @case("B"){{--RESERVADO--}}
       <td class="bg-gray text-center text-black">RESERVADO
+        {{-- BOTONES DROPDOWN OPCIONES --}}
         <div class="btn-group float-right">
-          <button type="button" class="btn btn-default" data-toggle="dropdown" aria-expanded="false">
+          <button type="button" class="btn-accion-tabla icon-circle-small bg-gray-light dropdown-toggle dropdown-icon"
+            data-toggle="dropdown">
           </button>
-          <div class="dropdown-menu" x-placement="bottom-start"
-            style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
-            <a class="tooltipsC agendar" title="Agendar" data-toggle="modal"
-              data-target="#modalAgenda">
-              <i class="fas fa-times text-gray icon-circle-small bg-danger"></i>
+          <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px); min-width: 194px;">
+            <a class="btn btn-app">
+              <i class="fas fa-edit"></i> Editar
             </a>
-            <a href="#" data-AgeCod="{{$semana[$key]["Age_AgeCod"]}}" class="tooltipsC
-                confirmar" title="Confirmar">
-              <i class="fas fa-check icon-circle-small bg-success"></i>
+            <a class="btn btn-app" data-AgeCod="{{$semana[$key]["Age_AgeCod"]}}" title="Confirmar">
+              <i class="fas fa-check"></i> Confirm
+            </a>
+            <a class="btn btn-app">
+              <i class="fas fa-trash-alt"></i> Eliminar
             </a>
           </div>
         </div>
-
+        {{-- FIN BOTONES DROPDOWN OPCIONES --}}
       </td>
       @break
       @case("C"){{--CONFIRMADO--}}
       <td class=" bg-warning text-center">CONFIRMADO
-        <a class="btn-accion-tabla tooltipsC float-right agendar" title="Agendar" data-toggle="modal"
-          data-target="#modalAgenda">
-          <i class="fas fa-times text-gray icon-circle-small bg-danger"></i>
-        </a>
+        {{-- BOTONES DROPDOWN OPCIONES --}}
+        <div class="btn-group float-right">
+          <button type="button" class="btn-accion-tabla icon-circle-small bg-gray-light dropdown-toggle dropdown-icon"
+            data-toggle="dropdown">
+          </button>
+          <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px); min-width: 130px">
+            <a class="btn btn-app">
+              <i class="fas fa-edit"></i> Editar
+            </a>
+            <a class="btn btn-app">
+              <i class="fas fa-trash-alt"></i> Eliminar
+            </a>
+          </div>
+        </div>
+        {{-- FIN BOTONES DROPDOWN OPCIONES --}}
       </td>
       @break
       @case("A"){{--DISPONIBLE--}}
+      @if (new DateTime(date('d-m-Y H:i', strtotime($index))) > new DateTime(date('d-m-Y H:i')))
       <td data-fecha="{{$index}}" data-horainicio="{{date('H:i',strtotime($semana[$key]["HoraInicio"]))}}"
-        data-horafin="{{date('H:i',strtotime($semana[$key]["HoraFin"]))}}" class=" text-center">--
-
-        <a class="btn-accion-tabla tooltipsC float-right agendar" title="Agendar" data-toggle="modal"
-          data-target="#modalAgenda">
-          <i class="fas fa-calendar-check text-gray icon-circle-small bg-info"></i>
-        </a>
-        {{-- 
-          <div class="btn-group float-right">
-            <button type="button" class="btn btn-default" data-toggle="dropdown" aria-expanded="false">
-            </button>
-            <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
-              <a class="btn-accion-tabla tooltipsC float-right agendar" title="Agendar" data-toggle="modal"
-            data-target="#modalAgenda">
-            <i class="fas fa-times text-gray icon-circle-small bg-danger"></i>
-          </a>
-          <a href="#"  data-AgeCod= "{{$semana[$key]["Age_AgeCod"]}}" class="btn-accion-tabla tooltipsC float-right
-        confirmar" title="Confirmar">
-        <i class="fas fa-check icon-circle-small bg-success"></i>
-        </a>
-        </div>
-        </div> --}}
+        data-horafin="{{date('H:i',strtotime($semana[$key]["HoraFin"]))}}" class="pointer text-center agendar"
+        title="Agendar" data-toggle2="tooltip" data-placement="bottom" data-toggle="modal" data-target="#modalAgenda">
 
       </td>
+      @else
+      <td class="bg-light disabled color-palette"></td>
+      @endif
       @break
       @default
       @if ($index == 'Hora')
       <td style="background-color: #fafafa;">{{$datos}}</td>
       @else
       <td>{{$datos}}</td>
-      @endif
-      @endswitch
-      @endif
+      @endif{{-- FIN IF ($index == 'Hora') --}}
+      @endswitch{{-- FIN SWITCH --}}
+      @endif{{-- FIN IF ($index != 'HoraInicio' && $index != 'HoraFin' && $index != 'Estado' && $index != 'Age_AgeCod')  --}}
       @endforeach
     </tr>
     @endforeach

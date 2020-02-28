@@ -4,16 +4,17 @@ Inicio
 @endsection
 @section('header')
 <meta name="csrf-token" content="{{ csrf_token() }}">
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 @endsection
 @section('scripts')
 <script src="{{asset("assets/pages/scripts/admin/index.js")}}" type="text/javascript"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
 <!-- Bootstrap Switch -->
 <script src="{{asset("assets/$theme/plugins/bootstrap-switch/js/bootstrap-switch.min.js")}}"></script>
 @include('includes.mensaje')
 <script>
   $(function(){
+    $('[data-toggle2="tooltip"]').tooltip()
+
     $('#modalAgenda').on('hidden.bs.modal', function (e) {
       $('.modal-body').find('input').val("");
       $('#tablaServicios').children('tbody').html("");
@@ -57,18 +58,18 @@ Inicio
     });
     
     $('.agendar').click(function(){
-      
-      $('input[name=mfechaAgenda]').val($(this).parent().data('fecha'));
-      $('#mHoraInicio').text($(this).parent().data('horainicio'));
+      $('input[name=mSede]').val($('#sede :selected').val());
+      $('input[name=mfechaAgenda]').val($(this).data('fecha'));
+      $('#mHoraInicio').text($(this).data('horainicio'));
       $('input[name=mHoraInicio]').val($('#mHoraInicio').text());
-      $('#mHoraFin').text($(this).parent().data('horafin'));
-      $('#mHoraFin').text($(this).parent().data('horafin'));
+      $('#mHoraFin').text($(this).data('horafin'));
+      $('#mHoraFin').text($(this).data('horafin'));
 
       console.log('Fecha: '+$('input[name=mfechaAgenda]').val());
-      console.log($(this).parent().data('horainicio'));
+      console.log($(this).data('horainicio'));
 
       if ($('#especialista :selected').text() != 'Local'){
-        $('#mEspecialista').html($('#especialista :selected').text());
+        $('#mEspecialista').text($('#especialista :selected').text());
       }else{
         $('#mEspecialista').css('display', 'none');
         $('#mOpcionEspecialista').css('display', 'block');

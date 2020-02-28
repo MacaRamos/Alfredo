@@ -39,8 +39,8 @@ label.requerido:after{
     border-top-right-radius: 20px;
     border-bottom-right-radius: 20px;
     border-bottom-left-radius: 20px;
-    padding-left: 1px;
-    padding-right: 1px;
+    padding-left: 2px;
+    padding-right: 2px;
     width: 20px;
     font-size: 9px;
     color: white;
@@ -285,4 +285,18 @@ legend{
 }
 .text-black{
     color: #000 !important;
+}
+
+.pointer {
+    cursor: pointer;
+}
+.bg-gray-light {
+    background-color: #f2f4f5 !important;
+}
+
+.btn-app {
+    margin: 0 0 1px 5px;
+    height: 45px;
+    min-width: 55px;
+    padding: 5px 5px;
 }

@@ -7,6 +7,7 @@
     <title>@yield('titulo','Alfredo') | Agenda</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="{{asset("assets/$theme/plugins/fontawesome-free/css/all.min.css")}}">
     <!-- Ionicons -->
@@ -81,6 +82,7 @@
     <!-- ./wrapper -->
     <!-- jQuery -->
     <script src="{{asset("assets/$theme/plugins/jquery/jquery.min.js")}}"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <!-- Bootstrap 4 -->
     <script src="{{asset("assets/$theme/plugins/bootstrap/js/bootstrap.bundle.min.js")}}"></script>
     <!-- overlayScrollbars -->

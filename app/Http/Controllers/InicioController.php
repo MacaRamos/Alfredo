@@ -51,6 +51,7 @@ class InicioController extends Controller
                     $fechaInicio = $fechaTemporal->sub(new DateInterval('P7D'));
                     break;
                 case 'agendar':
+                    //$agenda = Agenda::where()
                     $notificacion = $this->agendar($request);                    
                     $fechaInicio = new DateTime(date('d-m-Y', strtotime($request->fechaInicio)));
                     $fechaTermino = new DateTime(date('d-m-Y', strtotime($request->fechaTermino)));
@@ -122,11 +123,11 @@ class InicioController extends Controller
                     ->first();
                 if ($agenda) {
                     // $dia[$diaSemana[$fecha->format('w')] . ' ' . $fecha->format('d-m')] = 'Ocupado';
-                    $dia[$fecha->format('d-m-Y H:i:s')] = $agenda->Age_Estado;
+                    $dia[$dateStart] = $agenda->Age_Estado;
                     $dia["Age_AgeCod"] = $agenda->Age_AgeCod;
                 } else {
                     // $dia[$diaSemana[$fecha->format('w')] . ' ' . $fecha->format('d-m')] = 'Disponible';
-                    $dia[$fecha->format('d-m-Y H:i:s')] = 'A';
+                    $dia[$dateStart] = 'A';
                 }
                 if ($fecha == $fechaTermino) {
                     array_push($semana, $dia);
