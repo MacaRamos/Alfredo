@@ -140,10 +140,22 @@ class InicioController extends Controller
                     })
                     ->where('Age_Inicio', '<=', $dateStart)
                     ->where('Age_Fin', '>=', $dateEnd)
+                    ->with('estado')
                     ->first();
                 if ($agenda) {
-                    // $dia[$diaSemana[$fecha->format('w')] . ' ' . $fecha->format('d-m')] = 'Ocupado';
-                    $dia[$dateStart] = $agenda->Age_Estado;
+                    // if (new DateTime(date('d-m-Y H:i', strtotime($agenda->Age_Fin))) < new DateTime(date('d-m-Y H:i'))){
+                    //     switch ($agenda->Age_Estado) {
+                    //         case 'B':
+                    //             $agenda->Age_Estado = 'F';
+                    //             $agenda->update();
+                    //             break;
+                    //         case 'C':
+                    //             $agenda->Age_Estado = 'F';
+                    //             $agenda->update();
+                    //             break;
+                    //     }
+                    // }
+                    $dia[$dateStart] = $agenda->Age_Estado.'-'.trim($agenda->estado->Color).'-'.trim($agenda->estado->Nombre);
                     $dia["Age_AgeCod"] = $agenda->Age_AgeCod;
                 } else {
                     // $dia[$diaSemana[$fecha->format('w')] . ' ' . $fecha->format('d-m')] = 'Disponible';
@@ -154,6 +166,7 @@ class InicioController extends Controller
                 }
             }
         }
+        // dd($semana);
         return $semana;
     }
 

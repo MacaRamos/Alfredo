@@ -302,3 +302,7 @@ legend{
     min-width: 55px;
     padding: 5px 5px;
 }
+
+.btn-group.float-right.show:focus {
+    outline: none;
+}
