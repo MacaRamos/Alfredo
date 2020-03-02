@@ -13,6 +13,10 @@ Inicio
 @include('includes.mensaje')
 <script>
   $(function(){
+    var semana = @json($semana);
+    console.log(semana);
+
+
     $('[data-toggle2="tooltip"]').tooltip()
 
     $('#modalAgenda').on('hidden.bs.modal', function (e) {

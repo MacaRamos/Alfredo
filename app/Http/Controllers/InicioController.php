@@ -13,6 +13,7 @@ use DateInterval;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
+use stdClass;
 
 class InicioController extends Controller
 {
@@ -115,17 +116,15 @@ class InicioController extends Controller
         $semana = array();
         for ($hora = $horaInicio; $hora <= $horaTermino; $hora->add(new DateInterval('PT15M'))) {
             $horaFin = strtotime("+15 minutes", strtotime($hora->format('H:i')));
-            $dia = array();
-            $dia["Hora"] = $hora->format('H:i') . ' - ' . date('H:i', $horaFin);
-
+            $dia = new stdClass;
+            $dia->Hora = $hora->format('H:i') . ' - ' . date('H:i', $horaFin);
+            $dias = array();
             for ($fecha = new DateTime(date('d-m-Y', strtotime($fechaInicio->format('d-m-Y'))));
                 $fecha <= $fechaTermino;
                 $fecha->add(new DateInterval('P1D'))) {
                 //armo las horas con la fecha del ciclo $fecha
                 $dateStart = date('d-m-Y H:i:s', strtotime($fecha->format('Y-m-d') . " " . $hora->format('H:i:s')));
                 $dateEnd = date('d-m-Y H:i:s', strtotime($fecha->format('Y-m-d') . " " . date('H:i:s', $horaFin)));
-                $dia["HoraInicio"] = $dateStart;
-                $dia["HoraFin"] = $dateEnd;
 
                 $agenda = Agenda::where('Age_EmpCod', '=', $this->Emp)
                     ->where(function ($q) use ($sede) {
@@ -155,18 +154,25 @@ class InicioController extends Controller
                     //             break;
                     //     }
                     // }
-                    $dia[$dateStart] = $agenda->Age_Estado.'-'.trim($agenda->estado->Color).'-'.trim($agenda->estado->Nombre);
-                    $dia["Age_AgeCod"] = $agenda->Age_AgeCod;
+                    $dias[$fecha->format('d-m-Y')] = (object)array("HoraInicio" => $dateStart, "HoraFin" =>$dateEnd, "agenda" => $agenda->Age_AgeCod, "estado" => $agenda->Age_Estado, "color" => trim($agenda->estado->Color), "nombre" => trim($agenda->estado->Nombre));
+                    //$dia["Age_AgeCod"] = $agenda->Age_AgeCod;
                 } else {
                     // $dia[$diaSemana[$fecha->format('w')] . ' ' . $fecha->format('d-m')] = 'Disponible';
-                    $dia[$dateStart] = 'A';
+                    $dias[$fecha->format('d-m-Y')] = (object)array("HoraInicio" => $dateStart, "HoraFin" =>$dateEnd, "agenda" => '', "estado" => 'A', "color" => '', "nombre" => '');
                 }
                 if ($fecha == $fechaTermino) {
+                    $dia->dias = $dias;
                     array_push($semana, $dia);
                 }
             }
         }
+
         // dd($semana);
+        // foreach ($semana as $key => $horas){
+        //     foreach ($semana[$key] as $index => $datos){
+        //         echo $datos.'<br>';
+        //     }
+        // }
         return $semana;
     }
 
