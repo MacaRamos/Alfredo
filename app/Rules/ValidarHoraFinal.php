@@ -36,12 +36,12 @@ class ValidarHoraFinal implements Rule
                         //inicio < age_inicio < value < fin
                         //inicio < age_inicio
                         //value < fin
-        // dd($agenda);
+        //dd($agenda);
         
-        if($agenda){
-            return false;
-        }else{
+        if($agenda->isEmpty()){
             return true;
+        }else{
+            return false;
         }
     }
 

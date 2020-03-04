@@ -28,6 +28,23 @@ class InicioController extends Controller
     public function index(Request $request)
     {
         setlocale(LC_ALL, "es_ES@euro", "es_ES", "esp");
+
+        $ficha = session()->get("ficha");
+        if(isset($ficha))
+        {            
+            if($request->ficha)
+            {
+                if($request->ficha <= $ficha)
+                {
+                    $request->accion = "";
+                }
+                session()->put("ficha", $request->ficha);
+            }
+        }
+        else
+        {
+            session()->put("ficha", 0);
+        }
         // DB::listen(function ($query) {
 
         //     if(strpos($query->sql, "GCAGENDA") !== FALSE)
@@ -141,7 +158,7 @@ class InicioController extends Controller
                     })
                     ->with(['especialista' => function ($q) use ($especialista) {
                         if ($especialista) {
-                            $q->where('Age_EspCod', $especialista);
+                            $q->where('Ve_cod_ven', $especialista);
                         }
                     }])
                     // ->where(function ($q) use ($especialista) {
@@ -214,7 +231,7 @@ class InicioController extends Controller
         $codigoCliente = null;
         if ($request->cliente && $request->celular) {
             $cliente = new Cliente;
-            $cliente->Cli_NomCli = $request->cliente;
+            $cliente->Cli_NomCli = strtoupper($request->cliente);
             $cliente->Cli_NumCel = $request->celular;
             $cliente->Cli_NumFij = $request->fijo;
             $cliente->save();
@@ -281,7 +298,7 @@ class InicioController extends Controller
         $codigoCliente = null;
         if ($request->cliente && $request->celular) {
             $cliente = new Cliente;
-            $cliente->Cli_NomCli = $request->cliente;
+            $cliente->Cli_NomCli = strtoupper($request->cliente);
             $cliente->Cli_NumCel = $request->celular;
             $cliente->Cli_NumFij = $request->fijo;
             $cliente->save();
@@ -380,6 +397,7 @@ class InicioController extends Controller
         $especialista = $request->especialista;
         $respuesta = null;
         $query = Servicio::where('Art_nom_externo', 'like', '%' . $term . '%')
+                        ->where('Gc_fam_cod', '=', 1)
             ->with(["tiempoEspecialista" => function ($q) use ($especialista) {
                 $q->where('Ser_EspCod', 'like', '%' . $especialista . '%');
             }])

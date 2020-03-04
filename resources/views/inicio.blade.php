@@ -293,6 +293,7 @@ Inicio
 
 @section('contenido')
 <form class="form-horizontal" id="cambiarFiltros" method="POST" action="{{route('inicio')}}">
+  <input type="hidden" name="ficha" value="{{ ($request->ficha ?? session()->get("ficha")) + 1  }}" />
   <input type="hidden" name="accion" id="accion" value="">
   <input type="hidden" name="Age_AgeCod" id="Age_AgeCod" value="">
   <input type="hidden" name="Age_Estado" id="Age_Estado" value="">
