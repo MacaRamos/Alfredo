@@ -9,10 +9,12 @@ use App\Models\Cliente\Cliente;
 use App\Models\Especialista\Especialista;
 use App\Models\Sede\Sede;
 use App\Models\Servicio\Servicio;
+use App\Rules\ValidarHoraFinal;
 use DateInterval;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Validator;
 use stdClass;
 
 class InicioController extends Controller
@@ -71,6 +73,8 @@ class InicioController extends Controller
                     break;
                 case 'editar':
                     $notificacion = $this->editar($request);
+                    $fechaInicio = new DateTime(date('d-m-Y', strtotime($request->fechaInicio)));
+                    $fechaTermino = new DateTime(date('d-m-Y', strtotime($request->fechaTermino)));
                 break;
                 case 'confirmar':
                     $agenda = Agenda::where('Age_AgeCod', '=', $request->Age_AgeCod)
@@ -104,7 +108,7 @@ class InicioController extends Controller
 
             $semana = $this->llenarSemana($fechaInicio, $fechaTermino, $request->sede ?? '', $request->especialista ?? '');
 
-            return view('inicio', compact('sedes', 'especialistas', 'fechaInicio', 'fechaTermino', 'semana', 'request'))->with($notificacion);
+            return view('inicio', compact('sedes', 'especialistas', 'fechaInicio', 'fechaTermino', 'semana', 'request', 'notificacion'));
         } else {
             return view('seguridad.index');
         }
@@ -192,6 +196,21 @@ class InicioController extends Controller
 
     public function agendar(Request $request)
     {
+        $validator = Validator::make($request->all(),[
+            'mHoraFin' => [new ValidarHoraFinal($request->mHoraInicio)]
+        ]);
+
+        if ($validator->fails()) 
+        {
+            $notificacion = array(
+                'mensaje' => implode(';',$validator->errors()->all()),
+                'tipo' => 'error',
+                'titulo' => 'Agenda',
+            );
+
+            return $notificacion;
+        }
+
         $codigoCliente = null;
         if ($request->cliente && $request->celular) {
             $cliente = new Cliente;
@@ -215,8 +234,8 @@ class InicioController extends Controller
         $agenda->Age_SedCod = $request->mSede;
         $agenda->Age_EspCod = $request->mOpcionEspecialista;
         $agenda->Age_Fecha = date('d-m-Y', strtotime($request->mfechaAgenda));
-        $agenda->Age_Inicio = date('d-m-Y H:i', strtotime($agenda->Age_Fecha . " " . $request->mHoraInicio));
-        $agenda->Age_Fin = date('d-m-Y H:i', strtotime($agenda->Age_Fecha . " " . $request->mHoraFin));
+        $agenda->Age_Inicio = date('d-m-Y H:i:s', strtotime($request->mHoraInicio));
+        $agenda->Age_Fin = date('d-m-Y H:i:s', strtotime($request->mHoraFin));
         $agenda->Age_CliCod = $codigoCliente;
         $agenda->Age_Estado = 'B';
         $agenda->save();
@@ -234,18 +253,31 @@ class InicioController extends Controller
             $ageDet->save();
         }
         // dd($request->all());
+        
         $notificacion = array(
             'mensaje' => 'Hora agendada con éxito',
             'tipo' => 'success',
             'titulo' => 'Agenda',
         );
-        //return view('inicio', compact('request'))->with($notificacion);
         return $notificacion;
     }
 
-    public function editar(Request $request){
+    public function editar(Request $request)
+    {   
+        $validator = Validator::make($request->all(),[
+            'mHoraFin' => [new ValidarHoraFinal($request->mHoraInicio)]
+        ]);
 
-        dd($request->all());
+        if ($validator->fails()) 
+        {
+            $notificacion = array(
+                'mensaje' => implode(';',$validator->errors()->all()),
+                'tipo' => 'error',
+                'titulo' => 'Agenda',
+            );
+
+            return $notificacion;
+        }
         $codigoCliente = null;
         if ($request->cliente && $request->celular) {
             $cliente = new Cliente;
@@ -262,16 +294,14 @@ class InicioController extends Controller
                         ->where('Age_AgeCod', '=', $request->Age_AgeCod)
                         ->first();
 
-        $agenda->Age_SedCod = $request->mSede;
-        $agenda->Age_EspCod = $request->mOpcionEspecialista;
         $agenda->Age_Fecha = date('d-m-Y', strtotime($request->mfechaAgenda));
-        $agenda->Age_Inicio = date('d-m-Y H:i', strtotime($agenda->Age_Fecha . " " . $request->mHoraInicio));
-        $agenda->Age_Fin = date('d-m-Y H:i', strtotime($agenda->Age_Fecha . " " . $request->mHoraFin));
+        $agenda->Age_Inicio = date('d-m-Y H:i:s', strtotime($request->mHoraInicio));
+        $agenda->Age_Fin = date('d-m-Y H:i:s', strtotime($request->mHoraFin));
         $agenda->Age_CliCod = $codigoCliente;
-        $agenda->Age_Estado = 'B';
+        $agenda->Age_Estado = $request->Age_Estado;
         $agenda->update();
 
-        $ageDet = AgeDet::where('Mb_Epr_cod', '=', $this->Emp)
+        $ageDet = AgeDet::where('Age_EmpCod', '=', $this->Emp)
                             ->where('Age_AgeCod', '=', $request->Age_AgeCod)
                             ->where('Age_AgeCod', '=', $request->Age_SerCod)
                             ->delete();

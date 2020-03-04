@@ -30,7 +30,8 @@
         <td class="bg-gray-light disabled">
         </td>
         @else
-        <td data-fecha="{{$dato->Age_Inicio}}" data-horainicio="{{date('H:i',strtotime($dato->Age_Inicio))}}"
+        <td data-fecha="{{date('d-m-Y', strtotime($dato->Age_Inicio))}}"
+          data-horainicio="{{date('H:i',strtotime($dato->Age_Inicio))}}"
           data-horafin="{{date('H:i',strtotime($dato->Age_Fin))}}" class="pointer text-center agendar" title="Agendar"
           data-toggle2="tooltip" data-placement="bottom" data-toggle="modal" data-target="#modalAgenda">
         </td>
@@ -54,6 +55,7 @@
                 <i class="fas fa-edit editar"></i> Editar
               </a>
               <a class="btn btn-app confirmar" data-AgeCod="{{$semana[$key]->dias[$dia]->Age_AgeCod}}"
+                data-fecha="{{date('d-m-Y',strtotime($dato->Age_Fecha))}}"
                 data-horainicio="{{date('H:i',strtotime($dato->Age_Inicio))}}"
                 data-horafin="{{date('H:i',strtotime($dato->Age_Fin))}}" title="Confirmar">{{-- C  confirmado --}}
                 <i class="fas fa-check"></i> Confirm
@@ -76,6 +78,7 @@
             <div class="dropdown-menu" x-placement="bottom-start"
               style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px); min-width: 260px;">
               <a class="btn btn-app editar" data-key="{{$key}}" data-dia="{{$dia}}" data-toggle="modal"
+                data-fecha="{{date('d-m-Y',strtotime($dato->Age_Fecha))}}"
                 data-horainicio="{{date('H:i',strtotime($dato->Age_Inicio))}}"
                 data-horafin="{{date('H:i',strtotime($dato->Age_Fin))}}" data-target="#modalAgenda">
                 <i class="fas fa-edit"></i> Editar

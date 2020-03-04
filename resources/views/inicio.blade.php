@@ -7,15 +7,14 @@ Inicio
 @endsection
 @section('scripts')
 <script src="{{asset("assets/pages/scripts/admin/index.js")}}" type="text/javascript"></script>
-
 <!-- Bootstrap Switch -->
 <script src="{{asset("assets/$theme/plugins/bootstrap-switch/js/bootstrap-switch.min.js")}}"></script>
 @include('includes.mensaje')
 <script>
   $(function(){
+    
     var semana = @json($semana);
-    console.log(semana);
-
+    
     $('[data-toggle2="tooltip"]').tooltip()
 
     $('#modalAgenda').on('hidden.bs.modal', function (e) {
@@ -24,7 +23,7 @@ Inicio
       $('#cliente-checkbox').bootstrapSwitch('state', false, false);
     })
 
-
+    var servicio = 0
     var mHorDur = 0;
     var mMinDur = 0;
 
@@ -65,20 +64,23 @@ Inicio
       $('#accion').val('editar');
         e.preventDefault();
         if ($('#especialista :selected').text() != 'Local'){
-        $('#mEspecialista').text($('#especialista :selected').text());
-      }else{
-        $('#mEspecialista').css('display', 'none');
-        $('#mOpcionEspecialista').css('display', 'block');
-      }
+          $('#mEspecialista').text($('#especialista :selected').text());
+        }else{
+          $('#mEspecialista').css('display', 'none');
+          $('#mOpcionEspecialista').css('display', 'block');
+        }
         
         $('#Age_AgeCod').val(semana[$(this).data('key')].dias[$(this).data('dia')]["Age_AgeCod"]);
         $("#Cli_NomCli").val(semana[$(this).data('key')].dias[$(this).data('dia')].cliente["Cli_NomCli"]);
         $("#Cli_CodCli").val(semana[$(this).data('key')].dias[$(this).data('dia')].cliente["Cli_CodCli"]);
+        $('input[name=mfechaAgenda]').val($(this).data('fecha'));
+        $('#Age_Estado').val(semana[$(this).data('key')].dias[$(this).data('dia')]["Age_Estado"]);
         $('#mHoraInicio').text($(this).data('horainicio'));
-        $('input[name=mHoraInicio]').val($('#mHoraInicio').text());
+        $('input[name=mHoraInicio]').val(semana[$(this).data('key')].dias[$(this).data('dia')]["Age_Inicio"]);
         $('#mHoraFin').text($(this).data('horafin'));
-        $('input[name=mHoraFin]').val($('#mHoraFin').text());
-   
+        $('input[name=mHoraFin]').val(semana[$(this).data('key')].dias[$(this).data('dia')]["Age_Fin"]);
+
+        
         
         var lineasDetalle = semana[$(this).data('key')].dias[$(this).data('dia')].lineasDetalle;
         $.each(lineasDetalle, function(index, linea) {
@@ -92,17 +94,19 @@ Inicio
           $('#Art_cod').val(linea.articulo.Art_cod);
           $('#Art_nom_externo').val(linea.articulo.Art_nom_externo);
           $('#tablaServicios').children('tbody').append('<tr><td>'+$('#Art_nom_externo').val()+'<input type="hidden" name="servicios['+index+']" value="'+$('#Art_cod').val()+'"/><input class="hora" style="display: none;" name="mDuracion['+index+']" value="'+mHorDur+':'+mMinDur+'"/><a class="btn-accion-tabla float-right quitarServicio"><i class="fas fa-times icon-circle-small bg-danger"></i></a></td></tr>');
+          servicio = index+1;
         });
         
     });
     
     $('.agendar').click(function(){
+      $('#accion').val('agendar');
       $('input[name=mSede]').val($('#sede :selected').val());
       $('input[name=mfechaAgenda]').val($(this).data('fecha'));
       $('#mHoraInicio').text($(this).data('horainicio'));
-      $('input[name=mHoraInicio]').val($('#mHoraInicio').text());
+      $('input[name=mHoraInicio]').val($('input[name=mfechaAgenda]').val()+' '+$('#mHoraInicio').text());
       $('#mHoraFin').text($(this).data('horafin'));
-      $('input[name=mHoraFin]').val($('#mHoraFin').text());
+      $('input[name=mHoraFin]').val($('input[name=mfechaAgenda]').val()+' '+$('#mHoraFin').text());
 
       console.log('Fecha: '+$('input[name=mfechaAgenda]').val());
       console.log('Hora inicio'+$(this).data('horainicio'));
@@ -188,10 +192,11 @@ Inicio
     //recibe un date
     function verificarHoraFinal(duracionServicio)
     {
-      var duracionTotalReserva = new Date("1700-01-01 "+$('input[name=mHoraInicio]').val());
+      var duracionTotalReserva = new Date($('input[name=mfechaAgenda]').val()+' '+$('#mHoraInicio').text());
+      console.log('hola '+duracionTotalReserva);
       $('input.hora').each(function(index, item)
       {
-          var duracionServicioTd = new Date("1700-01-01 "+$(item).val());
+          var duracionServicioTd = new Date($('input[name=mfechaAgenda]').val()+' '+$(item).val());
           //establesco la nueva duración total de la reserva usando milisegundos
           duracionTotalReserva.setTime(duracionTotalReserva.getTime() +  //obtiene los milisegundos de la fecha actual
                                        (duracionServicioTd.getHours()*60*60*1000) + //obtiene la hora y la convierte en milisegundos
@@ -205,10 +210,10 @@ Inicio
     }
     function calculaHoraFinal()
     {
-      var duracionTotalReserva = new Date("1700-01-01 "+$('input[name=mHoraInicio]').val());
+      var duracionTotalReserva = new Date($('input[name=mfechaAgenda]').val()+' '+$('#mHoraInicio').text());
       $('input.hora').each(function(index, item)
       {
-          var duracionServicioTd = new Date("1700-01-01 "+$(item).val());
+          var duracionServicioTd = new Date($('input[name=mfechaAgenda]').val()+' '+$(item).val());
           //establesco la nueva duración total de la reserva usando milisegundos
           duracionTotalReserva.setTime(duracionTotalReserva.getTime() +  //obtiene los milisegundos de la fecha actual
                                        (duracionServicioTd.getHours()*60*60*1000) + //obtiene la hora y la convierte en milisegundos
@@ -229,7 +234,7 @@ Inicio
               $("#mHoraFin").text(date.getHours()+':'+date.getMinutes());
             }
         }
-        $('input[name=mHoraFin]').val($("#mHoraFin").text());
+        $('input[name=mHoraFin]').val($('input[name=mfechaAgenda]').val()+' '+$('#mHoraFin').text());
        // console.log($("#mHoraFin").text());
       //$("#mHoraFin").text(duracionTotalReserva.getHours()+':'+duracionTotalReserva.getMinutes());
     }
@@ -251,19 +256,19 @@ Inicio
               $("#mHoraFin").text(date.getHours()+':'+date.getMinutes());
             }
         }
-        $('input[name=mHoraFin]').val($("#mHoraFin").text());
+        $('input[name=mHoraFin]').val($('input[name=mfechaAgenda]').val()+' '+$('#mHoraFin').text());
        // console.log($("#mHoraFin").text());
       //$("#mHoraFin").text(duracionTotalReserva.getHours()+':'+duracionTotalReserva.getMinutes());
     }
     
-    var servicio = 0
+    
     $('#asignar').click(function(){
       if($('#Art_nom_externo').val() != '')
       {
         //mHorDur = parseInt($("#mHoraFin").text().substring(0,2))+mHorDur;
         //mMinDur = parseInt($("#mHoraFin").text().substring(3,5))+mMinDur;
         //$("#mHoraFin").text(mHorDur.toString()+':'+mMinDur.toString()); // save selected id to hidden input
-        var duracionServicio = new Date('1700-01-01 '+mHorDur+':'+mMinDur);
+        var duracionServicio = new Date($('input[name=mfechaAgenda]').val()+' '+mHorDur+':'+mMinDur);
         var duracionTotalServicios = verificarHoraFinal(duracionServicio);
         if(duracionTotalServicios.getHours()*60+duracionTotalServicios.getMinutes()  <= 19*60)
         {        
@@ -282,14 +287,15 @@ Inicio
     });
     
   });
-  
 </script>
+
 @endsection
 
 @section('contenido')
 <form class="form-horizontal" id="cambiarFiltros" method="POST" action="{{route('inicio')}}">
   <input type="hidden" name="accion" id="accion" value="">
   <input type="hidden" name="Age_AgeCod" id="Age_AgeCod" value="">
+  <input type="hidden" name="Age_Estado" id="Age_Estado" value="">
   @include('modal')
   @csrf
   <div class="card">
