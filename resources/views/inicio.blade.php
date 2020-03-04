@@ -16,7 +16,6 @@ Inicio
     var semana = @json($semana);
     console.log(semana);
 
-
     $('[data-toggle2="tooltip"]').tooltip()
 
     $('#modalAgenda').on('hidden.bs.modal', function (e) {
@@ -48,10 +47,10 @@ Inicio
     $('#mSede').text($('#sede :selected').text());
     $('input[name=mSede]').val($('#sede :selected').val());
     
-    $('#guardarReserva').click(function(){
-      $('#accion').val('agendar');
-      $('form#cambiarFiltros').submit();
-    });
+    // $('#guardarReserva').click(function(){
+    //   $('#accion').val('agendar');
+    //   $('form#cambiarFiltros').submit();
+    // });
 
     $('.confirmar').click(function(e)
     {
@@ -60,6 +59,42 @@ Inicio
         $('#Age_AgeCod').val($(this).data('agecod'));
         $('form#cambiarFiltros').submit();
     });
+
+    $('.editar').click(function(e)
+    {
+      $('#accion').val('editar');
+        e.preventDefault();
+        if ($('#especialista :selected').text() != 'Local'){
+        $('#mEspecialista').text($('#especialista :selected').text());
+      }else{
+        $('#mEspecialista').css('display', 'none');
+        $('#mOpcionEspecialista').css('display', 'block');
+      }
+        
+        $('#Age_AgeCod').val(semana[$(this).data('key')].dias[$(this).data('dia')]["Age_AgeCod"]);
+        $("#Cli_NomCli").val(semana[$(this).data('key')].dias[$(this).data('dia')].cliente["Cli_NomCli"]);
+        $("#Cli_CodCli").val(semana[$(this).data('key')].dias[$(this).data('dia')].cliente["Cli_CodCli"]);
+        $('#mHoraInicio').text($(this).data('horainicio'));
+        $('input[name=mHoraInicio]').val($('#mHoraInicio').text());
+        $('#mHoraFin').text($(this).data('horafin'));
+        $('input[name=mHoraFin]').val($('#mHoraFin').text());
+   
+        
+        var lineasDetalle = semana[$(this).data('key')].dias[$(this).data('dia')].lineasDetalle;
+        $.each(lineasDetalle, function(index, linea) {
+          if (linea.articulo.tiempoEspecialista != null){
+            mHorDur = linea.articulo.tiempoEspecialista["Ser_HorDur"];
+            mMinDur = linea.articulo.tiempoEspecialista["Ser_MinDur"];
+          }else{
+            mHorDur = linea.articulo.tiempoGeneral["Dur_HorDur"];
+            mMinDur = linea.articulo.tiempoGeneral["Dur_MinDur"];
+          }
+          $('#Art_cod').val(linea.articulo.Art_cod);
+          $('#Art_nom_externo').val(linea.articulo.Art_nom_externo);
+          $('#tablaServicios').children('tbody').append('<tr><td>'+$('#Art_nom_externo').val()+'<input type="hidden" name="servicios['+index+']" value="'+$('#Art_cod').val()+'"/><input class="hora" style="display: none;" name="mDuracion['+index+']" value="'+mHorDur+':'+mMinDur+'"/><a class="btn-accion-tabla float-right quitarServicio"><i class="fas fa-times icon-circle-small bg-danger"></i></a></td></tr>');
+        });
+        
+    });
     
     $('.agendar').click(function(){
       $('input[name=mSede]').val($('#sede :selected').val());
@@ -67,7 +102,7 @@ Inicio
       $('#mHoraInicio').text($(this).data('horainicio'));
       $('input[name=mHoraInicio]').val($('#mHoraInicio').text());
       $('#mHoraFin').text($(this).data('horafin'));
-      $('#mHoraFin').text($(this).data('horafin'));
+      $('input[name=mHoraFin]').val($('#mHoraFin').text());
 
       console.log('Fecha: '+$('input[name=mfechaAgenda]').val());
       console.log('Hora inicio'+$(this).data('horainicio'));

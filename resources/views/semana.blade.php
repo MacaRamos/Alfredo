@@ -21,28 +21,28 @@
       @else
       @foreach ($semana[$key]->dias as $dia => $dato)
 
-      @if ($dato->estado === "A")
-      @if ((new DateTime(date('d-m-Y H:i', strtotime($dato->HoraInicio))) < new DateTime(date('d-m-Y H:i'))) ||
-        ($diaSemana[intval(date('w',strtotime($dato->HoraInicio)))]=='Dom' ) ||
-        ($diaSemana[intval(date('w',strtotime($dato->HoraInicio)))]=='Sáb' && new DateTime(date('d-m-Y H:i',
-        strtotime($dato->HoraInicio)))>
-        new DateTime(date('d-m-Y', strtotime($dato->HoraInicio)).' 14:00')))
+      @if ($dato->Age_Estado === "A")
+      @if ((new DateTime(date('d-m-Y H:i', strtotime($dato->Age_Inicio))) < new DateTime(date('d-m-Y H:i'))) ||
+        ($diaSemana[intval(date('w',strtotime($dato->Age_Inicio)))]=='Dom' ) ||
+        ($diaSemana[intval(date('w',strtotime($dato->Age_Inicio)))]=='Sáb' && new DateTime(date('d-m-Y H:i',
+        strtotime($dato->Age_Inicio)))>
+        new DateTime(date('d-m-Y', strtotime($dato->Age_Inicio)).' 14:00')))
         <td class="bg-gray-light disabled">
         </td>
         @else
-        <td data-fecha="{{$dato->HoraInicio}}" data-horainicio="{{date('H:i',strtotime($dato->HoraInicio))}}"
-          data-horafin="{{date('H:i',strtotime($dato->HoraFin))}}" class="pointer text-center agendar" title="Agendar"
+        <td data-fecha="{{$dato->Age_Inicio}}" data-horainicio="{{date('H:i',strtotime($dato->Age_Inicio))}}"
+          data-horafin="{{date('H:i',strtotime($dato->Age_Fin))}}" class="pointer text-center agendar" title="Agendar"
           data-toggle2="tooltip" data-placement="bottom" data-toggle="modal" data-target="#modalAgenda">
         </td>
         @endif
         @else
 
-        @if (!isset($semana[$key+1]->dias[$dia]->agenda) || (isset($semana[$key+1]->dias[$dia]->agenda) &&
-        $semana[$key+1]->dias[$dia]->agenda != $semana[$key]->dias[$dia]->agenda))
+        @if (!isset($semana[$key+1]->dias[$dia]->Age_AgeCod) || (isset($semana[$key+1]->dias[$dia]->Age_AgeCod) &&
+        $semana[$key+1]->dias[$dia]->Age_AgeCod != $semana[$key]->dias[$dia]->Age_AgeCod))
         <td class="text-black"
-          style="background-color: #{{$dato->color}}; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
+          style="background-color: #{{trim($dato->estado["Color"])}}; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
           {{-- BOTONES DROPDOWN OPCIONES --}}
-          @switch($dato->estado)
+          @switch($dato->Age_Estado)
           @case('B')
           <div class="btn-group float-right">
             <button type="button" class="btn-accion-tabla icon-circle-small bg-gray-light dropdown-toggle dropdown-icon"
@@ -50,14 +50,15 @@
             </button>
             <div class="dropdown-menu" x-placement="bottom-start"
               style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px); min-width: 260px;">
-              <a class="btn btn-app">
-                <i class="fas fa-edit"></i> Editar
+              <a class="btn btn-app editar" data-key="{{$key}}" data-dia="{{$dia}}">
+                <i class="fas fa-edit editar"></i> Editar
               </a>
-              <a class="btn btn-app confirmar" data-AgeCod="{{$semana[$key]->dias[$dia]->agenda}}"
-                title="Confirmar">{{-- C  confirmado --}}
+              <a class="btn btn-app confirmar" data-AgeCod="{{$semana[$key]->dias[$dia]->Age_AgeCod}}"
+                data-horainicio="{{date('H:i',strtotime($dato->Age_Inicio))}}"
+                data-horafin="{{date('H:i',strtotime($dato->Age_Fin))}}" title="Confirmar">{{-- C  confirmado --}}
                 <i class="fas fa-check"></i> Confirm
               </a>
-              <a class="btn btn-app confirmar" data-AgeCod="{{$semana[$key]->dias[$dia]->agenda}}"
+              <a class="btn btn-app confirmar" data-AgeCod="{{$semana[$key]->dias[$dia]->Age_AgeCod}}"
                 title="Confirmar">{{-- D  sin respuesta --}}
                 <i class="fas fa-phone-slash"></i> Sin Resp.
               </a>
@@ -74,7 +75,9 @@
             </button>
             <div class="dropdown-menu" x-placement="bottom-start"
               style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px); min-width: 260px;">
-              <a class="btn btn-app">
+              <a class="btn btn-app editar" data-key="{{$key}}" data-dia="{{$dia}}" data-toggle="modal"
+                data-horainicio="{{date('H:i',strtotime($dato->Age_Inicio))}}"
+                data-horafin="{{date('H:i',strtotime($dato->Age_Fin))}}" data-target="#modalAgenda">
                 <i class="fas fa-edit"></i> Editar
               </a>
               <a class="btn btn-app">
@@ -95,14 +98,14 @@
           {{-- FIN BOTONES DROPDOWN OPCIONES --}}
         </td>
         @else
-        @if (!isset($semana[$key-1]->dias[$dia]->agenda) || (isset($semana[$key-1]->dias[$dia]->agenda) &&
-        $semana[$key-1]->dias[$dia]->agenda != $semana[$key]->dias[$dia]->agenda))
-        <td class="text-black"
-          style="background-color: #{{$dato->color}}; border-bottom: none; border-top-left-radius: 10px; border-top-right-radius: 10px;">
+        @if (!isset($semana[$key-1]->dias[$dia]->Age_AgeCod) || (isset($semana[$key-1]->dias[$dia]->Age_AgeCod) &&
+        $semana[$key-1]->dias[$dia]->Age_AgeCod != $semana[$key]->dias[$dia]->Age_AgeCod))
+        <td class="text-black" style="background-color: #{{trim($dato->estado["Color"])}}; border-bottom: none; border-top-left-radius: 10px;
+        border-top-right-radius: 10px;">
         </td>
         @else
-        <td class="text-black" style="background-color: #{{$dato->color}}; border-bottom: none;">
-          {{$semana[$key]->dias[$dia]->agenda}}</td>
+        <td class="text-black" style="background-color: #{{trim($dato->estado["Color"])}}; border-bottom: none;">
+          {{$semana[$key]->dias[$dia]->Age_AgeCod}}</td>
         @endif
         @endif
 

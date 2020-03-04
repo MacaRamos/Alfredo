@@ -69,6 +69,9 @@ class InicioController extends Controller
                     $fechaInicio = new DateTime(date('d-m-Y', strtotime($request->fechaInicio)));
                     $fechaTermino = new DateTime(date('d-m-Y', strtotime($request->fechaTermino)));
                     break;
+                case 'editar':
+                    $notificacion = $this->editar($request);
+                break;
                 case 'confirmar':
                     $agenda = Agenda::where('Age_AgeCod', '=', $request->Age_AgeCod)
                                     ->where('Age_Estado', '=', 'C')->first();
@@ -131,15 +134,26 @@ class InicioController extends Controller
                         if ($sede) {
                             $q->where('Age_SedCod', $sede);
                         }
-                    })                    
-                    ->where(function ($q) use ($especialista) {
+                    })
+                    ->with(['especialista' => function ($q) use ($especialista) {
                         if ($especialista) {
                             $q->where('Age_EspCod', $especialista);
                         }
-                    })
+                    }])
+                    // ->where(function ($q) use ($especialista) {
+                    //     if ($especialista) {
+                    //         $q->where('Age_EspCod', $especialista);
+                    //     }
+                    // })
                     ->where('Age_Inicio', '<=', $dateStart)
                     ->where('Age_Fin', '>=', $dateEnd)
                     ->with('estado')
+                    ->with('cliente')
+                    ->with('lineasDetalle', 'lineasDetalle.articulo')
+                    ->with(["lineasDetalle.articulo.tiempoEspecialista" => function ($q) use ($especialista) {
+                        $q->where('Ser_EspCod', 'like', '%' . $especialista . '%');
+                    }])
+                    ->with('lineasDetalle.articulo.tiempoGeneral')
                     ->first();
                 if ($agenda) {
                     // if (new DateTime(date('d-m-Y H:i', strtotime($agenda->Age_Fin))) < new DateTime(date('d-m-Y H:i'))){
@@ -154,11 +168,11 @@ class InicioController extends Controller
                     //             break;
                     //     }
                     // }
-                    $dias[$fecha->format('d-m-Y')] = (object)array("HoraInicio" => $dateStart, "HoraFin" =>$dateEnd, "agenda" => $agenda->Age_AgeCod, "estado" => $agenda->Age_Estado, "color" => trim($agenda->estado->Color), "nombre" => trim($agenda->estado->Nombre));
+                    $dias[$fecha->format('d-m-Y')] = (object)$agenda;
                     //$dia["Age_AgeCod"] = $agenda->Age_AgeCod;
                 } else {
                     // $dia[$diaSemana[$fecha->format('w')] . ' ' . $fecha->format('d-m')] = 'Disponible';
-                    $dias[$fecha->format('d-m-Y')] = (object)array("HoraInicio" => $dateStart, "HoraFin" =>$dateEnd, "agenda" => '', "estado" => 'A', "color" => '', "nombre" => '');
+                    $dias[$fecha->format('d-m-Y')] = (object)array("Age_Inicio" => $dateStart, "Age_Fin" =>$dateEnd, "Age_Estado" => 'A');
                 }
                 if ($fecha == $fechaTermino) {
                     $dia->dias = $dias;
@@ -222,6 +236,61 @@ class InicioController extends Controller
         // dd($request->all());
         $notificacion = array(
             'mensaje' => 'Hora agendada con éxito',
+            'tipo' => 'success',
+            'titulo' => 'Agenda',
+        );
+        //return view('inicio', compact('request'))->with($notificacion);
+        return $notificacion;
+    }
+
+    public function editar(Request $request){
+
+        dd($request->all());
+        $codigoCliente = null;
+        if ($request->cliente && $request->celular) {
+            $cliente = new Cliente;
+            $cliente->Cli_NomCli = $request->cliente;
+            $cliente->Cli_NumCel = $request->celular;
+            $cliente->Cli_NumFij = $request->fijo;
+            $cliente->save();
+            $codigoCliente = $cliente->Cli_CodCli;
+        }else{
+            $codigoCliente = $request->Cli_CodCli;
+        }
+        
+        $agenda = Agenda::where('Age_EmpCod', '=', $this->Emp)
+                        ->where('Age_AgeCod', '=', $request->Age_AgeCod)
+                        ->first();
+
+        $agenda->Age_SedCod = $request->mSede;
+        $agenda->Age_EspCod = $request->mOpcionEspecialista;
+        $agenda->Age_Fecha = date('d-m-Y', strtotime($request->mfechaAgenda));
+        $agenda->Age_Inicio = date('d-m-Y H:i', strtotime($agenda->Age_Fecha . " " . $request->mHoraInicio));
+        $agenda->Age_Fin = date('d-m-Y H:i', strtotime($agenda->Age_Fecha . " " . $request->mHoraFin));
+        $agenda->Age_CliCod = $codigoCliente;
+        $agenda->Age_Estado = 'B';
+        $agenda->update();
+
+        $ageDet = AgeDet::where('Mb_Epr_cod', '=', $this->Emp)
+                            ->where('Age_AgeCod', '=', $request->Age_AgeCod)
+                            ->where('Age_AgeCod', '=', $request->Age_SerCod)
+                            ->delete();
+        foreach ($request->servicios as $key => $servicio) {
+            $duracion = explode(':', $request->mDuracion[$key]);
+            
+            $ageDet = new AgeDet;
+            $ageDet->Age_EmpCod = $this->Emp;
+            $ageDet->Age_AgeCod = $request->Age_AgeCod;
+            $ageDet->Age_SedCod = $request->mSede;
+            $ageDet->Age_EspCod = $request->mOpcionEspecialista;
+            $ageDet->Age_SerCod = $servicio;
+            $ageDet->Age_DurHor = $duracion[0];
+            $ageDet->Age_DurMin = $duracion[1];
+            $ageDet->update();
+        }
+        // dd($request->all());
+        $notificacion = array(
+            'mensaje' => 'Hora modificada con éxito',
             'tipo' => 'success',
             'titulo' => 'Agenda',
         );

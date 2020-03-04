@@ -20,6 +20,7 @@ class AgeDet extends Model
 
     public function articulo()
     {
-        return $this->hasOne(Servicio::class, ['Art_cod'], ['Age_SerCod']);
+        return $this->hasOne(Servicio::class, ['Mb_Epr_cod', 'Art_cod'], ['Age_EmpCod','Age_SerCod']);
     }
+
 }
