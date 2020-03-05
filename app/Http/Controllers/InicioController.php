@@ -123,7 +123,7 @@ class InicioController extends Controller
                     ->get();
             }
 
-            $semana = $this->llenarSemana($fechaInicio, $fechaTermino, $request->sede ?? '', $request->especialista ?? '');
+            $semana = $this->llenarSemana($fechaInicio, $fechaTermino, $request->sede ?? null, $request->especialista ?? null);
 
             return view('inicio', compact('sedes', 'especialistas', 'fechaInicio', 'fechaTermino', 'semana', 'request', 'notificacion'));
         } else {
@@ -131,14 +131,21 @@ class InicioController extends Controller
         }
     }
 
-    private function llenarSemana($fechaInicio, $fechaTermino, $sede = '', $especialista = '')
+    private function llenarSemana($fechaInicio, $fechaTermino, $sede = null, $especialista = null)
     {
 
         $horaInicio = DateTime::createFromFormat('H:i', '09:00');
         $horaTermino = DateTime::createFromFormat('H:i', '18:45');
-        $especialistas = Especialista::where('Ve_ven_depto', '=', 'V' . $sede)
+        if($sede){
+            $especialistas = Especialista::where('Ve_ven_depto', '=', 'V' . $sede)
             ->with('departamento')
             ->get();
+        }else{
+            $especialistas = Especialista::where('Ve_ven_depto', '=', 'V1')
+            ->with('departamento')
+            ->get();
+        }
+        
         $semana = array();
         for ($hora = $horaInicio; $hora <= $horaTermino; $hora->add(new DateInterval('PT15M'))) {
             $horaFin = strtotime("+15 minutes", strtotime($hora->format('H:i')));
@@ -192,8 +199,9 @@ class InicioController extends Controller
                     //             break;
                     //     }
                     // }
-                    if (!$especialista) {
-                        if (count($especialistas)){
+                    // dd($especialista);
+                    if ($especialista == null) {
+                        if (count($especialistas) > 0){
                             $completado = (count($agenda)*100)/count($especialistas);
                         }else{
                             $completado = 0;
