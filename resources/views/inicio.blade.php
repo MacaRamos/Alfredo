@@ -9,8 +9,19 @@ Inicio
 <script src="{{asset("assets/pages/scripts/admin/index.js")}}" type="text/javascript"></script>
 <!-- Bootstrap Switch -->
 <script src="{{asset("assets/$theme/plugins/bootstrap-switch/js/bootstrap-switch.min.js")}}"></script>
+<!-- InputMask -->
+<script src="{{asset("assets/$theme/plugins/moment/moment.min.js")}}"></script>
+<script src="{{asset("assets/$theme/plugins/inputmask/min/jquery.inputmask.bundle.min.js")}}"></script>
 @include('includes.mensaje')
 <script>
+  $("#celular").inputmask({
+    mask: "[9-99999999]",
+      placeholder: ''
+  });
+  $("#fijo").inputmask({
+    mask: "[41-2196134]",
+      placeholder: ''
+  });
   $(function(){
     
     var semana = @json($semana);
@@ -33,6 +44,7 @@ Inicio
         $('form#cambiarFiltros').submit();    
     });
     $("#especialista").change(function(){        
+        $('#accion').val('');
         $('form#cambiarFiltros').submit();
     });
     $('#anterior').click(function(){
@@ -55,6 +67,14 @@ Inicio
     {
         e.preventDefault();        
         $('#accion').val('confirmar');        
+        $('#Age_AgeCod').val($(this).data('agecod'));
+        $('form#cambiarFiltros').submit();
+    });
+
+    $('.eliminar').click(function(e)
+    {
+        e.preventDefault();        
+        $('#accion').val('eliminar');        
         $('#Age_AgeCod').val($(this).data('agecod'));
         $('form#cambiarFiltros').submit();
     });

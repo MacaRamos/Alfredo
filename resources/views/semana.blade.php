@@ -21,7 +21,7 @@
       @else
       @foreach ($semana[$key]->dias as $dia => $dato)
 
-      @if ($dato->Age_Estado === "A")
+      @if ($dato->Age_Estado == "A")
       @if ((new DateTime(date('d-m-Y H:i', strtotime($dato->Age_Inicio))) < new DateTime(date('d-m-Y H:i'))) ||
         ($diaSemana[intval(date('w',strtotime($dato->Age_Inicio)))]=='Dom' ) ||
         ($diaSemana[intval(date('w',strtotime($dato->Age_Inicio)))]=='Sáb' && new DateTime(date('d-m-Y H:i',
@@ -37,7 +37,11 @@
         </td>
         @endif
         @else
-
+        @if ($dato->Age_Estado == "Z")
+        <td class="text-black" style="background-color: #{{trim($dato->estado["Color"])}}; border-radius: 10px;">
+          {{$dato->estado["Nombre"]}}
+        </td>
+        @else
         @if (!isset($semana[$key+1]->dias[$dia]->Age_AgeCod) || (isset($semana[$key+1]->dias[$dia]->Age_AgeCod) &&
         $semana[$key+1]->dias[$dia]->Age_AgeCod != $semana[$key]->dias[$dia]->Age_AgeCod))
         <td class="text-black"
@@ -64,7 +68,7 @@
                 title="Confirmar">{{-- D  sin respuesta --}}
                 <i class="fas fa-phone-slash"></i> Sin Resp.
               </a>
-              <a class="btn btn-app">
+              <a class="btn btn-app eliminar" data-AgeCod="{{$semana[$key]->dias[$dia]->Age_AgeCod}}">
                 <i class="fas fa-trash-alt"></i> Eliminar
               </a>
             </div>
@@ -89,14 +93,14 @@
               <a class="btn btn-app">
                 <i class="fas fa-times"></i> No Asiste {{-- F  no asiste --}}
               </a>
-              <a class="btn btn-app">
+              <a class="btn btn-app eliminar" data-AgeCod="{{$semana[$key]->dias[$dia]->Age_AgeCod}}">
                 <i class="fas fa-trash-alt"></i> Eliminar
               </a>
             </div>
           </div>
           @break
           @default
-
+          @break
           @endswitch
           {{-- FIN BOTONES DROPDOWN OPCIONES --}}
         </td>
@@ -109,6 +113,7 @@
         @else
         <td class="text-black" style="background-color: #{{trim($dato->estado["Color"])}}; border-bottom: none;">
           {{$semana[$key]->dias[$dia]->Age_AgeCod}}</td>
+        @endif
         @endif
         @endif
 
