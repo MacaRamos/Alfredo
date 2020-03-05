@@ -46,7 +46,7 @@
           -
           @endif
           @endforeach --}}
-        </p>'>>{{trim($dato->estado["Nombre"])}}
+        </p>'>{{trim($dato->estado["Nombre"])}}
         </td>
         @else
         @if (!isset($semana[$key+1]->dias[$dia]->Age_AgeCod) || (isset($semana[$key+1]->dias[$dia]->Age_AgeCod) &&
