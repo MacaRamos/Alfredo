@@ -136,16 +136,16 @@ class InicioController extends Controller
 
         $horaInicio = DateTime::createFromFormat('H:i', '09:00');
         $horaTermino = DateTime::createFromFormat('H:i', '18:45');
-        if($sede){
+        if ($sede) {
             $especialistas = Especialista::where('Ve_ven_depto', '=', 'V' . $sede)
-            ->with('departamento')
-            ->get();
-        }else{
+                ->with('departamento')
+                ->get();
+        } else {
             $especialistas = Especialista::where('Ve_ven_depto', '=', 'V1')
-            ->with('departamento')
-            ->get();
+                ->with('departamento')
+                ->get();
         }
-        
+
         $semana = array();
         for ($hora = $horaInicio; $hora <= $horaTermino; $hora->add(new DateInterval('PT15M'))) {
             $horaFin = strtotime("+15 minutes", strtotime($hora->format('H:i')));
@@ -170,11 +170,11 @@ class InicioController extends Controller
                             $q->where('Age_EspCod', $especialista);
                         }
                     })
-                    // ->where(function ($q) use ($especialista) {
-                    //     if ($especialista) {
-                    //         $q->where('Age_EspCod', $especialista);
-                    //     }
-                    // })
+                // ->where(function ($q) use ($especialista) {
+                //     if ($especialista) {
+                //         $q->where('Age_EspCod', $especialista);
+                //     }
+                // })
                     ->where('Age_Inicio', '<=', $dateStart)
                     ->where('Age_Fin', '>=', $dateEnd)
                     ->with('estado')
@@ -185,7 +185,7 @@ class InicioController extends Controller
                     }])
                     ->with('lineasDetalle.articulo.tiempoGeneral')
                     ->get();
-                    
+
                 if (count($agenda) > 0) {
                     // if (new DateTime(date('d-m-Y H:i', strtotime($agenda->Age_Fin))) < new DateTime(date('d-m-Y H:i'))){
                     //     switch ($agenda->Age_Estado) {
@@ -201,27 +201,31 @@ class InicioController extends Controller
                     // }
                     // dd($especialista);
                     if ($especialista == null) {
-                        if (count($especialistas) > 0){
-                            $completado = (count($agenda)*100)/count($especialistas);
-                        }else{
+                        if (count($especialistas) > 0) {
+                            $completado = (count($agenda) * 100) / count($especialistas);
+                        } else {
                             $completado = 0;
                         }
 
                         if ($completado == 0) {
                             $estado = array("Color" => 'fff', "Nombre" => 'DISPONIBLE', "Clase" => 'bg-white');
                             $dias[$fecha->format('d-m-Y')] = (object) array("Age_Inicio" => $dateStart, "Age_Fin" => $dateEnd, "Age_Estado" => 'A', "estado" => $estado);
-                        }else if ($completado < 75) {
+                        } else if ($completado < 75) {
                             $estado = array("Color" => 'ffc107', "Nombre" => 'MEDIANAMENTE OCUPADO', "Clase" => 'bg-warning');
                             $dias[$fecha->format('d-m-Y')] = (object) array("Age_Inicio" => $dateStart, "Age_Fin" => $dateEnd, "Age_Estado" => 'Z', "estado" => $estado);
-                        }else if ($completado >= 75 && $completado < 100) {
+                        } else if ($completado >= 75 && $completado < 100) {
                             $estado = array("Color" => 'ff851b', "Nombre" => 'CASI OCUPADO', "Clase" => 'bg-orange');
                             $dias[$fecha->format('d-m-Y')] = (object) array("Age_Inicio" => $dateStart, "Age_Fin" => $dateEnd, "Age_Estado" => 'Z', "estado" => $estado);
-                        }else if ($completado == 100) {
+                        } else if ($completado == 100) {
                             $estado = array("Color" => 'dc3545', "Nombre" => 'FULL OCUPADO', "Clase" => 'bg-danger');
                             $dias[$fecha->format('d-m-Y')] = (object) array("Age_Inicio" => $dateStart, "Age_Fin" => $dateEnd, "Age_Estado" => 'Z', "estado" => $estado);
                         }
                     } else {
-                        
+                        if (new DateTime(date('d-m-Y H:i')) >= new DateTime(date('d-m-Y H:i', strtotime($agenda[0]->Age_Inicio))) 
+                        && new DateTime(date('d-m-Y H:i')) <= new DateTime(date('d-m-Y H:i', strtotime($agenda[0]->Age_Fin)))) {
+                            $agenda[0]->Age_Estado = 'E'; //EN CURSO
+                            $agenda[0]->update();
+                        }
                         $dias[$fecha->format('d-m-Y')] = (object)$agenda[0];
                     }
 
@@ -235,8 +239,7 @@ class InicioController extends Controller
                 }
             }
         }
-
-        
+        // dd($semana);
         // foreach ($semana as $key => $horas){
         //     foreach ($semana[$key] as $index => $datos){
         //         echo $datos.'<br>';

@@ -330,44 +330,47 @@ Inicio
   @include('modal')
   @csrf
   <div class="card">
-    <div class="col-sm-6">
-      <!-- select -->
-      <div class="form-group p-2">
-        <span class="label">Local</span>
-        <select class="form-control" id="sede" name="sede">
-          @foreach ($sedes as $sede)
-          @if ($sede->Mb_Sedecod == $request->sede)
-          <option value="{{$sede->Mb_Sedecod}}" selected>{{$sede->Mb_sedenom}}</option>
-          @else
-          <option value="{{$sede->Mb_Sedecod}}">{{$sede->Mb_sedenom}}</option>
-          @endif
-          @endforeach
-        </select>
+    <div class="row">
+      <div class="col-sm-3">
+        <!-- select -->
+        <div class="form-group p-2">
+          <span class="label">Local</span>
+          <select class="form-control" id="sede" name="sede">
+            @foreach ($sedes as $sede)
+            @if ($sede->Mb_Sedecod == $request->sede)
+            <option value="{{$sede->Mb_Sedecod}}" selected>{{$sede->Mb_sedenom}}</option>
+            @else
+            <option value="{{$sede->Mb_Sedecod}}">{{$sede->Mb_sedenom}}</option>
+            @endif
+            @endforeach
+          </select>
+        </div>
+      </div>
+      <div class="col-sm-3">
+        <!-- select -->
+        <div class="form-group p-2">
+          <span class="label">Especialista</span>
+          <select class="form-control" id="especialista" name="especialista">
+            @if (!$request->especialista)
+            <option value="" selected>Local</option>
+            @foreach ($especialistas as $especialista)
+            <option value="{{$especialista->Ve_cod_ven}}">{{$especialista->Ve_nombre_ven}}</option>
+            @endforeach
+            @else
+            <option value="">Local</option>
+            @foreach ($especialistas as $especialista)
+            @if (trim($especialista->Ve_cod_ven) == $request->especialista)
+            <option value="{{$especialista->Ve_cod_ven}}" selected>{{$especialista->Ve_nombre_ven}}</option>
+            @else
+            <option value="{{$especialista->Ve_cod_ven}}">{{$especialista->Ve_nombre_ven}}</option>
+            @endif
+            @endforeach
+            @endif
+          </select>
+        </div>
       </div>
     </div>
-    <div class="col-sm-6">
-      <!-- select -->
-      <div class="form-group p-2">
-        <span class="label">Especialista</span>
-        <select class="form-control" id="especialista" name="especialista">
-          @if (!$request->especialista)
-          <option value="" selected>Local</option>
-          @foreach ($especialistas as $especialista)
-          <option value="{{$especialista->Ve_cod_ven}}">{{$especialista->Ve_nombre_ven}}</option>
-          @endforeach
-          @else
-          <option value="">Local</option>
-          @foreach ($especialistas as $especialista)
-          @if (trim($especialista->Ve_cod_ven) == $request->especialista)
-          <option value="{{$especialista->Ve_cod_ven}}" selected>{{$especialista->Ve_nombre_ven}}</option>
-          @else
-          <option value="{{$especialista->Ve_cod_ven}}">{{$especialista->Ve_nombre_ven}}</option>
-          @endif
-          @endforeach
-          @endif
-        </select>
-      </div>
-    </div>
+
   </div>
   <!-- /.card -->
   <div class="row">
@@ -384,7 +387,7 @@ Inicio
               <button type="button" id="siguiente" class="btn btn-default btn-flat tooltipsC" title="Siguiente"><i
                   class="fas fa-chevron-right"></i></button>
             </div>
-            <div class="col-lg-5">
+            <div class="col-lg-5 mt-n2">
               @if ($fechaInicio->format('m') == $fechaTermino->format('m'))
               <p class="text-center p-0">{{ucwords(strftime("%h %d",$fechaInicio->getTimestamp()))}} -
                 {{strftime("%d",$fechaTermino->getTimestamp())}}</p>
@@ -392,7 +395,52 @@ Inicio
               <p class="text-center p-0">{{ucwords(strftime("%h %d",$fechaInicio->getTimestamp()))}} -
                 {{ucwords(strftime("%h %d",$fechaTermino->getTimestamp()))}}</p>
               @endif
-              <p class="text-center font-weight-bold p-0" id="especialistaOficial"></p>
+              <p class="text-center font-weight-bold mt-n3" id="especialistaOficial" style="font-size: 15px;"></p>
+              <div class="row mx-auto">
+                @if (isset($request->especialista))
+                  <div class="col-sm-2">
+                    <div class="bg-white border border-black" style="width: 80px; height: 10px"></div>
+                    Disponible
+                  </div>
+                  <div class="col-sm-2">
+                    <div class="bg-gray border border-black" style="width: 80px; height: 10px"></div>
+                    Reservado
+                  </div>
+                  <div class="col-sm-2">
+                    <div class="bg-success border border-black" style="width: 80px; height: 10px"></div>
+                    Confirmado
+                  </div>
+                  <div class="col-sm-2">
+                    <div class="bg-olive border border-black" style="width: 80px; height: 10px"></div>
+                    En curso
+                  </div>
+                  <div class="col-sm-2">
+                    <div class="bg-warning border border-black" style="width: 80px; height: 10px"></div>
+                    Sin respuesta
+                  </div>
+                  <div class="col-sm-2">
+                    <div class="bg-danger border border-black" style="width: 80px; height: 10px"></div>
+                    No asiste
+                  </div>
+                {{-- @else
+                  <div class="col-sm-3">
+                    <div class="bg-white border border-black" style="width: 80px; height: 10px"></div>
+                    Disponible
+                  </div>
+                  <div class="col-sm-3">
+                    <div class="bg-warning border border-black" style="width: 80px; height: 10px"></div>
+                    Medianamente ocupado
+                  </div>
+                  <div class="col-sm-3">
+                    <div class="bg-orange border border-black" style="width: 80px; height: 10px"></div>
+                    Casi ocupado
+                  </div>
+                  <div class="col-sm-3">
+                    <div class="bg-danger border border-black" style="width: 80px; height: 10px"></div>
+                    Full ocupado
+                  </div> --}}
+                @endif
+              </div>
             </div>
             <div class="col-lg-4 mb-n1">
               <ul class="nav nav-pills float-right">

@@ -38,16 +38,34 @@
         @endif
         @else
         @if ($dato->Age_Estado == "Z")
-        <td class="{{trim($dato->estado["Clase"])}}" style="border-radius: 10px;">
-          {{$dato->estado["Nombre"]}}
+        <td class="{{trim($dato->estado["Clase"])}}" style="border-radius: 10px;" data-toggle2="tooltip"
+          data-html="true" title='<p>
+          {{-- @foreach ($dato->lineasDetalle as $linea)
+          {{$linea->articulo->Art_nom_externo}}
+          @if(!$loop->last)
+          -
+          @endif
+          @endforeach --}}
+        </p>'>>{{trim($dato->estado["Nombre"])}}
         </td>
         @else
         @if (!isset($semana[$key+1]->dias[$dia]->Age_AgeCod) || (isset($semana[$key+1]->dias[$dia]->Age_AgeCod) &&
         $semana[$key+1]->dias[$dia]->Age_AgeCod != $semana[$key]->dias[$dia]->Age_AgeCod))
         <td class="{{trim($dato->estado["Clase"])}}"
           style="border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
-          {{-- Servicio: {{trim($dato->servicio["Ve_nombre_ven"])}} --}}
-          {{-- {{trim($dato->especialista["Ve_nombre_ven"])}} --}}
+          @php
+          $altura = ((((strtotime($dato->Age_Fin) - strtotime($dato->Age_Inicio))/60)/15)-1)*36;
+          @endphp
+
+          <div style="height: {{$altura}}px; margin-top: -{{$altura}}px;">
+            {{trim($dato->cliente["Cli_NomCli"])}} ({{$dato->cliente["Cli_NumCel"]}})<br>
+            @foreach ($dato->lineasDetalle as $linea)
+            {{$linea->articulo->Art_nom_externo}}
+            @if(!$loop->last)
+            <br>
+            @endif
+            @endforeach
+          </div>
           {{-- BOTONES DROPDOWN OPCIONES --}}
           @switch($dato->Age_Estado)
           @case('B')
@@ -101,6 +119,22 @@
             </div>
           </div>
           @break
+          @case('E')
+          <div class="btn-group float-right">
+            <button type="button" class="btn-accion-tabla icon-circle-small bg-gray-light dropdown-toggle dropdown-icon"
+              data-toggle="dropdown">
+            </button>
+            <div class="dropdown-menu" x-placement="bottom-start"
+              style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px); min-width: 133px;">
+              <a class="btn btn-app">
+                <i class="fas fa-times"></i> No Asiste {{-- F  no asiste --}}
+              </a>
+              <a class="btn btn-app eliminar" data-AgeCod="{{$semana[$key]->dias[$dia]->Age_AgeCod}}">
+                <i class="fas fa-trash-alt"></i> Eliminar
+              </a>
+            </div>
+          </div>
+          @break
           @default
           @break
           @endswitch
@@ -110,15 +144,7 @@
         @if (!isset($semana[$key-1]->dias[$dia]->Age_AgeCod) || (isset($semana[$key-1]->dias[$dia]->Age_AgeCod) &&
         $semana[$key-1]->dias[$dia]->Age_AgeCod != $semana[$key]->dias[$dia]->Age_AgeCod))
         <td class="{{trim($dato->estado["Clase"])}}" style="border-bottom: none; border-top-left-radius: 10px;
-        border-top-right-radius: 10px;"
-        data-toggle2="tooltip" data-html="true" title='<p>
-          @foreach ($dato->lineasDetalle as $linea)
-          {{$linea->articulo->Art_nom_externo}}
-          @if(!$loop->last)
-          -
-          @endif
-          @endforeach</p>'>
-          {{trim($dato->cliente["Cli_NomCli"])}} ({{$dato->cliente["Cli_NumCel"]}})
+        border-top-right-radius: 10px;">
         </td>
         @else
         <td class="{{trim($dato->estado["Clase"])}}" style="border-bottom: none;">
