@@ -200,16 +200,16 @@ class InicioController extends Controller
                         }
 
                         if ($completado == 0) {
-                            $estado = array("Color" => 'fff', "Nombre" => 'DISPONIBLE');
+                            $estado = array("Color" => 'fff', "Nombre" => 'DISPONIBLE', "Clase" => 'bg-white');
                             $dias[$fecha->format('d-m-Y')] = (object) array("Age_Inicio" => $dateStart, "Age_Fin" => $dateEnd, "Age_Estado" => 'A', "estado" => $estado);
                         }else if ($completado < 75) {
-                            $estado = array("Color" => 'ffc107', "Nombre" => 'MEDIANAMENTE OCUPADO');
+                            $estado = array("Color" => 'ffc107', "Nombre" => 'MEDIANAMENTE OCUPADO', "Clase" => 'bg-warning');
                             $dias[$fecha->format('d-m-Y')] = (object) array("Age_Inicio" => $dateStart, "Age_Fin" => $dateEnd, "Age_Estado" => 'Z', "estado" => $estado);
                         }else if ($completado >= 75 && $completado < 100) {
-                            $estado = array("Color" => 'ff851b', "Nombre" => 'CASI OCUPADO');
+                            $estado = array("Color" => 'ff851b', "Nombre" => 'CASI OCUPADO', "Clase" => 'bg-orange');
                             $dias[$fecha->format('d-m-Y')] = (object) array("Age_Inicio" => $dateStart, "Age_Fin" => $dateEnd, "Age_Estado" => 'Z', "estado" => $estado);
                         }else if ($completado == 100) {
-                            $estado = array("Color" => 'dc3545', "Nombre" => 'FULL OCUPADO');
+                            $estado = array("Color" => 'dc3545', "Nombre" => 'FULL OCUPADO', "Clase" => 'bg-danger');
                             $dias[$fecha->format('d-m-Y')] = (object) array("Age_Inicio" => $dateStart, "Age_Fin" => $dateEnd, "Age_Estado" => 'Z', "estado" => $estado);
                         }
                     } else {

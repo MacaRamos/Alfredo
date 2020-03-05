@@ -165,6 +165,7 @@ li.user-header{
 }
 .bg-gray{
     background-color: #cfcfcf !important;
+    color: #000 !important;
 }
 .hover-default:hover{
     background-color: #dadada;

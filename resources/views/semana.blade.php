@@ -38,14 +38,16 @@
         @endif
         @else
         @if ($dato->Age_Estado == "Z")
-        <td class="text-black" style="background-color: #{{trim($dato->estado["Color"])}}; border-radius: 10px;">
+        <td class="{{trim($dato->estado["Clase"])}}" style="border-radius: 10px;">
           {{$dato->estado["Nombre"]}}
         </td>
         @else
         @if (!isset($semana[$key+1]->dias[$dia]->Age_AgeCod) || (isset($semana[$key+1]->dias[$dia]->Age_AgeCod) &&
         $semana[$key+1]->dias[$dia]->Age_AgeCod != $semana[$key]->dias[$dia]->Age_AgeCod))
-        <td class="text-black"
-          style="background-color: #{{trim($dato->estado["Color"])}}; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
+        <td class="{{trim($dato->estado["Clase"])}}"
+          style="border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
+          {{-- Servicio: {{trim($dato->servicio["Ve_nombre_ven"])}} --}}
+          {{-- {{trim($dato->especialista["Ve_nombre_ven"])}} --}}
           {{-- BOTONES DROPDOWN OPCIONES --}}
           @switch($dato->Age_Estado)
           @case('B')
@@ -107,12 +109,20 @@
         @else
         @if (!isset($semana[$key-1]->dias[$dia]->Age_AgeCod) || (isset($semana[$key-1]->dias[$dia]->Age_AgeCod) &&
         $semana[$key-1]->dias[$dia]->Age_AgeCod != $semana[$key]->dias[$dia]->Age_AgeCod))
-        <td class="text-black" style="background-color: #{{trim($dato->estado["Color"])}}; border-bottom: none; border-top-left-radius: 10px;
-        border-top-right-radius: 10px;">
+        <td class="{{trim($dato->estado["Clase"])}}" style="border-bottom: none; border-top-left-radius: 10px;
+        border-top-right-radius: 10px;"
+        data-toggle2="tooltip" data-html="true" title='<p>
+          @foreach ($dato->lineasDetalle as $linea)
+          {{$linea->articulo->Art_nom_externo}}
+          @if(!$loop->last)
+          -
+          @endif
+          @endforeach</p>'>
+          {{trim($dato->cliente["Cli_NomCli"])}} ({{$dato->cliente["Cli_NumCel"]}})
         </td>
         @else
-        <td class="text-black" style="background-color: #{{trim($dato->estado["Color"])}}; border-bottom: none;">
-          {{$semana[$key]->dias[$dia]->Age_AgeCod}}</td>
+        <td class="{{trim($dato->estado["Clase"])}}" style="border-bottom: none;">
+        </td>
         @endif
         @endif
         @endif

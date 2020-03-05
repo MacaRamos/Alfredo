@@ -13,6 +13,15 @@ Inicio
 <script src="{{asset("assets/$theme/plugins/moment/moment.min.js")}}"></script>
 <script src="{{asset("assets/$theme/plugins/inputmask/min/jquery.inputmask.bundle.min.js")}}"></script>
 @include('includes.mensaje')
+
+@section('styles')
+<style>
+  .tooltip.show p {
+    text-align: left;
+  }
+</style>
+@endsection
+
 <script>
   $("#celular").inputmask({
     mask: "[9-99999999]",
@@ -25,6 +34,7 @@ Inicio
   $(function(){
     
     var semana = @json($semana);
+    console.log(semana);
     
     $('[data-toggle2="tooltip"]').tooltip()
 
