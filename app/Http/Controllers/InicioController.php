@@ -170,6 +170,7 @@ class InicioController extends Controller
                             $q->where('Age_EspCod', $especialista);
                         }
                     })
+                    ->with('especialista')
                 // ->where(function ($q) use ($especialista) {
                 //     if ($especialista) {
                 //         $q->where('Age_EspCod', $especialista);
@@ -206,19 +207,33 @@ class InicioController extends Controller
                         } else {
                             $completado = 0;
                         }
+                        $array1 = array();
+                        foreach($agenda as $a){
+                            array_push($array1, $a->especialista["Ve_nombre_ven"]);
+                        }
+                        $array2 = array();
+                        foreach($especialistas as $esp){
+                            array_push($array2, $esp['Ve_nombre_ven']);
+                        }
+                        // if($dateStart == '06-03-2020 09:45:00'){
+                            $disponibles = array_diff($array2, $array1);
+                            // dd($disponibles);
+                        // }
+                        
+                        
 
                         if ($completado == 0) {
                             $estado = array("Color" => 'fff', "Nombre" => 'DISPONIBLE', "Clase" => 'bg-white');
-                            $dias[$fecha->format('d-m-Y')] = (object) array("Age_Inicio" => $dateStart, "Age_Fin" => $dateEnd, "Age_Estado" => 'A', "estado" => $estado);
+                            $dias[$fecha->format('d-m-Y')] = (object) array("Age_Inicio" => $dateStart, "Age_Fin" => $dateEnd, "Age_Estado" => 'A', "estado" => $estado, "disponibles" => $disponibles);
                         } else if ($completado < 75) {
                             $estado = array("Color" => 'ffc107', "Nombre" => 'MEDIANAMENTE OCUPADO', "Clase" => 'bg-warning');
-                            $dias[$fecha->format('d-m-Y')] = (object) array("Age_Inicio" => $dateStart, "Age_Fin" => $dateEnd, "Age_Estado" => 'Z', "estado" => $estado);
+                            $dias[$fecha->format('d-m-Y')] = (object) array("Age_Inicio" => $dateStart, "Age_Fin" => $dateEnd, "Age_Estado" => 'Z', "estado" => $estado, "disponibles" => $disponibles);
                         } else if ($completado >= 75 && $completado < 100) {
                             $estado = array("Color" => 'ff851b', "Nombre" => 'CASI OCUPADO', "Clase" => 'bg-orange');
-                            $dias[$fecha->format('d-m-Y')] = (object) array("Age_Inicio" => $dateStart, "Age_Fin" => $dateEnd, "Age_Estado" => 'Z', "estado" => $estado);
+                            $dias[$fecha->format('d-m-Y')] = (object) array("Age_Inicio" => $dateStart, "Age_Fin" => $dateEnd, "Age_Estado" => 'Z', "estado" => $estado, "disponibles" => $disponibles);
                         } else if ($completado == 100) {
                             $estado = array("Color" => 'dc3545', "Nombre" => 'FULL OCUPADO', "Clase" => 'bg-danger');
-                            $dias[$fecha->format('d-m-Y')] = (object) array("Age_Inicio" => $dateStart, "Age_Fin" => $dateEnd, "Age_Estado" => 'Z', "estado" => $estado);
+                            $dias[$fecha->format('d-m-Y')] = (object) array("Age_Inicio" => $dateStart, "Age_Fin" => $dateEnd, "Age_Estado" => 'Z', "estado" => $estado, "disponibles" => $disponibles);
                         }
                     } else {
                         if (new DateTime(date('d-m-Y H:i')) >= new DateTime(date('d-m-Y H:i', strtotime($agenda[0]->Age_Inicio))) 

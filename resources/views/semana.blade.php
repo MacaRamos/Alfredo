@@ -38,14 +38,17 @@
         @endif
         @else
         @if ($dato->Age_Estado == "Z")
+        @php
+            
+        @endphp
         <td class="{{trim($dato->estado["Clase"])}}" style="border-radius: 10px;" data-toggle2="tooltip"
-          data-html="true" title='<p>
-          {{-- @foreach ($dato->lineasDetalle as $linea)
-          {{$linea->articulo->Art_nom_externo}}
+          data-html="true" title='<p>DISPONIBLES: <br>
+          @foreach ($dato->disponibles as $especialistaDisponible)
+          - {{$especialistaDisponible}}
           @if(!$loop->last)
-          -
+          <br>
           @endif
-          @endforeach --}}
+          @endforeach
         </p>'>{{trim($dato->estado["Nombre"])}}
         </td>
         @else
