@@ -5,6 +5,11 @@ Inicio
 @section('header')
 <meta name="csrf-token" content="{{ csrf_token() }}">
 @endsection
+
+@section('tituloContenido')
+<h1 style="font-family: 'Khand', sans-serif;">GESTIÓN AGENDA</h1>
+@endsection
+
 @section('scripts')
 <script src="{{asset("assets/pages/scripts/admin/index.js")}}" type="text/javascript"></script>
 <!-- Bootstrap Switch -->
@@ -33,10 +38,30 @@ Inicio
   });
   $(function(){
     
-    var semana = @json($semana);
-    console.log(semana);
+    var dia = @json($dia);
+    console.log(dia);
+
+    var pestana = @json($request->pestana ?? '#semana');
+    console.log(pestana);
+    $('.nav.nav-pills a[href="'+pestana+'"]').tab('show');
+    $('#pestana').val($('.nav-link.active').attr("href"));
+
+    $('.nav.nav-pills a').on('click', function (e) {
+      e.preventDefault()
+      $(this).tab('show');
+      $('#pestana').val($('.nav-link.active').attr("href"));
+      pestana = $('#pestana').val();
+      if(pestana == '#dia'){
+        $('#nombreFechaDia').css('display', 'block');
+        $('#nombreFechaSemana').css('display', 'none');
+      }else if(pestana == '#semana'){
+        $('#nombreFechaDia').css('display', 'none');
+        $('#nombreFechaSemana').css('display', 'block');
+      }
+    })
     
-    $('[data-toggle2="tooltip"]').tooltip()
+    
+    $('[data-toggle2="tooltip"]').tooltip();    
 
     $('#modalAgenda').on('hidden.bs.modal', function (e) {
       $('.modal-body').find('input').val("");
@@ -327,6 +352,7 @@ Inicio
   <input type="hidden" name="accion" id="accion" value="">
   <input type="hidden" name="Age_AgeCod" id="Age_AgeCod" value="">
   <input type="hidden" name="Age_Estado" id="Age_Estado" value="">
+  <input type="hidden" name="pestana" id="pestana" value="">
   @include('modal')
   @csrf
   <div class="card">
@@ -382,46 +408,52 @@ Inicio
             <div class="col-lg-3">
               <input type="hidden" name="fechaInicio" value="{{$fechaInicio->format('d-m-Y')}}">
               <input type="hidden" name="fechaTermino" value="{{$fechaTermino->format('d-m-Y')}}">
+              <input type="hidden" name="fechaDia" value="{{$fechaDia->format('d-m-Y')}}">
               <button type="button" id="anterior" class="btn btn-default btn-flat tooltipsC" title="Anterior"><i
                   class="fas fa-chevron-left"></i></button>
               <button type="button" id="siguiente" class="btn btn-default btn-flat tooltipsC" title="Siguiente"><i
                   class="fas fa-chevron-right"></i></button>
             </div>
             <div class="col-lg-5 mt-n2">
-              @if ($fechaInicio->format('m') == $fechaTermino->format('m'))
-              <p class="text-center p-0">{{ucwords(strftime("%h %d",$fechaInicio->getTimestamp()))}} -
-                {{strftime("%d",$fechaTermino->getTimestamp())}}</p>
-              @else
-              <p class="text-center p-0">{{ucwords(strftime("%h %d",$fechaInicio->getTimestamp()))}} -
-                {{ucwords(strftime("%h %d",$fechaTermino->getTimestamp()))}}</p>
-              @endif
+              <p class="text-center p-0" id="nombreFechaSemana">
+                @if ($fechaInicio->format('m') == $fechaTermino->format('m'))
+                {{ucwords(strftime("%B %d",$fechaInicio->getTimestamp()))}} -
+                {{strftime("%d",$fechaTermino->getTimestamp())}}
+                @else
+                {{ucwords(strftime("%h %d",$fechaInicio->getTimestamp()))}} -
+                {{ucwords(strftime("%h %d",$fechaTermino->getTimestamp()))}}
+                @endif
+              </p>
+              <p class="text-center p-0" id="nombreFechaDia" style="display: none;">
+                {{ucwords(strftime("%B %d, %G",$fechaDia->getTimestamp()))}}</p>
+
               <p class="text-center font-weight-bold mt-n3" id="especialistaOficial" style="font-size: 15px;"></p>
               <div class="row mx-auto">
                 @if (isset($request->especialista))
-                  <div class="col-sm-2">
-                    <div class="bg-white border border-black" style="width: 80px; height: 10px"></div>
-                    Disponible
-                  </div>
-                  <div class="col-sm-2">
-                    <div class="bg-gray border border-black" style="width: 80px; height: 10px"></div>
-                    Reservado
-                  </div>
-                  <div class="col-sm-2">
-                    <div class="bg-success border border-black" style="width: 80px; height: 10px"></div>
-                    Confirmado
-                  </div>
-                  <div class="col-sm-2">
-                    <div class="bg-olive border border-black" style="width: 80px; height: 10px"></div>
-                    En curso
-                  </div>
-                  <div class="col-sm-2">
-                    <div class="bg-warning border border-black" style="width: 80px; height: 10px"></div>
-                    Sin respuesta
-                  </div>
-                  <div class="col-sm-2">
-                    <div class="bg-danger border border-black" style="width: 80px; height: 10px"></div>
-                    No asiste
-                  </div>
+                <div class="col-sm-2">
+                  <div class="bg-white border border-black" style="width: 80px; height: 10px"></div>
+                  Disponible
+                </div>
+                <div class="col-sm-2">
+                  <div class="bg-gray border border-black" style="width: 80px; height: 10px"></div>
+                  Reservado
+                </div>
+                <div class="col-sm-2">
+                  <div class="bg-success border border-black" style="width: 80px; height: 10px"></div>
+                  Confirmado
+                </div>
+                <div class="col-sm-2">
+                  <div class="bg-olive border border-black" style="width: 80px; height: 10px"></div>
+                  En curso
+                </div>
+                <div class="col-sm-2">
+                  <div class="bg-warning border border-black" style="width: 80px; height: 10px"></div>
+                  Sin respuesta
+                </div>
+                <div class="col-sm-2">
+                  <div class="bg-danger border border-black" style="width: 80px; height: 10px"></div>
+                  No asiste
+                </div>
                 {{-- @else
                   <div class="col-sm-3">
                     <div class="bg-white border border-black" style="width: 80px; height: 10px"></div>
@@ -444,25 +476,25 @@ Inicio
             </div>
             <div class="col-lg-4 mb-n1">
               <ul class="nav nav-pills float-right">
-                <li class="nav-item"><a class="nav-link" href="#tab_1" data-toggle="tab">Mes</a></li>
-                <li class="nav-item"><a class="nav-link active" href="#tab_2" data-toggle="tab">Semana</a></li>
-                <li class="nav-item"><a class="nav-link" href="#tab_3" data-toggle="tab">Día</a></li>
+                <li class="nav-item"><a class="nav-link" href="#mes" data-toggle="tab">Mes</a></li>
+                <li class="nav-item"><a class="nav-link" href="#semana" data-toggle="tab">Semana</a></li>
+                <li class="nav-item"><a class="nav-link" href="#dia" data-toggle="tab">Día</a></li>
               </ul>
             </div>
           </div>
         </div><!-- /.card-header -->
         <div class="card-body">
           <div class="tab-content">
-            <div class="tab-pane" id="tab_1">
+            <div class="tab-pane" id="mes">
 
             </div>
             <!-- /.tab-pane -->
-            <div class="tab-pane active" id="tab_2">
+            <div class="tab-pane" id="semana">
               @include('semana')
             </div>
             <!-- /.tab-pane -->
-            <div class="tab-pane" id="tab_3">
-
+            <div class="tab-pane" id="dia">
+              @include('dia')
             </div>
             <!-- /.tab-pane -->
           </div>

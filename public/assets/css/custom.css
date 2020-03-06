@@ -183,8 +183,8 @@ li.user-header{
 .table td, .table th {
     padding: .45rem;
     border-top: none;
-    border-bottom: 1px solid #f3f7fb;
-    border-right: 1px solid #f3f7fb;
+    border-bottom: 1px solid #f1f1f1;
+    border-right: 1px solid #f1f1f1;
 }
 .page-item.active .page-link{
     background-color:  #08c !important;
@@ -228,7 +228,7 @@ select.form-control {
   box-shadow: none;
   border-radius: 0;
   padding: 0;
-  width: 20em;
+  width: 19em;
 }
 
 input[type="text"]:focus,
@@ -306,4 +306,7 @@ legend{
 
 .btn-group.float-right.show:focus {
     outline: none;
+}
+.card-body.p-0 .table tbody>tr>td:first-of-type, .card-body.p-0 .table tbody>tr>th:first-of-type, .card-body.p-0 .table thead>tr>td:first-of-type, .card-body.p-0 .table thead>tr>th:first-of-type {
+   padding-left: .45rem;
 }

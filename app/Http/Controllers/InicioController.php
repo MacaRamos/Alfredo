@@ -51,18 +51,50 @@ class InicioController extends Controller
         // });
         $notificacion = null;
         if (session()->get('Rol_nombre')) {
+            // dd($request->all());
             switch ($request->accion) {
                 case 'siguiente':
-                    $fechaTemporal = new DateTime(date('d-m-Y', strtotime($request->fechaTermino)));
-                    $fechaInicio = new DateTime(date('d-m-Y', strtotime($request->fechaTermino)));
-                    $fechaInicio = $fechaInicio->add(new DateInterval('P1D'));
-                    $fechaTermino = $fechaTemporal->add(new DateInterval('P7D'));
+                    if ($request->pestana == '#semana') {
+                        $fechaTemporal = new DateTime(date('d-m-Y', strtotime($request->fechaTermino)));
+                        $fechaInicio = new DateTime(date('d-m-Y', strtotime($request->fechaTermino)));
+                        $fechaInicio = $fechaInicio->add(new DateInterval('P1D'));
+                        $fechaTermino = $fechaTemporal->add(new DateInterval('P7D'));
+                        $fechaDia = $fechaInicio;
+                    } else if ($request->pestana == '#dia') {
+                        $fechaTemporal = new DateTime(date('d-m-Y', strtotime($request->fechaDia)));
+                        $fechaDia = $fechaTemporal->add(new DateInterval('P1D'));
+
+                        $fechaInicio = new DateTime(date('d-m-Y', strtotime($request->fechaInicio)));
+                        $fechaTermino = new DateTime(date('d-m-Y', strtotime($request->fechaTermino)));
+                        
+                        if($fechaDia > $fechaTermino){
+                            $fechaTemporal = new DateTime(date('d-m-Y', strtotime($request->fechaTermino)));
+                            $fechaInicio = new DateTime(date('d-m-Y', strtotime($request->fechaTermino)));
+                            $fechaInicio = $fechaInicio->add(new DateInterval('P1D'));
+                            $fechaTermino = $fechaTemporal->add(new DateInterval('P7D'));
+                        }
+                    }
                     break;
                 case 'anterior':
-                    $fechaTemporal = new DateTime(date('d-m-Y', strtotime($request->fechaInicio)));
-                    $fechaTermino = new DateTime(date('d-m-Y', strtotime($request->fechaInicio)));
-                    $fechaTermino = $fechaTermino->sub(new DateInterval('P1D'));
-                    $fechaInicio = $fechaTemporal->sub(new DateInterval('P7D'));
+                    if ($request->pestana == '#semana') {
+                        $fechaTemporal = new DateTime(date('d-m-Y', strtotime($request->fechaInicio)));
+                        $fechaTermino = new DateTime(date('d-m-Y', strtotime($request->fechaInicio)));
+                        $fechaTermino = $fechaTermino->sub(new DateInterval('P1D'));
+                        $fechaInicio = $fechaTemporal->sub(new DateInterval('P7D'));
+                    } else if ($request->pestana == '#dia') {
+                        $fechaTemporal = new DateTime(date('d-m-Y', strtotime($request->fechaDia)));
+                        $fechaDia = $fechaTemporal->sub(new DateInterval('P1D'));
+
+                        $fechaInicio = new DateTime(date('d-m-Y', strtotime($request->fechaInicio)));
+                        $fechaTermino = new DateTime(date('d-m-Y', strtotime($request->fechaTermino)));
+
+                        if($fechaDia < $fechaInicio){
+                            $fechaTemporal = new DateTime(date('d-m-Y', strtotime($request->fechaInicio)));
+                            $fechaTermino = new DateTime(date('d-m-Y', strtotime($request->fechaInicio)));
+                            $fechaTermino = $fechaTermino->sub(new DateInterval('P1D'));
+                            $fechaInicio = $fechaTemporal->sub(new DateInterval('P7D'));
+                        }
+                    }
                     break;
                 case 'agendar':
                     $agenda = Agenda::get();
@@ -107,6 +139,7 @@ class InicioController extends Controller
                 default:
                     $fechaActual = new DateTime(date('d-m-Y'));
                     $fechaInicio = new DateTime(date('d-m-Y'));
+                    $fechaDia = new DateTime(date('d-m-Y'));
                     $fechaTermino = $fechaActual->add(new DateInterval('P6D'));
                     break;
             }
@@ -124,8 +157,8 @@ class InicioController extends Controller
             }
 
             $semana = $this->llenarSemana($fechaInicio, $fechaTermino, $request->sede ?? null, $request->especialista ?? null);
-
-            return view('inicio', compact('sedes', 'especialistas', 'fechaInicio', 'fechaTermino', 'semana', 'request', 'notificacion'));
+            $dia = $this->llenarDia($fechaDia, $request->sede ?? null);
+            return view('inicio', compact('sedes', 'especialistas', 'fechaDia','fechaInicio', 'fechaTermino', 'semana', 'dia', 'request', 'notificacion'));
         } else {
             return view('seguridad.index');
         }
@@ -149,8 +182,8 @@ class InicioController extends Controller
         $semana = array();
         for ($hora = $horaInicio; $hora <= $horaTermino; $hora->add(new DateInterval('PT15M'))) {
             $horaFin = strtotime("+15 minutes", strtotime($hora->format('H:i')));
-            $dia = new stdClass;
-            $dia->Hora = $hora->format('H:i') . ' - ' . date('H:i', $horaFin);
+            $datos = new stdClass;
+            $datos->Hora = $hora->format('H:i') . ' - ' . date('H:i', $horaFin);
             $dias = array();
             for ($fecha = new DateTime(date('d-m-Y', strtotime($fechaInicio->format('d-m-Y'))));
                 $fecha <= $fechaTermino;
@@ -167,7 +200,7 @@ class InicioController extends Controller
                     })
                     ->whereHas('especialista', function ($q) use ($especialista) {
                         if ($especialista) {
-                            $q->where('Age_EspCod', $especialista);
+                            $q->where('Age_EspCod', '=', $especialista);
                         }
                     })
                     ->with('especialista')
@@ -208,19 +241,17 @@ class InicioController extends Controller
                             $completado = 0;
                         }
                         $array1 = array();
-                        foreach($agenda as $a){
+                        foreach ($agenda as $a) {
                             array_push($array1, $a->especialista["Ve_nombre_ven"]);
                         }
                         $array2 = array();
-                        foreach($especialistas as $esp){
+                        foreach ($especialistas as $esp) {
                             array_push($array2, $esp['Ve_nombre_ven']);
                         }
                         // if($dateStart == '06-03-2020 09:45:00'){
-                            $disponibles = array_diff($array2, $array1);
-                            // dd($disponibles);
+                        $disponibles = array_diff($array2, $array1);
+                        // dd($disponibles);
                         // }
-                        
-                        
 
                         if ($completado == 0) {
                             $estado = array("Color" => 'fff', "Nombre" => 'DISPONIBLE', "Clase" => 'bg-white');
@@ -236,12 +267,12 @@ class InicioController extends Controller
                             $dias[$fecha->format('d-m-Y')] = (object) array("Age_Inicio" => $dateStart, "Age_Fin" => $dateEnd, "Age_Estado" => 'Z', "estado" => $estado, "disponibles" => $disponibles);
                         }
                     } else {
-                        if (new DateTime(date('d-m-Y H:i')) >= new DateTime(date('d-m-Y H:i', strtotime($agenda[0]->Age_Inicio))) 
-                        && new DateTime(date('d-m-Y H:i')) <= new DateTime(date('d-m-Y H:i', strtotime($agenda[0]->Age_Fin)))) {
+                        if (new DateTime(date('d-m-Y H:i')) >= new DateTime(date('d-m-Y H:i', strtotime($agenda[0]->Age_Inicio)))
+                            && new DateTime(date('d-m-Y H:i')) <= new DateTime(date('d-m-Y H:i', strtotime($agenda[0]->Age_Fin)))) {
                             $agenda[0]->Age_Estado = 'E'; //EN CURSO
                             $agenda[0]->update();
                         }
-                        $dias[$fecha->format('d-m-Y')] = (object)$agenda[0];
+                        $dias[$fecha->format('d-m-Y')] = (object) $agenda[0];
                     }
 
                 } else {
@@ -249,8 +280,8 @@ class InicioController extends Controller
                     $dias[$fecha->format('d-m-Y')] = (object) array("Age_Inicio" => $dateStart, "Age_Fin" => $dateEnd, "Age_Estado" => 'A');
                 }
                 if ($fecha == $fechaTermino) {
-                    $dia->dias = $dias;
-                    array_push($semana, $dia);
+                    $datos->dias = $dias;
+                    array_push($semana, $datos);
                 }
             }
         }
@@ -261,6 +292,79 @@ class InicioController extends Controller
         //     }
         // }
         return $semana;
+    }
+
+    private function llenarDia($fechaDia, $sede = null)
+    {
+        $horaInicio = DateTime::createFromFormat('H:i', '09:00');
+        $horaTermino = DateTime::createFromFormat('H:i', '18:45');
+        if ($sede) {
+            $especialistas = Especialista::where('Ve_ven_depto', '=', 'V' . $sede)
+                ->with('departamento')
+                ->get();
+        } else {
+            $especialistas = Especialista::where('Ve_ven_depto', '=', 'V1')
+                ->with('departamento')
+                ->get();
+        }
+
+        $dia = array();
+        for ($hora = $horaInicio; $hora <= $horaTermino; $hora->add(new DateInterval('PT15M'))) {
+            $horaFin = strtotime("+15 minutes", strtotime($hora->format('H:i')));
+            $datos = new stdClass;
+            $datos->Hora = $hora->format('H:i') . ' - ' . date('H:i', $horaFin);
+            $espe = array();
+            foreach ($especialistas as $key => $especialista) {
+                $dateStart = date('d-m-Y H:i:s', strtotime($fechaDia->format('Y-m-d') . " " . $hora->format('H:i:s')));
+                $dateEnd = date('d-m-Y H:i:s', strtotime($fechaDia->format('Y-m-d') . " " . date('H:i:s', $horaFin)));
+
+                $agenda = Agenda::where('Age_EmpCod', '=', $this->Emp)
+                    ->where(function ($q) use ($sede) {
+                        if ($sede) {
+                            $q->where('Age_SedCod', $sede);
+                        }
+                    })
+                    ->whereHas('especialista', function ($q) use ($especialista) {
+                        $q->where('Age_EspCod', '=', $especialista["Ve_cod_ven"]);
+                    })
+                // ->with('especialista')
+                    ->where('Age_Inicio', '<=', $dateStart)
+                    ->where('Age_Fin', '>=', $dateEnd)
+                    ->with('estado')
+                    ->with('cliente')
+                    ->with('lineasDetalle', 'lineasDetalle.articulo')
+                    ->with(["lineasDetalle.articulo.tiempoEspecialista" => function ($q) use ($especialista) {
+                        $q->where('Ser_EspCod', 'like', '%' . $especialista . '%');
+                    }])
+                    ->with('lineasDetalle.articulo.tiempoGeneral')
+                    ->get();
+
+                if (count($agenda) > 0) {
+                    // dd("hola");
+                    if (new DateTime(date('d-m-Y H:i')) >= new DateTime(date('d-m-Y H:i', strtotime($agenda[0]->Age_Inicio)))
+                        && new DateTime(date('d-m-Y H:i')) <= new DateTime(date('d-m-Y H:i', strtotime($agenda[0]->Age_Fin)))) {
+                        $agenda[0]->Age_Estado = 'E'; //EN CURSO
+                        $agenda[0]->update();
+                    }
+                    $espe[$especialista["Ve_nombre_ven"]] = (object) $agenda[0];
+
+                } else {
+                    // $dia[$diaSemana[$fecha->format('w')] . ' ' . $fecha->format('d-m')] = 'Disponible';
+                    $espe[$especialista["Ve_nombre_ven"]] = (object) array("Age_Inicio" => $dateStart, "Age_Fin" => $dateEnd, "Age_Estado" => 'A');
+                }
+                if ($key == count($especialistas) - 1) {
+                    $datos->espe = $espe;
+                    array_push($dia, $datos);
+                }
+            }
+        }
+        // dd($dia);
+        // foreach ($semana as $key => $horas){
+        //     foreach ($semana[$key] as $index => $datos){
+        //         echo $datos.'<br>';
+        //     }
+        // }
+        return $dia;
     }
 
     public function agendar(Request $request)
