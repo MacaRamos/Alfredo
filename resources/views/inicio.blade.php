@@ -45,6 +45,13 @@ Inicio
     console.log(pestana);
     $('.nav.nav-pills a[href="'+pestana+'"]').tab('show');
     $('#pestana').val($('.nav-link.active').attr("href"));
+    if(pestana == '#dia'){
+        $('#nombreFechaDia').css('display', 'block');
+        $('#nombreFechaSemana').css('display', 'none');
+      }else if(pestana == '#semana'){
+        $('#nombreFechaSemana').css('display', 'block');
+        $('#nombreFechaDia').css('display', 'none');
+      }
 
     $('.nav.nav-pills a').on('click', function (e) {
       e.preventDefault()
@@ -55,8 +62,8 @@ Inicio
         $('#nombreFechaDia').css('display', 'block');
         $('#nombreFechaSemana').css('display', 'none');
       }else if(pestana == '#semana'){
-        $('#nombreFechaDia').css('display', 'none');
         $('#nombreFechaSemana').css('display', 'block');
+        $('#nombreFechaDia').css('display', 'none');
       }
     })
     
@@ -415,7 +422,7 @@ Inicio
                   class="fas fa-chevron-right"></i></button>
             </div>
             <div class="col-lg-5 mt-n2">
-              <p class="text-center p-0" id="nombreFechaSemana">
+              <p class="text-center p-0" id="nombreFechaSemana" style="display: none;">
                 @if ($fechaInicio->format('m') == $fechaTermino->format('m'))
                 {{ucwords(strftime("%B %d",$fechaInicio->getTimestamp()))}} -
                 {{strftime("%d",$fechaTermino->getTimestamp())}}

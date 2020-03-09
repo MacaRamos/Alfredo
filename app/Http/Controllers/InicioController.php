@@ -113,11 +113,13 @@ class InicioController extends Controller
 
                     $fechaInicio = new DateTime(date('d-m-Y', strtotime($request->fechaInicio)));
                     $fechaTermino = new DateTime(date('d-m-Y', strtotime($request->fechaTermino)));
+                    $fechaDia = new DateTime(date('d-m-Y', strtotime($request->fechaDia)));
                     break;
                 case 'editar':
                     $notificacion = $this->editar($request);
                     $fechaInicio = new DateTime(date('d-m-Y', strtotime($request->fechaInicio)));
                     $fechaTermino = new DateTime(date('d-m-Y', strtotime($request->fechaTermino)));
+                    $fechaDia = new DateTime(date('d-m-Y', strtotime($request->fechaDia)));
                     break;
                 case 'confirmar':
                     $agenda = Agenda::where('Age_AgeCod', '=', $request->Age_AgeCod)
@@ -127,6 +129,7 @@ class InicioController extends Controller
                     }
                     $fechaInicio = new DateTime(date('d-m-Y', strtotime($request->fechaInicio)));
                     $fechaTermino = new DateTime(date('d-m-Y', strtotime($request->fechaTermino)));
+                    $fechaDia = new DateTime(date('d-m-Y', strtotime($request->fechaDia)));
                     break;
                 case 'eliminar':
                     $agenda = Agenda::where('Age_AgeCod', '=', $request->Age_AgeCod)->first();
@@ -135,6 +138,7 @@ class InicioController extends Controller
                     }
                     $fechaInicio = new DateTime(date('d-m-Y', strtotime($request->fechaInicio)));
                     $fechaTermino = new DateTime(date('d-m-Y', strtotime($request->fechaTermino)));
+                    $fechaDia = new DateTime(date('d-m-Y', strtotime($request->fechaDia)));
                     break;
                 default:
                     $fechaActual = new DateTime(date('d-m-Y'));
