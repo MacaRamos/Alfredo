@@ -31,7 +31,7 @@
           <td class="bg-gray-light disabled">
           </td>
           @else
-          <td data-fecha="{{date('d-m-Y', strtotime($dato->Age_Inicio))}}"
+          <td data-fecha="{{date('Y-m-d', strtotime($dato->Age_Inicio))}}"
             data-horainicio="{{date('H:i',strtotime($dato->Age_Inicio))}}"
             data-horafin="{{date('H:i',strtotime($dato->Age_Fin))}}" class="pointer text-center agendar" title="Agendar"
             data-toggle2="tooltip" data-placement="bottom" data-toggle="modal" data-target="#modalAgenda">

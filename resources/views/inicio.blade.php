@@ -254,8 +254,10 @@ Inicio
     //recibe un date
     function verificarHoraFinal(duracionServicio)
     {
+      console.log('hola '+$('input[name=mfechaAgenda]').val()+' '+$('#mHoraInicio').text());
       var duracionTotalReserva = new Date($('input[name=mfechaAgenda]').val()+' '+$('#mHoraInicio').text());
-      console.log('hola '+duracionTotalReserva);
+      
+      
       $('input.hora').each(function(index, item)
       {
           var duracionServicioTd = new Date($('input[name=mfechaAgenda]').val()+' '+$(item).val());
