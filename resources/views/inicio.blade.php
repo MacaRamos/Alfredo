@@ -131,9 +131,9 @@ Inicio
     $('.eliminar').click(function(e){
         e.preventDefault();  
         swal({
-          title: '¿Está seguro que desea eliminar el registro ?',
+          title: '¿Está seguro que desea eliminar al registro?',
             text: "Esta acción no se puede deshacer!",
-            icon: 'warning',
+            icon: 'error',
             buttons: {
                 cancel: "Cancelar",
                 confirm: "Aceptar"

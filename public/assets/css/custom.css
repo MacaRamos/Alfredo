@@ -187,11 +187,11 @@ li.user-header{
     border-right: 1px solid #f1f1f1; */
 }
 .page-item.active .page-link{
-    background-color:  #08c !important;
-    border-color: #08c !important;
+    background-color:  #000 !important;
+    border-color: #000 !important;
 }
 .pagination > li > a{
-    color: #08c !important;
+    color: #000000 !important;
 }
 .nav-pills .nav-link:not(.active):hover {
     color: #000;

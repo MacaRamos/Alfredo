@@ -75,7 +75,7 @@
 
       var _proto = ControlSidebar.prototype;
 
-      _proto.show = function show() {
+      _proto.show = function show() {        
         // Show the control sidebar
         if (this._config.controlsidebarSlide) {
           $('html').addClass(ClassName.CONTROL_SIDEBAR_ANIMATE);
@@ -113,7 +113,7 @@
 
       _proto.toggle = function toggle() {
         var shouldOpen = $('body').hasClass(ClassName.CONTROL_SIDEBAR_OPEN) || $('body').hasClass(ClassName.CONTROL_SIDEBAR_SLIDE);
-
+        
         if (shouldOpen) {
           // Open the control sidebar
           this.show();
@@ -521,11 +521,11 @@
 
       var _proto = PushMenu.prototype;
 
-      _proto.expand = function expand() {
+      _proto.expand = function expand() {             
         if (this._options.autoCollapseSize) {
           if ($(window).width() <= this._options.autoCollapseSize) {
             $(Selector.BODY).addClass(ClassName.OPEN);
-          }
+          }          
         }
 
         $(Selector.BODY).removeClass(ClassName.COLLAPSED);
@@ -538,7 +538,7 @@
         $(this._element).trigger(shownEvent);
       };
 
-      _proto.collapse = function collapse() {
+      _proto.collapse = function collapse() {        
         if (this._options.autoCollapseSize) {
           if ($(window).width() <= this._options.autoCollapseSize) {
             $(Selector.BODY).removeClass(ClassName.OPEN);
@@ -555,7 +555,7 @@
         $(this._element).trigger(collapsedEvent);
       };
 
-      _proto.toggle = function toggle() {
+      _proto.toggle = function toggle() {                
         if (!$(Selector.BODY).hasClass(ClassName.COLLAPSED)) {
           this.collapse();
         } else {
@@ -563,7 +563,7 @@
         }
       };
 
-      _proto.autoCollapse = function autoCollapse(resize) {
+      _proto.autoCollapse = function autoCollapse(resize) {        
         if (resize === void 0) {
           resize = false;
         }
@@ -748,8 +748,7 @@
       };
 
       _proto.expand = function expand(treeviewMenu, parentLi) {
-        var _this = this;
-
+        var _this = this;        
         var expandedEvent = $.Event(Event.EXPANDED);
 
         if (this._config.accordion) {

@@ -32,7 +32,7 @@
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
     <!-- Mis estilos -->
     <link rel="stylesheet" href="{{asset("assets/css/custom.css")}}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+    <link rel="stylesheet" href="{{asset("assets/$theme/plugins/toastr/toastr.min.css")}}">
     <script src="https://kit.fontawesome.com/7379ba20a1.js" crossorigin="anonymous"></script>
 
     @yield('header')
@@ -98,7 +98,7 @@
     <script src="{{asset("assets/js/jquery-validation/jquery.validate.min.js")}}"></script>
     <script src="{{asset("assets/js/jquery-validation/localization/messages_es.min.js")}}"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="{{asset("assets/$theme/plugins/toastr/toastr.min.js")}}"></script>
     <script src="{{asset("assets/js/scripts.js")}}"></script>
     <script src="{{asset("assets/js/funciones.js")}}"></script>
     @yield('scripts')

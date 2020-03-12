@@ -49,6 +49,8 @@ Route::group(['prefix' => 'especialista', 'namespace' => 'Especialista', 'middle
     route::get('','EspecialistaController@index')->name('especialista');
     route::post('','EspecialistaController@index')->name('especialista');
 
+    Route::get('/filtrarEspecialistas/{Ve_nombre_ven?}', 'EspecialistaController@filtrarEspecialistas')->name('filtrarEspecialistas');
+
     Route::get('/crear', 'EspecialistaController@crear')->name('crear_especialista');
     Route::post('/guardar', 'EspecialistaController@guardar')->name('guardar_especialista');
 

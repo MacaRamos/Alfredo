@@ -13,18 +13,43 @@ Especialistas
 @section("scripts")
 @include('includes.mensaje')
 <script>
-$(function(){
+  $(function(){
   var searchInput = $('#busqueda');
 
 // Multiply by 2 to ensure the cursor always ends up at the end;
 // Opera sometimes sees a carriage return as 2 characters.
-  var strLength = searchInput.val().length * 2;
-  searchInput.focus();
-  searchInput[0].setSelectionRange(strLength, strLength);
+  // var strLength = searchInput.val().length * 2;
+  // searchInput.focus();
+  // searchInput[0].setSelectionRange(strLength, strLength);
 
   $('#busqueda').on('input', function(){
-    $('form#buscar').submit(); 
+    $.ajax({
+        url: "{{route('filtrarEspecialistas')}}/" + $('#busqueda').val(),
+        success: function(result){
+          $("#tabla-data").html(result);
+        }
+    });        
   });
+
+  $('.eliminar').click(function(e){
+        e.preventDefault();  
+        swal({
+          title: '¿Está seguro que desea eliminar el especialista?',
+            text: "Esta acción no se puede deshacer!",
+            icon: 'error',
+            buttons: {
+                cancel: "Cancelar",
+                confirm: "Aceptar"
+            },
+            dangerMode: true,
+        }).then((value) => {
+            if (value) {
+              $('#accion').val('eliminar');        
+              $('#Age_AgeCod').val($(this).data('agecod'));
+              $('form#cambiarFiltros').submit();
+            }
+        });
+    });
 });
 </script>
 @endsection
@@ -35,38 +60,26 @@ $(function(){
     <div class="row">
       <div class="col-lg-9">
         <div class="card-tools pull-right">
-          <a href="{{route('crear_especialista')}}" class="btn btn-default border-info">
+          <a href="{{route('crear_especialista')}}" class="btn btn-default">
             <i class="fas fa-plus-circle pr-2"></i>Nuevo
           </a>
         </div>
       </div>
       <div class="col-lg-3">
-        <form class="form-horizontal" method="POST" id="buscar" action="{{route('especialista')}}">
-          @csrf
-          <div class="form-group row">
-            <label class="col-lg-2 col-form-label">Buscar</label>
-            <div class="input-group col-lg-10">
-              <input type="text" class="form-control" name="busqueda" value="{{$request->busqueda}}" id="busqueda"
-                placeholder="Buscar" autocomplete="off"/>
-              <button type="submit" class="btn btn-info">Buscar</button>
-            </div>
+        <div class="form-group row">
+          <label class="col-lg-2 col-form-label">Buscar</label>
+          <div class="input-group col-lg-10">
+            <input type="text" class="form-control" name="busqueda" id="busqueda" placeholder="Buscar"
+              autocomplete="off" />
           </div>
-        </form>
+        </div>
       </div>
       <!-- SIC y numero O/C -->
     </div>
-    <div class="card mt-2">
+    <div class="card mt-2" id='tabla-data'>
       <!-- /.card-header -->
-      <div class="card-body table-responsive p-0">
-        @include('especialista.table')
-      </div>
-      <!-- /.card-body -->
-      <div class="card-footer bg-white">
-        <div class="dataTables_paginate paging_simple_numbers float-right">
-          {{$especialistas->links("pagination::bootstrap-4")}}
-        </div>
-      </div>
-      <!-- /.card-footer-->
+      @include('especialista.table')
+
     </div>
     <!-- /.card -->
   </div>
