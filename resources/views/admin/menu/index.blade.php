@@ -13,12 +13,12 @@ Menú
 
 @section("scripts")
 <script src="{{asset("assets/pages/scripts/admin/menu/index.js")}}" type="text/javascript"></script>
+@include('includes.mensaje')
 @endsection
 
 @section('contenido')
 <div class="row">
     <div class="col-lg-12">
-        @include('includes.mensaje')
         <div class="card border-top border-info mt-2">
           <div class="card-header">
             <h3 class="card-title">Menús</h3>

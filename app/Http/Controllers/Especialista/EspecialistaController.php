@@ -1,23 +1,24 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Especialista;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ValidacionMenu;
-use App\Models\Admin\Menu;
+use App\Models\Especialista\Especialista;
 use Illuminate\Http\Request;
 
-class MenuController extends Controller
+class EspecialistaController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $menus = Menu::getMenu();
-        return view('admin.menu.index', compact('menus'));
+        $especialistas = Especialista::where('Ve_nombre_ven', 'like', "%$request->busqueda%")
+                                     ->orderBy('Ve_nombre_ven')
+                                     ->paginate(15);
+        return view('especialista.index', compact('especialistas', 'request'));
     }
 
     /**
@@ -27,7 +28,7 @@ class MenuController extends Controller
      */
     public function crear()
     {
-        return view('admin.menu.crear');
+        //
     }
 
     /**
@@ -36,15 +37,9 @@ class MenuController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function guardar(ValidacionMenu $request)//Se cambia la clase Request por mi request
+    public function guardar(Request $request)
     {
-        Menu::create($request->all());
-        $notificacion = array(
-            'mensaje' => 'Menú creado con exito',
-            'tipo' => 'success',
-            'titulo' => 'Memú',
-        );
-        return redirect('admin/menu')->with($notificacion);
+        //
     }
 
     /**
@@ -64,10 +59,9 @@ class MenuController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function editar($Men_id)
+    public function editar($id)
     {
-        $data = Menu::findOrfail($Men_id);
-        return view('admin.menu.editar', compact('data'));
+        //
     }
 
     /**
@@ -79,8 +73,7 @@ class MenuController extends Controller
      */
     public function actualizar(Request $request, $id)
     {
-
-        //return redirect('admin/menu/crear')->with('mensaje','Menú actualizado con exito');
+        //
     }
 
     /**
@@ -92,16 +85,5 @@ class MenuController extends Controller
     public function eliminar($id)
     {
         //
-    }
-
-    public function guardarOrden(Request $request)
-    {
-        if ($request->ajax()) {
-            $menu = new Menu;
-            $menu->guardarOrden($request->menu);
-            return response()->json(['respuesta' => 'ok']);
-        } else {
-            abort(404);
-        }
     }
 }

@@ -80,17 +80,17 @@
               </button>
               <div class="dropdown-menu" x-placement="bottom-start"
                 style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px); min-width: 260px;">
-                <a class="btn btn-app editar" data-key="{{$key}}" data-dia="{{$dia}}">
-                  <i class="fas fa-edit editar"></i> Editar
-                </a>
-                <a class="btn btn-app confirmar" data-AgeCod="{{$semana[$key]->dias[$dia]->Age_AgeCod}}"
-                  data-fecha="{{date('d-m-Y',strtotime($dato->Age_Fecha))}}"
+                <a class="btn btn-app editar" data-key="{{$key}}" data-dia="{{$dia}}" data-toggle="modal"
+                  data-fecha="{{date('Y-m-d',strtotime($dato->Age_Fecha))}}"
                   data-horainicio="{{date('H:i',strtotime($dato->Age_Inicio))}}"
-                  data-horafin="{{date('H:i',strtotime($dato->Age_Fin))}}" title="Confirmar">{{-- C  confirmado --}}
+                  data-horafin="{{date('H:i',strtotime($dato->Age_Fin))}}" data-target="#modalAgenda">
+                  <i class="fas fa-edit"></i> Editar
+                </a>
+                <a class="btn btn-app confirmar" data-AgeCod="{{$semana[$key]->dias[$dia]->Age_AgeCod}}">{{-- C  confirmado --}}
                   <i class="fas fa-check"></i> Confirm
                 </a>
-                <a class="btn btn-app confirmar" data-AgeCod="{{$semana[$key]->dias[$dia]->Age_AgeCod}}"
-                  title="Confirmar">{{-- D  sin respuesta --}}
+                <a class="btn btn-app sinRespuesta" data-AgeCod="{{$semana[$key]->dias[$dia]->Age_AgeCod}}"
+                  title="Sin respuesta">{{-- D  sin respuesta --}}
                   <i class="fas fa-phone-slash"></i> Sin Resp.
                 </a>
                 <a class="btn btn-app eliminar" data-AgeCod="{{$semana[$key]->dias[$dia]->Age_AgeCod}}">
@@ -108,15 +108,15 @@
               <div class="dropdown-menu" x-placement="bottom-start"
                 style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px); min-width: 260px;">
                 <a class="btn btn-app editar" data-key="{{$key}}" data-dia="{{$dia}}" data-toggle="modal"
-                  data-fecha="{{date('d-m-Y',strtotime($dato->Age_Fecha))}}"
+                  data-fecha="{{date('Y-m-d',strtotime($dato->Age_Fecha))}}"
                   data-horainicio="{{date('H:i',strtotime($dato->Age_Inicio))}}"
                   data-horafin="{{date('H:i',strtotime($dato->Age_Fin))}}" data-target="#modalAgenda">
                   <i class="fas fa-edit"></i> Editar
                 </a>
-                <a class="btn btn-app">
-                  <i class="fas fa-check"></i> Asiste {{-- E  asiste --}}
-                </a>
-                <a class="btn btn-app">
+                {{-- <a class="btn btn-app">
+                  <i class="fas fa-check"></i> Asiste <!-- E  asiste -->
+                </a> --}}
+                <a class="btn btn-app noAsiste">
                   <i class="fas fa-times"></i> No Asiste {{-- F  no asiste --}}
                 </a>
                 <a class="btn btn-app eliminar" data-AgeCod="{{$semana[$key]->dias[$dia]->Age_AgeCod}}">
@@ -133,8 +133,8 @@
               </button>
               <div class="dropdown-menu" x-placement="bottom-start"
                 style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px); min-width: 133px;">
-                <a class="btn btn-app">
-                  <i class="fas fa-times"></i> No Asiste {{-- F  no asiste --}}
+                <a class="btn btn-app noAsiste" data-toggle="modal" data-target="#modalAgenda">
+                  <i class="fas fa-times"></i> No Asiste <!-- F  no asiste -->
                 </a>
                 <a class="btn btn-app eliminar" data-AgeCod="{{$semana[$key]->dias[$dia]->Age_AgeCod}}">
                   <i class="fas fa-trash-alt"></i> Eliminar

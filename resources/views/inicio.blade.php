@@ -38,13 +38,13 @@ Inicio
   });
   $(function(){
     
+    var semana = @json($semana);
     var dia = @json($dia);
-    console.log(dia);
 
     var pestana = @json($request->pestana ?? '#semana');
     console.log(pestana);
     $('.nav.nav-pills a[href="'+pestana+'"]').tab('show');
-    $('#pestana').val($('.nav-link.active').attr("href"));
+    $('#pestana').val($('.nav-link.pestanas.active').attr("href"));
     if(pestana == '#dia'){
         $('#nombreFechaDia').css('display', 'block');
         $('#nombreFechaSemana').css('display', 'none');
@@ -53,10 +53,10 @@ Inicio
         $('#nombreFechaDia').css('display', 'none');
       }
 
-    $('.nav.nav-pills a').on('click', function (e) {
+    $('.nav.nav-pills a.pestanas').on('click', function (e) {
       e.preventDefault()
       $(this).tab('show');
-      $('#pestana').val($('.nav-link.active').attr("href"));
+      $('#pestana').val($('.nav-link.pestanas.active').attr("href"));
       pestana = $('#pestana').val();
       if(pestana == '#dia'){
         $('#nombreFechaDia').css('display', 'block');
@@ -107,19 +107,48 @@ Inicio
 
     $('.confirmar').click(function(e)
     {
-        e.preventDefault();        
+        e.preventDefault();
+        $('#accion').val('confirmar');        
+        $('#Age_AgeCod').val($(this).data('agecod'));
+        $('form#cambiarFiltros').submit();
+    });
+    
+    $('.noAsiste').click(function(e)
+    {
+        e.preventDefault();
         $('#accion').val('confirmar');        
         $('#Age_AgeCod').val($(this).data('agecod'));
         $('form#cambiarFiltros').submit();
     });
 
-    $('.eliminar').click(function(e)
-    {
-        e.preventDefault();        
-        $('#accion').val('eliminar');        
-        $('#Age_AgeCod').val($(this).data('agecod'));
-        $('form#cambiarFiltros').submit();
+    // $('.eliminar').click(function(e)
+    // {
+    //     e.preventDefault();        
+    //     $('#accion').val('eliminar');        
+    //     $('#Age_AgeCod').val($(this).data('agecod'));
+    //     $('form#cambiarFiltros').submit();
+    // });
+    $('.eliminar').click(function(e){
+        e.preventDefault();  
+        swal({
+          title: '¿Está seguro que desea eliminar el registro ?',
+            text: "Esta acción no se puede deshacer!",
+            icon: 'warning',
+            buttons: {
+                cancel: "Cancelar",
+                confirm: "Aceptar"
+            },
+            dangerMode: true,
+        }).then((value) => {
+            if (value) {
+              $('#accion').val('eliminar');        
+              $('#Age_AgeCod').val($(this).data('agecod'));
+              $('form#cambiarFiltros').submit();
+            }
+        });
     });
+
+ 
 
     $('.editar').click(function(e)
     {
@@ -131,7 +160,7 @@ Inicio
           $('#mEspecialista').css('display', 'none');
           $('#mOpcionEspecialista').css('display', 'block');
         }
-        
+        console.log(semana[$(this).data('key')].dias[$(this).data('dia')]["Age_AgeCod"]);
         $('#Age_AgeCod').val(semana[$(this).data('key')].dias[$(this).data('dia')]["Age_AgeCod"]);
         $("#Cli_NomCli").val(semana[$(this).data('key')].dias[$(this).data('dia')].cliente["Cli_NomCli"]);
         $("#Cli_CodCli").val(semana[$(this).data('key')].dias[$(this).data('dia')].cliente["Cli_CodCli"]);
@@ -142,7 +171,7 @@ Inicio
         $('#mHoraFin').text($(this).data('horafin'));
         $('input[name=mHoraFin]').val(semana[$(this).data('key')].dias[$(this).data('dia')]["Age_Fin"]);
 
-        
+        console.log('hello '+$('input[name=mfechaAgenda]').val()+' '+$('#mHoraInicio').text());
         
         var lineasDetalle = semana[$(this).data('key')].dias[$(this).data('dia')].lineasDetalle;
         $.each(lineasDetalle, function(index, linea) {
@@ -485,9 +514,9 @@ Inicio
             </div>
             <div class="col-lg-4 mb-n1">
               <ul class="nav nav-pills float-right">
-                <li class="nav-item"><a class="nav-link" href="#mes" data-toggle="tab">Mes</a></li>
-                <li class="nav-item"><a class="nav-link" href="#semana" data-toggle="tab">Semana</a></li>
-                <li class="nav-item"><a class="nav-link" href="#dia" data-toggle="tab">Día</a></li>
+                <li class="nav-item"><a class="nav-link pestanas" href="#mes" data-toggle="tab">Mes</a></li>
+                <li class="nav-item"><a class="nav-link pestanas" href="#semana" data-toggle="tab">Semana</a></li>
+                <li class="nav-item"><a class="nav-link pestanas" href="#dia" data-toggle="tab">Día</a></li>
               </ul>
             </div>
           </div>

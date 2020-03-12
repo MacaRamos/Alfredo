@@ -182,9 +182,9 @@ li.user-header{
 }
 .table td, .table th {
     padding: .45rem;
-    border-top: none;
+    /* border-top: none;
     border-bottom: 1px solid #f1f1f1;
-    border-right: 1px solid #f1f1f1;
+    border-right: 1px solid #f1f1f1; */
 }
 .page-item.active .page-link{
     background-color:  #08c !important;

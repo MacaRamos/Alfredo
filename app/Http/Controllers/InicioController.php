@@ -98,7 +98,7 @@ class InicioController extends Controller
                     break;
                 case 'agendar':
                     $agenda = Agenda::get();
-                    if ($agenda) {
+                    if (isset($agenda)) {     
                         $agenda = Agenda::where('Age_EmpCod', '=', $this->Emp)
                             ->where('Age_SedCod', '=', $request->mSede)
                             ->where('Age_EspCod', '=', $request->mOpcionEspecialista)
@@ -124,8 +124,18 @@ class InicioController extends Controller
                 case 'confirmar':
                     $agenda = Agenda::where('Age_AgeCod', '=', $request->Age_AgeCod)
                         ->where('Age_Estado', '=', 'C')->first();
-                    if (!$agenda) {
+                    if (!isset($agenda)) {  
                         $notificacion = $this->confirmarAgenda($request);
+                    }
+                    $fechaInicio = new DateTime(date('d-m-Y', strtotime($request->fechaInicio)));
+                    $fechaTermino = new DateTime(date('d-m-Y', strtotime($request->fechaTermino)));
+                    $fechaDia = new DateTime(date('d-m-Y', strtotime($request->fechaDia)));
+                    break;
+                case 'noAsiste':
+                    $agenda = Agenda::where('Age_AgeCod', '=', $request->Age_AgeCod)
+                        ->where('Age_Estado', '=', 'F')->first();
+                    if (!isset($agenda)) {  
+                        $notificacion = $this->noAsiste($request);
                     }
                     $fechaInicio = new DateTime(date('d-m-Y', strtotime($request->fechaInicio)));
                     $fechaTermino = new DateTime(date('d-m-Y', strtotime($request->fechaTermino)));
@@ -133,7 +143,7 @@ class InicioController extends Controller
                     break;
                 case 'eliminar':
                     $agenda = Agenda::where('Age_AgeCod', '=', $request->Age_AgeCod)->first();
-                    if (!$agenda) {
+                    if (isset($agenda)) {                        
                         $notificacion = $this->eliminarAgenda($request);
                     }
                     $fechaInicio = new DateTime(date('d-m-Y', strtotime($request->fechaInicio)));
@@ -518,18 +528,34 @@ class InicioController extends Controller
         return $notificacion;
     }
 
-    public function elimnarAgenda(Request $request)
+    public function eliminarAgenda(Request $request)
     {
-        Agenda::where('Age_EmpCod', '=', $this->Emp)
+        AgeDet::where('Age_EmpCod', '=', $this->Emp)
             ->where('Age_AgeCod', '=', $request->Age_AgeCod)
             ->delete();
 
-        AgeDet::where('Age_EmpCod', '=', $this->Emp)
+        Agenda::where('Age_EmpCod', '=', $this->Emp)
             ->where('Age_AgeCod', '=', $request->Age_AgeCod)
             ->delete();
 
         $notificacion = array(
             'mensaje' => 'Hora eliminada con éxito',
+            'tipo' => 'success',
+            'titulo' => 'Agenda',
+        );
+        return $notificacion;
+    }
+
+    public function noAsiste(Request $request)
+    {
+        $agenda = Agenda::where('Age_EmpCod', '=', $this->Emp)
+            ->where('Age_AgeCod', '=', $request->Age_AgeCod)
+            ->first();
+        $agenda->Age_Estado = 'F'; //confirmado
+        $agenda->update();
+
+        $notificacion = array(
+            'mensaje' => 'Cliente no asiste, guardado con éxito',
             'tipo' => 'success',
             'titulo' => 'Agenda',
         );
