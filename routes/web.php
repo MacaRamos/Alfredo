@@ -54,8 +54,8 @@ Route::group(['prefix' => 'especialista', 'namespace' => 'Especialista', 'middle
     Route::get('/crear', 'EspecialistaController@crear')->name('crear_especialista');
     Route::post('/guardar', 'EspecialistaController@guardar')->name('guardar_especialista');
 
-    Route::get('/editar', 'EspecialistaController@editar')->name('editar_especialista');
-    Route::put('/actualizar', 'EspecialistaController@actualizar')->name('actualizar_especialista');
+    Route::get('/editar/{Ve_cod_ven}', 'EspecialistaController@editar')->name('editar_especialista');
+    Route::put('/actualizar/{Ve_cod_ven}', 'EspecialistaController@actualizar')->name('actualizar_especialista');
 
-    Route::delete('/eliminar', 'EspecialistaController@eliminar')->name('eliminar_especialista');
+    Route::delete('/eliminar/{Ve_cod_ven}', 'EspecialistaController@eliminar')->name('eliminar_especialista');
 });

@@ -57,7 +57,7 @@
         @if (!isset($dia[$key+1]->espe[$keyEspe]->Age_AgeCod) || (isset($dia[$key+1]->espe[$keyEspe]->Age_AgeCod) &&
         $dia[$key+1]->espe[$keyEspe]->Age_AgeCod != $dia[$key]->espe[$keyEspe]->Age_AgeCod))
         <td class="{{trim($dato->estado["Clase"])}}"
-          style="border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
+          style="border-top: none !important; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
           @php
           $altura = ((((strtotime($dato->Age_Fin) - strtotime($dato->Age_Inicio))/60)/15)-1)*36;
           @endphp
@@ -152,7 +152,7 @@
         border-top-right-radius: 10px;">
         </td>
         @else
-        <td class="{{trim($dato->estado["Clase"])}}" style="border-bottom: none;">
+        <td class="{{trim($dato->estado["Clase"])}}" style="border-bottom: none; border-top: none !important; ">
         </td>
         @endif
         @endif

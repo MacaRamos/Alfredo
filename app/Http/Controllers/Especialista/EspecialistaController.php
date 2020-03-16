@@ -87,9 +87,13 @@ class EspecialistaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function editar($id)
+    public function editar($Ve_cod_ven)
     {
-        //
+        $especialista = Especialista::where('Mb_Epr_cod', '=', $this->Emp)
+                                ->where('Ve_cod_ven', '=', $Ve_cod_ven)
+                                ->first();
+        $sedes = Sede::get();
+        return view('especialista.editar', compact('especialista', 'sedes'));
     }
 
     /**
@@ -99,9 +103,27 @@ class EspecialistaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function actualizar(Request $request, $id)
+    public function actualizar(ValidacionEspecialista $request, $Ve_cod_ven)
     {
-        //
+        $departamento = substr($request->Ve_ven_depto,1,1);
+        $sede = Sede::where('Mb_Sedecod', '=', $departamento)->first();
+        $especialista = Especialista::where('Mb_Epr_cod', '=', $this->Emp)
+                                    ->where('Ve_cod_ven', '=', $Ve_cod_ven)
+                                    ->first();
+        $especialista->Ve_nombre_ven = strtoupper($request->Ve_nombre_ven);
+        $especialista->Ve_rut_ven = $request->Ve_rut_ven;
+        $especialista->Ve_ven_dv = $request->Ve_ven_dv;
+        $especialista->Ve_ven_depto = $request->Ve_ven_depto;
+        $especialista->Ve_ven_dir = $sede->Mb_Sededir;
+        $especialista->Ve_tipo_ven = $request->Ve_tipo_ven;
+        $especialista->save();
+
+        $notificacion = array(
+            'mensaje' => 'Especialista editado con éxito',
+            'tipo' => 'success',
+            'titulo' => 'Especialistas'
+        );
+        return redirect('especialista')->with($notificacion);
     }
 
     /**
@@ -110,8 +132,16 @@ class EspecialistaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function eliminar($id)
+    public function eliminar($Ve_cod_ven)
     {
-        //
+        Especialista::where('Mb_Epr_cod', '=', $this->Emp)
+                    ->where('Ve_cod_vend', '=', $Ve_cod_ven)
+                    ->delete();
+        $notificacion = array(
+            'mensaje' => 'Especialista eliminado con éxito',
+            'tipo' => 'success',
+            'titulo' => 'Agenda',
+        );
+        return $notificacion;
     }
 }

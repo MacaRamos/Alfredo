@@ -1,9 +1,9 @@
 @extends("theme.$theme.layout")
 @section('titulo')
-Crear Funcionario
+Editar Especialista
 @endsection
 @section('tituloContenido')
-<h1 style="font-family: 'Khand', sans-serif;">Crear Funcionario</h1>
+<h1 style="font-family: 'Khand', sans-serif;">Editar Especialista</h1>
 @endsection
 
 
@@ -52,17 +52,17 @@ Crear Funcionario
     <div class="col-lg-12">
         <div class="card">
             <div class="card-header border-bottom-3 border-black">
-                <h3 class="card-title">Funcionario</h3>
+                <h3 class="card-title">Especialista</h3>
                 <div class="card-tools pull-right">
                     <a href="{{route('especialista')}}" class="btn btn-block bg-black btn-sm ">
-                        <i class="fas fa-reply"></i> Volver a Funcionarios
+                        <i class="fas fa-reply"></i> Volver a especialistas
                     </a>
                 </div>
             </div>
             <!-- form start -->
-            <form action="{{route('guardar_especialista')}}" id="form-general" class="form-horizontal" method="POST"
+            <form action="{{route('actualizar_especialista', ['Ve_cod_ven' => trim($especialista->Ve_cod_ven)])}}" id="form-general" class="form-horizontal" method="POST"
                 autocomplete="off">
-                @csrf
+                @csrf @method('put')
                 <div class="card-body">
                     @include('especialista.form')
                 </div>
@@ -70,7 +70,7 @@ Crear Funcionario
                 <div class="card-footer">
                     <div class="col-lg-8 mx-auto">
                         <div class="row">
-                            @include('includes.boton-form-crear')
+                            @include('includes.boton-form-editar')
                         </div>
                     </div>
                 </div>

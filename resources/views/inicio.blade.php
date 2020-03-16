@@ -48,9 +48,11 @@ Inicio
     if(pestana == '#dia'){
         $('#nombreFechaDia').css('display', 'block');
         $('#nombreFechaSemana').css('display', 'none');
+        $('#especialista').prop('disabled', true);
       }else if(pestana == '#semana'){
         $('#nombreFechaSemana').css('display', 'block');
         $('#nombreFechaDia').css('display', 'none');
+        $('#especialista').prop('disabled', false);
       }
 
     $('.nav.nav-pills a.pestanas').on('click', function (e) {
@@ -61,9 +63,11 @@ Inicio
       if(pestana == '#dia'){
         $('#nombreFechaDia').css('display', 'block');
         $('#nombreFechaSemana').css('display', 'none');
+        $('#especialista').prop('disabled', true);
       }else if(pestana == '#semana'){
         $('#nombreFechaSemana').css('display', 'block');
         $('#nombreFechaDia').css('display', 'none');
+        $('#especialista').prop('disabled', false);
       }
     })
     
@@ -116,9 +120,24 @@ Inicio
     $('.noAsiste').click(function(e)
     {
         e.preventDefault();
-        $('#accion').val('confirmar');        
+        $('#accion').val('noAsiste');        
+        $('#Age_AgeCod').val($(this).data('agecod'));        
+    });
+
+    $('.sinRespuesta').click(function(e)
+    {
+        e.preventDefault();
+        $('#accion').val('sinRespuesta');        
         $('#Age_AgeCod').val($(this).data('agecod'));
-        $('form#cambiarFiltros').submit();
+    });
+
+    $('#enviarObservacion').on('click', function(){
+      $('form#cambiarFiltros').submit();
+    });
+    $('#observacion').on('input', function () {
+      var chars = $(this).val().length;
+      var diff = $(this).attr('maxlength') - chars;
+      $('#maxCaracteres').text(diff);
     });
 
     // $('.eliminar').click(function(e)
@@ -392,6 +411,7 @@ Inicio
   <input type="hidden" name="Age_Estado" id="Age_Estado" value="">
   <input type="hidden" name="pestana" id="pestana" value="">
   @include('modal')
+  @include('observacionModal')
   @csrf
   <div class="card">
     <div class="row">

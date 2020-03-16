@@ -56,7 +56,7 @@
           @if (!isset($semana[$key+1]->dias[$dia]->Age_AgeCod) || (isset($semana[$key+1]->dias[$dia]->Age_AgeCod) &&
           $semana[$key+1]->dias[$dia]->Age_AgeCod != $semana[$key]->dias[$dia]->Age_AgeCod))
           <td class="{{trim($dato->estado["Clase"])}}"
-            style="border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
+            style="border-top: none !important; border-top: none !important; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
             @php
             $altura = ((((strtotime($dato->Age_Fin) - strtotime($dato->Age_Inicio))/60)/15)-1)*36;
             @endphp
@@ -89,7 +89,7 @@
                 <a class="btn btn-app confirmar" data-AgeCod="{{$semana[$key]->dias[$dia]->Age_AgeCod}}">{{-- C  confirmado --}}
                   <i class="fas fa-check"></i> Confirm
                 </a>
-                <a class="btn btn-app sinRespuesta" data-AgeCod="{{$semana[$key]->dias[$dia]->Age_AgeCod}}"
+                <a class="btn btn-app sinRespuesta" data-AgeCod="{{$semana[$key]->dias[$dia]->Age_AgeCod}}" data-toggle="modal" data-target="#observacionModal"
                   title="Sin respuesta">{{-- D  sin respuesta --}}
                   <i class="fas fa-phone-slash"></i> Sin Resp.
                 </a>
@@ -105,8 +105,9 @@
                 class="btn-accion-tabla icon-circle-small bg-gray-light dropdown-toggle dropdown-icon"
                 data-toggle="dropdown">
               </button>
+              @if ((new DateTime(date('d-m-Y', strtotime($dato->Age_Inicio))) == new DateTime(date('d-m-Y'))))
               <div class="dropdown-menu" x-placement="bottom-start"
-                style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px); min-width: 260px;">
+                style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px); min-width: 196px;">
                 <a class="btn btn-app editar" data-key="{{$key}}" data-dia="{{$dia}}" data-toggle="modal"
                   data-fecha="{{date('Y-m-d',strtotime($dato->Age_Fecha))}}"
                   data-horainicio="{{date('H:i',strtotime($dato->Age_Inicio))}}"
@@ -116,13 +117,30 @@
                 {{-- <a class="btn btn-app">
                   <i class="fas fa-check"></i> Asiste <!-- E  asiste -->
                 </a> --}}
-                <a class="btn btn-app noAsiste">
+                <a class="btn btn-app noAsiste" data-AgeCod="{{$semana[$key]->dias[$dia]->Age_AgeCod}}" data-toggle="modal" data-target="#observacionModal">
                   <i class="fas fa-times"></i> No Asiste {{-- F  no asiste --}}
                 </a>
                 <a class="btn btn-app eliminar" data-AgeCod="{{$semana[$key]->dias[$dia]->Age_AgeCod}}">
                   <i class="fas fa-trash-alt"></i> Eliminar
                 </a>
               </div>
+              @else
+              <div class="dropdown-menu" x-placement="bottom-start"
+                style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px); min-width: 130px;">
+                <a class="btn btn-app editar" data-key="{{$key}}" data-dia="{{$dia}}" data-toggle="modal"
+                  data-fecha="{{date('Y-m-d',strtotime($dato->Age_Fecha))}}"
+                  data-horainicio="{{date('H:i',strtotime($dato->Age_Inicio))}}"
+                  data-horafin="{{date('H:i',strtotime($dato->Age_Fin))}}" data-target="#modalAgenda">
+                  <i class="fas fa-edit"></i> Editar
+                </a>
+                {{-- <a class="btn btn-app">
+                  <i class="fas fa-check"></i> Asiste <!-- E  asiste -->
+                </a> --}}
+                <a class="btn btn-app eliminar" data-AgeCod="{{$semana[$key]->dias[$dia]->Age_AgeCod}}">
+                  <i class="fas fa-trash-alt"></i> Eliminar
+                </a>
+              </div>
+              @endif
             </div>
             @break
             @case('E')
@@ -133,8 +151,25 @@
               </button>
               <div class="dropdown-menu" x-placement="bottom-start"
                 style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px); min-width: 133px;">
-                <a class="btn btn-app noAsiste" data-toggle="modal" data-target="#modalAgenda">
+                <a class="btn btn-app noAsiste" data-toggle="modal" data-target="#observacionModal">
                   <i class="fas fa-times"></i> No Asiste <!-- F  no asiste -->
+                </a>
+                <a class="btn btn-app eliminar" data-AgeCod="{{$semana[$key]->dias[$dia]->Age_AgeCod}}">
+                  <i class="fas fa-trash-alt"></i> Eliminar
+                </a>
+              </div>
+            </div>
+            @break
+            @case('D')
+            <div class="btn-group float-right">
+              <button type="button"
+                class="btn-accion-tabla icon-circle-small bg-gray-light dropdown-toggle dropdown-icon"
+                data-toggle="dropdown">
+              </button>
+              <div class="dropdown-menu" x-placement="bottom-start"
+                style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px); min-width: 130px;">
+                <a class="btn btn-app confirmar" data-AgeCod="{{$semana[$key]->dias[$dia]->Age_AgeCod}}">{{-- C  confirmado --}}
+                  <i class="fas fa-check"></i> Confirm
                 </a>
                 <a class="btn btn-app eliminar" data-AgeCod="{{$semana[$key]->dias[$dia]->Age_AgeCod}}">
                   <i class="fas fa-trash-alt"></i> Eliminar
@@ -154,7 +189,7 @@
         border-top-right-radius: 10px;">
           </td>
           @else
-          <td class="{{trim($dato->estado["Clase"])}}" style="border-bottom: none;">
+          <td class="{{trim($dato->estado["Clase"])}}" style="border-bottom: none; border-top: none !important; ">
           </td>
           @endif
           @endif

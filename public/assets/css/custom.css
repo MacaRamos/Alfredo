@@ -89,7 +89,7 @@ body{
 }
 
 .form-control:disabled, .form-control[readonly]{
-    background-color: #dcdcdc;
+    background-color: #e9ecef;
 }
 .border-bottom-3{
     border-bottom: 3px solid;

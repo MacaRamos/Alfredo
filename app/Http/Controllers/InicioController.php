@@ -133,9 +133,20 @@ class InicioController extends Controller
                     break;
                 case 'noAsiste':
                     $agenda = Agenda::where('Age_AgeCod', '=', $request->Age_AgeCod)
-                        ->where('Age_Estado', '=', 'F')->first();
+                                    ->where('Age_Estado', '=', 'F')->first();
                     if (!isset($agenda)) {  
                         $notificacion = $this->noAsiste($request);
+                    }
+                    $fechaInicio = new DateTime(date('d-m-Y', strtotime($request->fechaInicio)));
+                    $fechaTermino = new DateTime(date('d-m-Y', strtotime($request->fechaTermino)));
+                    $fechaDia = new DateTime(date('d-m-Y', strtotime($request->fechaDia)));
+                    break;
+                case 'sinRespuesta':
+                    // dd($request->all());
+                    $agenda = Agenda::where('Age_AgeCod', '=', $request->Age_AgeCod)
+                                    ->where('Age_Estado', '=', 'D')->first();
+                    if (!isset($agenda)) {  
+                        $notificacion = $this->sinRespuesta($request);
                     }
                     $fechaInicio = new DateTime(date('d-m-Y', strtotime($request->fechaInicio)));
                     $fechaTermino = new DateTime(date('d-m-Y', strtotime($request->fechaTermino)));
@@ -235,19 +246,7 @@ class InicioController extends Controller
                     ->get();
 
                 if (count($agenda) > 0) {
-                    // if (new DateTime(date('d-m-Y H:i', strtotime($agenda->Age_Fin))) < new DateTime(date('d-m-Y H:i'))){
-                    //     switch ($agenda->Age_Estado) {
-                    //         case 'B':
-                    //             $agenda->Age_Estado = 'F';
-                    //             $agenda->update();
-                    //             break;
-                    //         case 'C':
-                    //             $agenda->Age_Estado = 'F';
-                    //             $agenda->update();
-                    //             break;
-                    //     }
-                    // }
-                    // dd($especialista);
+                    
                     if ($especialista == null) {
                         if (count($especialistas) > 0) {
                             $completado = (count($agenda) * 100) / count($especialistas);
@@ -551,11 +550,31 @@ class InicioController extends Controller
         $agenda = Agenda::where('Age_EmpCod', '=', $this->Emp)
             ->where('Age_AgeCod', '=', $request->Age_AgeCod)
             ->first();
+        
         $agenda->Age_Estado = 'F'; //confirmado
+        $agenda->Age_Observacion = $request->Age_Observacion;
         $agenda->update();
 
         $notificacion = array(
             'mensaje' => 'Cliente no asiste, guardado con éxito',
+            'tipo' => 'success',
+            'titulo' => 'Agenda',
+        );
+        return $notificacion;
+    }
+
+    public function sinRespuesta(Request $request)
+    {
+        $agenda = Agenda::where('Age_EmpCod', '=', $this->Emp)
+            ->where('Age_AgeCod', '=', $request->Age_AgeCod)
+            ->first();
+        
+        $agenda->Age_Estado = 'D'; //sin respuesta
+        $agenda->Age_Observacion = $request->Age_Observacion;
+        $agenda->update();
+
+        $notificacion = array(
+            'mensaje' => 'Cliente sin respuesta, guardado con éxito',
             'tipo' => 'success',
             'titulo' => 'Agenda',
         );

@@ -1,9 +1,9 @@
 @extends("theme.$theme.layout")
 @section('titulo')
-Especialistas
+Funcionarios
 @endsection
 @section('tituloContenido')
-<h1 style="font-family: 'Khand', sans-serif;">ESPECIALISTAS</h1>
+<h1 style="font-family: 'Khand', sans-serif;">FUNCIONARIOS</h1>
 @endsection
 
 @section("header")

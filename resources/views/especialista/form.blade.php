@@ -19,17 +19,16 @@
         </div>
         <div class="col-lg-4">
             <div class="form-group">
-                <label for="nombre" class="requerido">Nombre</label>
-                <input type="text" class="form-control" name="nombre" id="nombre"
-                    value="{{old('nombre', $especialista->Ve_nombre_ven ?? '')}}" required />
+                <label for="Ve_cod_ven" class="requerido">Nombre Usuario</label>
+                <input type="text" class="form-control" name="Ve_cod_ven" id="Ve_cod_ven"
+                    value="{{old('Ve_cod_ven', $especialista->Ve_cod_ven ?? '')}}" required />
             </div>
         </div>
         <div class="col-lg-4">
             <div class="form-group">
-                <label for="apellido" class="requerido">Apellido</label>
-                <input type="text" class="form-control" name="apellido" id="apellido"
-                    value="{{old('apellido', $especialista->Ve_nombre_ven ?? '')}}" required />
-                    <input type="hidden" class="form-control" name="Ve_nombre_ven" id="Ve_nombre_ven"/>
+                <label for="Ve_nombre_ven" class="requerido">Nombre</label>
+                <input type="text" class="form-control" name="Ve_nombre_ven" id="Ve_nombre_ven"
+                    value="{{old('Ve_nombre_ven', $especialista->Ve_nombre_ven ?? '')}}" required />
             </div>
         </div>
     </div>
@@ -52,10 +51,46 @@
         </div>
         <div class="col-lg-4">
             <div class="form-group">
-                <label class="label requerido">Tipo</label>
+                <label class="label requerido">Cargo</label>
                 <select class="form-control" id="sede" name="Ve_tipo_ven" required>
                     @if (isset($especialista->Ve_tipo_ven))
-                    <option value="{{$especialista->Ve_tipo_ven}}" selected>{{$especialista->Ve_tipo_ven}}</option>
+                    @switch($especialista->Ve_tipo_ven)
+                        @case('P')
+                            <option value="{{$especialista->Ve_tipo_ven}}" selected>PELUQUERO</option>
+                            <option value="A">ASISTENTE</option>
+                            <option value="B">BARBERO</option>
+                            <option value="E">ENCARGADO LOCA</option>
+                            <option value="B">GERENCIA</option>
+                            @break
+                        @case('A')
+                            <option value="A">PELUQUERO</option>
+                            <option value="{{$especialista->Ve_tipo_ven}}" selected>ASISTENTE</option>
+                            <option value="B">BARBERO</option>
+                            <option value="E">ENCARGADO LOCA</option>
+                            <option value="B">GERENCIA</option>
+                            @break 
+                        @case('B')
+                            <option value="A">PELUQUERO</option>
+                            <option value="A">ASISTENTE</option>
+                            <option value="{{$especialista->Ve_tipo_ven}}" selected>BARBERO</option>
+                            <option value="E">ENCARGADO LOCA</option>
+                            <option value="B">GERENCIA</option>
+                            @break
+                        @case('E')
+                            <option value="A">PELUQUERO</option>
+                            <option value="A">ASISTENTE</option>
+                            <option value="B">BARBERO</option>
+                            <option value="{{$especialista->Ve_tipo_ven}}" selected>ENCARGADO LOCA</option>
+                            <option value="B">GERENCIA</option>
+                            @break
+                        @case('G')
+                            <option value="A">PELUQUERO</option>
+                            <option value="A">ASISTENTE</option>
+                            <option value="B">BARBERO</option>
+                            <option value="E">ENCARGADO LOCA</option>
+                            <option value="{{$especialista->Ve_tipo_ven}}" selected>GERENCIA</option>
+                            @break
+                    @endswitch                    
                     @else
                     <option value="P">PELUQUERO</option>
                     <option value="A">ASISTENTE</option>
