@@ -1,4 +1,4 @@
-$('.menu_rol').on('change', function () {
+$('.menu_rol').on('change', function() {
     var data = {
         Men_id: $(this).data('menuid'),
         Rol_codigo: $(this).val(),
@@ -12,13 +12,13 @@ $('.menu_rol').on('change', function () {
     ajaxRequest('/admin/menu-rol', data);
 });
 
-function ajaxRequest (url, data) {
+function ajaxRequest(url, data) {
     $.ajax({
         url: url,
         type: 'POST',
         data: data,
-        success: function (respuesta) {
-            Insuval.notificaciones(respuesta.respuesta, 'Insuval', 'success');
+        success: function(respuesta) {
+            Alfredo.notificaciones(respuesta.respuesta, '', 'success');
         }
     });
-} 
+}

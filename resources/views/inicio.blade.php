@@ -29,11 +29,11 @@ Inicio
 
 <script>
   $("#celular").inputmask({
-    mask: "[9-99999999]",
+    mask: "[999999999]",
       placeholder: ''
   });
   $("#fijo").inputmask({
-    mask: "[41-2196134]",
+    mask: "[999999999]",
       placeholder: ''
   });
   $(function(){
@@ -42,7 +42,6 @@ Inicio
     var dia = @json($dia);
 
     var pestana = @json($request->pestana ?? '#semana');
-    console.log(pestana);
     $('.nav.nav-pills a[href="'+pestana+'"]').tab('show');
     $('#pestana').val($('.nav-link.pestanas.active').attr("href"));
     if(pestana == '#dia'){
@@ -179,7 +178,7 @@ Inicio
           $('#mEspecialista').css('display', 'none');
           $('#mOpcionEspecialista').css('display', 'block');
         }
-        console.log(semana[$(this).data('key')].dias[$(this).data('dia')]["Age_AgeCod"]);
+        // // console.log(semana[$(this).data('key')].dias[$(this).data('dia')]["Age_AgeCod"]);
         $('#Age_AgeCod').val(semana[$(this).data('key')].dias[$(this).data('dia')]["Age_AgeCod"]);
         $("#Cli_NomCli").val(semana[$(this).data('key')].dias[$(this).data('dia')].cliente["Cli_NomCli"]);
         $("#Cli_CodCli").val(semana[$(this).data('key')].dias[$(this).data('dia')].cliente["Cli_CodCli"]);
@@ -190,7 +189,7 @@ Inicio
         $('#mHoraFin').text($(this).data('horafin'));
         $('input[name=mHoraFin]').val(semana[$(this).data('key')].dias[$(this).data('dia')]["Age_Fin"]);
 
-        console.log('hello '+$('input[name=mfechaAgenda]').val()+' '+$('#mHoraInicio').text());
+        
         
         var lineasDetalle = semana[$(this).data('key')].dias[$(this).data('dia')].lineasDetalle;
         $.each(lineasDetalle, function(index, linea) {
@@ -218,8 +217,8 @@ Inicio
       $('#mHoraFin').text($(this).data('horafin'));
       $('input[name=mHoraFin]').val($('input[name=mfechaAgenda]').val()+' '+$('#mHoraFin').text());
 
-      console.log('Fecha: '+$('input[name=mfechaAgenda]').val());
-      console.log('Hora inicio'+$(this).data('horainicio'));
+      // console.log('Fecha: '+$('input[name=mfechaAgenda]').val());
+      // console.log('Hora inicio'+$(this).data('horainicio'));
 
       if ($('#especialista :selected').text() != 'Local'){
         $('#mEspecialista').text($('#especialista :selected').text());
@@ -235,9 +234,9 @@ Inicio
 
     // Attach `switchChange` event to all switches.
     $(switchSelector).on('switchChange.bootstrapSwitch', function(event, state) {
-      // console.log(this);  // DOM element
-      // console.log(event); // jQuery event
-      // console.log(state); // true | false
+      // // console.log(this);  // DOM element
+      // // console.log(event); // jQuery event
+      // // console.log(state); // true | false
 
       if (state){
         $('#viejoCliente').css('display', 'none');
@@ -283,26 +282,27 @@ Inicio
                 },
                 dataType: "json",
                 success: function(data){
-                  console.log(data);
+                  // console.log(data);
                     response(data);
                 }
             });
         },
         select: function (event, ui) {
-          console.log(ui.item.horDur);
-          console.log(ui.item.minDur);
+          // console.log(ui.item.horDur);
+          // console.log(ui.item.minDur);
             $("#Art_nom_externo").val(ui.item.label); // display the selected text
             $("#Art_cod").val(ui.item.id); // save selected id to hidden input
+            $('#asignar').focus();
             mHorDur = parseInt(ui.item.horDur);
             mMinDur = parseInt(ui.item.minDur);
-            console.log(mMinDur);
+            // console.log(mMinDur);
         },
         minLength: 1
     });
     //recibe un date
     function verificarHoraFinal(duracionServicio)
     {
-      console.log('hola '+$('input[name=mfechaAgenda]').val()+' '+$('#mHoraInicio').text());
+      // console.log('hola '+$('input[name=mfechaAgenda]').val()+' '+$('#mHoraInicio').text());
       var duracionTotalReserva = new Date($('input[name=mfechaAgenda]').val()+' '+$('#mHoraInicio').text());
       
       
@@ -347,7 +347,7 @@ Inicio
             }
         }
         $('input[name=mHoraFin]').val($('input[name=mfechaAgenda]').val()+' '+$('#mHoraFin').text());
-       // console.log($("#mHoraFin").text());
+      //  // console.log($("#mHoraFin").text());
       //$("#mHoraFin").text(duracionTotalReserva.getHours()+':'+duracionTotalReserva.getMinutes());
     }
 
@@ -369,7 +369,7 @@ Inicio
             }
         }
         $('input[name=mHoraFin]').val($('input[name=mfechaAgenda]').val()+' '+$('#mHoraFin').text());
-       // console.log($("#mHoraFin").text());
+      //  // console.log($("#mHoraFin").text());
       //$("#mHoraFin").text(duracionTotalReserva.getHours()+':'+duracionTotalReserva.getMinutes());
     }
     
@@ -386,12 +386,20 @@ Inicio
         {        
           $('#tablaServicios').children('tbody').append('<tr><td>'+$('#Art_nom_externo').val()+'<input type="hidden" name="servicios['+servicio+']" value="'+$('#Art_cod').val()+'"/><input class="hora" style="display: none;" name="mDuracion['+servicio+']" value="'+mHorDur+':'+mMinDur+'"/><a class="btn-accion-tabla float-right quitarServicio"><i class="fas fa-times icon-circle-small bg-danger"></i></a></td></tr>');
           servicio++;
-          $('a.quitarServicio').click(function(){
-            event.preventDefault();
+          $('a.quitarServicio').click(function(){            
             $(this).closest('tr').remove();
-            calculaHoraFinal();  
+            calculaHoraFinal();
+            console.log($('#tablaServicios > tbody').html().trim());
+            if($('#tablaServicios > tbody').html().trim() == ""){
+              $('.guardar').prop("disabled", true);
+              $('.guardar').addClass("disabled",false);
+            }          
           });
-          estableceHoraFinal(duracionTotalServicios);      
+          estableceHoraFinal(duracionTotalServicios);
+          if($('.guardar').prop("disabled", true)){
+            $('.guardar').prop("disabled",false);
+            $('.guardar').removeClass("disabled",false);
+          }
         }else{
           //#TODO: poner mensaje de error si se pasa de las 19 de la tarde
         }

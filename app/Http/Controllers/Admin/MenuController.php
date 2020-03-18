@@ -77,10 +77,9 @@ class MenuController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function actualizar(Request $request, $id)
+    public function actualizar(ValidacionMenu $request)
     {
-
-        //return redirect('admin/menu/crear')->with('mensaje','Menú actualizado con exito');
+        dd('hola');
     }
 
     /**

@@ -60,8 +60,8 @@ Editar Especialista
                 </div>
             </div>
             <!-- form start -->
-            <form action="{{route('actualizar_especialista', ['Ve_cod_ven' => trim($especialista->Ve_cod_ven)])}}" id="form-general" class="form-horizontal" method="POST"
-                autocomplete="off">
+            <form action="{{route('actualizar_especialista', ['Ve_cod_ven' => trim($especialista->Ve_cod_ven)])}}"
+                id="form-general" class="form-horizontal" method="POST" autocomplete="off">
                 @csrf @method('put')
                 <div class="card-body">
                     @include('especialista.form')

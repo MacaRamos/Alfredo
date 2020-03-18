@@ -17,7 +17,20 @@ Crear Funcionario
 @include('includes.error-form')
 
 <script>
-    
+    $(function(){
+        $('#rut').keypress(function(tecla) {
+            var rut = $('#Ve_rut_ven').val();
+            if(rut.length>6){
+                if((tecla.charCode > 47 && tecla.charCode < 57) || (tecla.charCode == 75) || (tecla.charCode == 107)){
+                    return true;
+                } return false;
+            }else{
+                if(tecla.charCode > 47 && tecla.charCode < 57){
+                    return true;
+                } return false;
+            }
+        });
+    });
 
     function checkRut() {
         var rut = $('#rut').val();

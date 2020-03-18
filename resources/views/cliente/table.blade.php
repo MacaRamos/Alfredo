@@ -2,41 +2,25 @@
     <table class="table table-condensed table-hover" id="tabla-data">
         <thead class="border-bottom-3 border-black">
             <tr>
-                <th>Funcionario</th>
-                <th>Cargo</th>
-                <th>Sede</th>
+                <th>Cliente</th>
+                <th>Célular</th>
+                <th>Fijo</th>
                 <th style="width: 100px"></th>
             </tr>
         </thead>
         <tbody class="border-bottom">
-            @foreach ($especialistas as $especialista)
+            @foreach ($clientes as $cliente)
             <tr>
-                <td>{{$especialista->Ve_nombre_ven}}</td>
-                @switch($especialista->Ve_tipo_ven)
-                @case('P')
-                <td>PELUQUERO</td>
-                @break
-                @case('A')
-                <td>ASISTENTE</td>
-                @break
-                @case('B')
-                <td>BARBERO</td>
-                @break
-                @case('E')
-                <td>ENCARGADO LOCA</td>
-                @break
-                @case('G')
-                <td>GERENCIA</td>
-                @break
-                @endswitch
-                <td>{{substr($especialista->Ve_ven_depto,1,2)}}</td>
+                <td>{{$cliente->Cli_NomCli}}</td>
+                <td>{{$cliente->Cli_NumCel}}</td>
+                <td>{{$cliente->Cli_NumFij}}</td>
                 <td>
-                    <a href="{{route('editar_especialista', ['Ve_cod_ven' => rtrim($especialista->Ve_cod_ven)])}}"
+                    <a href="{{route('editar_cliente', ['Cli_CodCli' => rtrim($cliente->Cli_CodCli)])}}"
                         class="btn-accion-tabla editar tooltipsC" title="Editar este registro">
                         <i class="fas fa-pencil-alt icon-circle bg-gray"></i>
                     </a>
                     <form
-                        action="{{route('eliminar_especialista', ['Ve_cod_ven' => rtrim($especialista->Ve_cod_ven)])}}"
+                        action="{{route('eliminar_cliente', ['Cli_CodCli' => rtrim($cliente->Cli_CodCli)])}}"
                         class="d-inline form-eliminar" method="POST">
                         @csrf
                         @method('delete')
@@ -53,7 +37,7 @@
 <!-- /.card-body -->
 <div class="card-footer bg-white">
     <div class="dataTables_paginate paging_simple_numbers float-right">
-        {{$especialistas->links("pagination::bootstrap-4")}}
+        {{$clientes->links("pagination::bootstrap-4")}}
     </div>
 </div>
 <!-- /.card-footer-->

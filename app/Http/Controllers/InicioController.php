@@ -382,6 +382,7 @@ class InicioController extends Controller
 
     public function agendar(Request $request)
     {
+        dd($request->all());
         $validator = Validator::make($request->all(), [
             'mHoraFin' => [new ValidarHoraFinal($request->mHoraInicio)],
         ]);

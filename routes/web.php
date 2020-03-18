@@ -47,15 +47,22 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['aut
 
 Route::group(['prefix' => 'especialista', 'namespace' => 'Especialista', 'middleware' => ['auth','superadmin']], function(){
     route::get('','EspecialistaController@index')->name('especialista');
-    route::post('','EspecialistaController@index')->name('especialista');
 
     Route::get('/filtrarEspecialistas/{Ve_nombre_ven?}', 'EspecialistaController@filtrarEspecialistas')->name('filtrarEspecialistas');
-
     Route::get('/crear', 'EspecialistaController@crear')->name('crear_especialista');
     Route::post('/guardar', 'EspecialistaController@guardar')->name('guardar_especialista');
+    Route::get('/{Ve_cod_ven}/editar', 'EspecialistaController@editar')->name('editar_especialista');
+    Route::put('/{Ve_cod_ven}', 'EspecialistaController@actualizar')->name('actualizar_especialista');
+    Route::delete('/{Ve_cod_ven}/eliminar', 'EspecialistaController@eliminar')->name('eliminar_especialista');
+});
 
-    Route::get('/editar/{Ve_cod_ven}', 'EspecialistaController@editar')->name('editar_especialista');
-    Route::put('/actualizar/{Ve_cod_ven}', 'EspecialistaController@actualizar')->name('actualizar_especialista');
+Route::group(['prefix' => 'cliente', 'namespace' => 'cliente', 'middleware' => ['auth','superadmin']], function(){
+    route::get('','ClienteController@index')->name('cliente');
 
-    Route::delete('/eliminar/{Ve_cod_ven}', 'EspecialistaController@eliminar')->name('eliminar_especialista');
+    Route::get('/filtrarClientes/{Cli_NomCli?}', 'ClienteController@filtrarClientes')->name('filtrarClientes');
+    Route::get('/crear', 'ClienteController@crear')->name('crear_cliente');
+    Route::post('/guardar', 'ClienteController@guardar')->name('guardar_cliente');
+    Route::get('/{Cli_CodCli}/editar', 'ClienteController@editar')->name('editar_cliente');
+    Route::put('/{Cli_CodCli}', 'ClienteController@actualizar')->name('actualizar_cliente');
+    Route::delete('/{Cli_CodCli}/eliminar', 'ClienteController@eliminar')->name('eliminar_cliente');
 });

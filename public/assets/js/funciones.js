@@ -1,6 +1,6 @@
-var Insuval = function () {
+var Alfredo = function() {
     return {
-        validacionGeneral: function (id, reglas, mensajes) {
+        validacionGeneral: function(id, reglas, mensajes) {
             const formulario = $('#' + id);
             formulario.validate({
                 rules: reglas,
@@ -9,18 +9,18 @@ var Insuval = function () {
                 errorClass: 'invalid-feedback', // default input error message class
                 focusInvalid: false, // do not focus the last invalid input
                 ignore: "", // validate all fields including form hidden input
-                highlight: function (element, errorClass, validClass) { // hightlight error inputs
+                highlight: function(element, errorClass, validClass) { // hightlight error inputs
                     $(element).closest('.form-control').addClass('is-invalid'); // set error class to the control control
                 },
-                unhighlight: function (element) { // revert the change done by hightlight
+                unhighlight: function(element) { // revert the change done by hightlight
                     $(element).closest('.form-control').removeClass('is-invalid'); // set error class to the control control
                 },
-                success: function (label) {
+                success: function(label) {
                     label.closest('.form-control').removeClass('is-invalid'); // set success class to the control control
                 },
-                errorPlacement: function (error, element) {
-                    if ($(element).is('select') && element.hasClass('bs-select')) {//PARA LOS SELECT BOOSTRAP
-                        error.insertAfter(element);//element.next().after(error);
+                errorPlacement: function(error, element) {
+                    if ($(element).is('select') && element.hasClass('bs-select')) { //PARA LOS SELECT BOOSTRAP
+                        error.insertAfter(element); //element.next().after(error);
                     } else if ($(element).is('select') && element.hasClass('select2-hidden-accessible')) {
                         element.next().after(error);
                     } else if (element.attr("data-error-container")) {
@@ -29,15 +29,15 @@ var Insuval = function () {
                         error.insertAfter(element); // default placement for everything else
                     }
                 },
-                invalidHandler: function (event, validator) { //display error alert on form submit
-                    
+                invalidHandler: function(event, validator) { //display error alert on form submit
+
                 },
-                submitHandler: function (form) {
+                submitHandler: function(form) {
                     return true;
                 }
             });
         },
-        notificaciones: function (mensaje, titulo, tipo) {
+        notificaciones: function(mensaje, titulo, tipo) {
             toastr.options = {
                 closeButton: true,
                 newestOnTop: true,

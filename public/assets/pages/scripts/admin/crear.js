@@ -1,3 +1,3 @@
-$(document).ready(function () {
-    Insuval.validacionGeneral('form-general');
+$(document).ready(function() {
+    Alfredo.validacionGeneral('form-general');
 });

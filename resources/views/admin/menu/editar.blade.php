@@ -1,6 +1,6 @@
 @extends("theme.$theme.layout")
 @section('titulo')
-    Crear Menu
+Editar Menu
 @endsection
 
 @section('scripts')
@@ -17,15 +17,16 @@
                 <h3 class="card-title">Editar Menú</h3>
                 <div class="card-tools pull-right">
                     <a href="{{route('menu')}}" class="btn btn-block btn-info btn-sm ">
-                        <i class="fas fa-reply"></i> Volver a Menús 
+                        <i class="fas fa-reply"></i> Volver a Menús
                     </a>
                 </div>
             </div>
             <!-- form start -->
-            <form action="{{route('actualizar_menu', ['Men_id'=> $data->Men_id])}}" id="form-general" class="form-horizontal" method="POST" autocomplete="off">
+            <form action="{{route('actualizar_menu', ['Men_id'=> $data->Men_id])}}"
+                class="form-horizontal" method="POST" autocomplete="off">
                 @csrf @method("put")
                 <div class="card-body">
-                 @include('admin.menu.form')
+                    @include('admin.menu.form')
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">
@@ -36,10 +37,10 @@
                                 @include('includes.boton-form-editar')
                             </div>
                         </div>
-                    </div>    
+                    </div>
                 </div>
                 <!-- /.card-footer -->
-              </form>
+            </form>
         </div>
     </div>
 </div>

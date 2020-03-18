@@ -1,9 +1,9 @@
 @extends("theme.$theme.layout")
 @section('titulo')
-Funcionarios
+Clientes
 @endsection
 @section('tituloContenido')
-<h1 style="font-family: 'Khand', sans-serif;">FUNCIONARIOS</h1>
+<h1 style="font-family: 'Khand', sans-serif;">CLIENTES</h1>
 @endsection
 
 @section("header")
@@ -25,53 +25,13 @@ Funcionarios
 
   $('#busqueda').on('input', function(){
     $.ajax({
-        url: "{{route('filtrarEspecialistas')}}/" + $('#busqueda').val(),
+        url: "{{route('filtrarClientes')}}/" + $('#busqueda').val(),
         success: function(result){
           $("#tabla-data").html(result);
         }
     });        
   });
 
-  // $("#tabla-data").on('submit', '.form-eliminar', function (e) {
-  //       e.preventDefault();
-  //       const form = $(this);
-  //       console.log(form);
-  //       swal({
-  //         title: '¿Está seguro que desea eliminar el especialista?',
-  //           text: "Esta acción no se puede deshacer!",
-  //           icon: 'error',
-  //           buttons: {
-  //               cancel: "Cancelar",
-  //               confirm: "Aceptar"
-  //           },
-  //           dangerMode: true,
-  //       }).then((value) => {
-  //           if (value) {
-  //             ajaxRequest(form);
-  //           }
-  //       });
-  //   });
-
-  //   function ajaxRequest(form) {
-  //      console.log(form.attr('action'));
-  //       $.ajax({
-  //           url: form.attr('action'),
-  //           type: 'POST',
-  //           data: form.serialize(),
-  //           success: function (respuesta) {
-  //               if (respuesta.mensaje == "ok") {
-  //                   form.parents('tr').remove();
-  //                   Insuval.notificaciones('El registro fue eliminado correctamente', '', 'success');
-  //               } else {
-  //                   Insuval.notificaciones('El registro no pudo ser eliminado, hay recursos usandolo', '', 'error');
-  //               }
-
-  //           },
-  //           error: function () {
-
-  //           }
-  //       });
-  //   }
 });
 </script>
 @endsection
@@ -82,7 +42,7 @@ Funcionarios
     <div class="row">
       <div class="col-lg-9">
         <div class="card-tools pull-right">
-          <a href="{{route('crear_especialista')}}" class="btn btn-default">
+          <a href="{{route('crear_cliente')}}" class="btn btn-default">
             <i class="fas fa-plus-circle pr-2"></i>Nuevo
           </a>
         </div>
@@ -100,7 +60,7 @@ Funcionarios
     </div>
     <div class="card mt-2" id='tabla-data'>
       <!-- /.card-header -->
-      @include('especialista.table')
+      @include('cliente.table')
 
     </div>
     <!-- /.card -->

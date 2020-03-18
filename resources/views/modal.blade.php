@@ -22,7 +22,7 @@
             <label class="label requerido">Especialista</label>
             <div><span class="label" id="mEspecialista"></span>
               <select class="form-control" id="mOpcionEspecialista" name="mOpcionEspecialista"
-                style="width: 10em; display: none;">
+                style="display: none;">
                 @foreach ($especialistas as $especialista)
                 @if (trim($especialista->Ve_cod_ven) == $request->especialista)
                 <option value="{{$especialista->Ve_cod_ven}}" selected>{{$especialista->Ve_nombre_ven}}</option>
@@ -49,29 +49,27 @@
         </div>
 
         <div class="row pt-4">
-          <div class="col-lg-6" id="viejoCliente">
+          <div class="col-lg-5" id="viejoCliente">
             <label class="label mb-0 requerido">Cliente</label>
             <input type="hidden" class="form-control" name="Cli_CodCli" id="Cli_CodCli" value="">
             <input type="text" class="form-control" name="Cli_NomCli" id="Cli_NomCli" value="" />
           </div>
-          <div class="col-lg-6" id="nuevoCliente" style="display: none;">
+          <div class="col-lg-5" id="nuevoCliente" style="display: none;">
             <label class="label mb-0 requerido">Nombre cliente</label>
             <input type="text" class="form-control" name="cliente" id="cliente" value=""
               style="text-transform: uppercase;" />
             <div class="row pt-4">
               <div class="col-lg-6">
                 <label class="label requerido">Celular</label>
-                <input type="text" class="form-control" name="celular" id="celular" value="" placeholder="9-9999999"
-                  style="width: 10em;" />
+                <input type="text" class="form-control" name="celular" id="celular" value="" placeholder="9-9999999"/>
               </div>
               <div class="col-lg-6">
                 <label class="label">Teléfono Fijo</label>
-                <input type="text" class="form-control" name="fijo" id="fijo" value="" placeholder="41-9999999"
-                  style="width: 10em;" />
+                <input type="text" class="form-control" name="fijo" id="fijo" value="" placeholder="41-9999999"/>
               </div>
             </div>
           </div>
-          <div class="col-lg-6">
+          <div class="col-lg-6 pl-4">
             <label class="label mb-0">¿Cliente Nuevo?</label>
             <div><input class="switch bs-switch" type="checkbox" id="cliente-checkbox" name="cliente-checkbox"
                 data-bootstrap-switch data-on-color="black" data-on-text="Sí" data-off-text="No">
@@ -79,7 +77,7 @@
           </div>
         </div>
         <div class="row pt-4">
-          <div class="col-lg-122">
+          <div class="col-lg-12">
             <legend class="label-title">Asignar servicios</legend>
           </div>
         </div>
@@ -90,10 +88,10 @@
             <input type="text" class="form-control" name="Art_nom_externo" id="Art_nom_externo" value="" required />
           </div>
           <div class="col-lg-2 text-center">
-            <button type="button" class="btn btn-default" id="asignar">Asignar</button>
+            <button type="button" class="btn btn-success" id="asignar">Asignar</button>
           </div>
           <div class="col-lg-5">
-            <table class="table table-bordered" id="tablaServicios">
+            <table class="table table-bordered" id="tablaServicios" >
               <thead>
                 <th>Servicio</th>
               </thead>
@@ -105,7 +103,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-        <button type="submit" class="btn bg-black text-white">Guardar</button>
+        <button type="submit" class="btn bg-black text-white guardar disabled" disabled>Guardar</button>
       </div>
       {{-- </form> --}}
     </div>

@@ -1,7 +1,11 @@
 <div class="col-lg-8 mx-auto">
     <div class="row">
         <!-- Especialista -->
+        @if (isset($especialista))
+        <div class="col-lg-6">
+        @else
         <div class="col-lg-4">
+        @endif
             <div class="form-group ">
                 <label for="rut" class="requerido">RUT</label>
                 @if ($especialista ?? '')
@@ -17,14 +21,20 @@
                     value="{{old('Ve_ven_dv', $especialista->Ve_ven_dv ?? '')}}" />
             </div>
         </div>
+        @if (!isset($especialista))
         <div class="col-lg-4">
             <div class="form-group">
-                <label for="Ve_cod_ven" class="requerido">Nombre Usuario</label>
+                <label for="Ve_cod_ven" class="requerido">Código Usuario</label>
                 <input type="text" class="form-control" name="Ve_cod_ven" id="Ve_cod_ven"
                     value="{{old('Ve_cod_ven', $especialista->Ve_cod_ven ?? '')}}" required />
             </div>
         </div>
+        @endif
+        @if (isset($especialista))
+        <div class="col-lg-6">
+        @else
         <div class="col-lg-4">
+        @endif
             <div class="form-group">
                 <label for="Ve_nombre_ven" class="requerido">Nombre</label>
                 <input type="text" class="form-control" name="Ve_nombre_ven" id="Ve_nombre_ven"
@@ -34,7 +44,11 @@
     </div>
     <div class="row">
         <!-- Paciente, Cliente y Prescriptor -->
+        @if (isset($especialista))
+        <div class="col-lg-6">
+        @else
         <div class="col-lg-4">
+        @endif
             @csrf
             <div class="form-group ">
                 <label class="label requerido">Local</label>
@@ -49,7 +63,11 @@
                 </select>
             </div>
         </div>
+        @if (isset($especialista))
+        <div class="col-lg-6">
+        @else
         <div class="col-lg-4">
+        @endif
             <div class="form-group">
                 <label class="label requerido">Cargo</label>
                 <select class="form-control" id="sede" name="Ve_tipo_ven" required>

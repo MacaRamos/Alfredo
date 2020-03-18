@@ -12,7 +12,8 @@ class Cliente extends Model
 
     protected $dateFormat = 'd-m-Y H:i:s';
     protected $table = "CLIENTES";
-    protected $guarded = ['Cli_CodCli', 'Cli_NomCli'];
+    protected $fillable = ['Cli_NomCli', 'Cli_NumCel', 'Cli_NumFij'];
+    protected $guarded = ['Cli_CodCli'];
     protected $primaryKey = 'Cli_CodCli';
     public $timestamps = false;
 }

@@ -12,7 +12,7 @@
 @if ($errors->any())
 @foreach ($errors->all() as $error)
 <script>
-$(function(){
+
     var error = @json($error);
     toastr.options = {
                 closeButton: true,
@@ -22,7 +22,7 @@ $(function(){
                 timeOut: '5000'
             };
     toastr.error(error,'Error');
-});
+
 </script>
 @endforeach
 @endif
