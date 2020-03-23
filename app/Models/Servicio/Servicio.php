@@ -24,4 +24,8 @@ class Servicio extends Model
     public function tiempoEspecialista(){
         return $this->hasOne(DuracionEspecialista::class, ['Ser_EmpCod', 'Ser_SerCod'], ['Mb_Epr_cod', 'Art_cod']);
     }
+
+    public function precio(){
+        return $this->hasOne(Precio::class, ['Mb_Epr_cod', 'Art_cod'], ['Mb_Epr_cod', 'Art_cod']);
+    }
 }

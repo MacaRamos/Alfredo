@@ -29,14 +29,14 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['aut
     /*RUTAS DEL MENU*/
     Route::get('menu', 'MenuController@index')->name('menu');
     Route::get('menu/crear', 'MenuController@crear')->name('crear_menu');
-    Route::post('menu', 'MenuController@guardar')->name('guardar_menu');
+    Route::post('menu/guardar', 'MenuController@guardar')->name('guardar_menu');
     Route::get('menu/{Men_id}/editar', 'MenuController@editar')->name('editar_menu');
     Route::put('menu/{Men_id}', 'MenuController@actualizar')->name('actualizar_menu');
     Route::post('menu/guardar-orden', 'MenuController@guardarOrden')->name('guardar_orden');
     /*RUTAS ROL*/
     Route::get('rol', 'RolController@index')->name('rol');
     Route::get('rol/crear', 'RolController@crear')->name('crear_rol');
-    Route::post('rol', 'RolController@guardar')->name('guardar_rol');
+    Route::post('rol/guardar', 'RolController@guardar')->name('guardar_rol');
     Route::get('rol/{Rol_codigo}/editar', 'RolController@editar')->name('editar_rol');
     Route::put('rol/{Rol_codigo}', 'RolController@actualizar')->name('actualizar_rol');
     Route::delete('rol/{Rol_codigo}', 'RolController@eliminar')->name('eliminar_rol');
@@ -65,4 +65,15 @@ Route::group(['prefix' => 'cliente', 'namespace' => 'cliente', 'middleware' => [
     Route::get('/{Cli_CodCli}/editar', 'ClienteController@editar')->name('editar_cliente');
     Route::put('/{Cli_CodCli}', 'ClienteController@actualizar')->name('actualizar_cliente');
     Route::delete('/{Cli_CodCli}/eliminar', 'ClienteController@eliminar')->name('eliminar_cliente');
+});
+
+Route::group(['prefix' => 'servicio', 'namespace' => 'servicio', 'middleware' => ['auth','superadmin']], function(){
+    route::get('','ServicioController@index')->name('servicio');
+
+    Route::get('/filtrarServicios/{Art_nom_externo?}', 'ServicioController@filtrarServicios')->name('filtrarServicios');
+    Route::get('/crear', 'ServicioController@crear')->name('crear_servicio');
+    Route::post('/guardar', 'ServicioController@guardar')->name('guardar_servicio');
+    Route::get('/{Art_cod}/editar', 'ServicioController@editar')->name('editar_servicio');
+    Route::put('/{Art_cod}', 'ServicioController@actualizar')->name('actualizar_servicio');
+    Route::delete('/{Art_cod}/eliminar', 'ServicioController@eliminar')->name('eliminar_servicio');
 });

@@ -4,14 +4,15 @@ Editar Menu
 @endsection
 
 @section('scripts')
+<script src="{{asset("assets/pages/scripts/admin/crear.js")}}"></script>
 <script src="{{asset("assets/pages/scripts/admin/menu/crear.js")}}"></script>
+@include('includes.mensaje')
+@include('includes.error-form')
 @endsection
 
 @section('contenido')
 <div class="row">
     <div class="col-lg-12">
-        @include('includes.error-form')
-        @include('includes.mensaje')
         <div class="card border-top border-info mt-2">
             <div class="card-header with-border">
                 <h3 class="card-title">Editar Menú</h3>

@@ -25,18 +25,17 @@ class ValidacionMenu extends FormRequest
     public function rules()
     {
         return [
-            'Men_nombre' => 'required|max:50|unique:menu,men_nombre,'.$this->route('Men_codigo').',Men_codigo',
+            'Men_nombre' => 'required|max:50|unique:Menu,Men_nombre,'.$this->route('Men_id').',Men_id',
             'Men_url' => ['required', 'max:100', new ValidarCampoUrl],
             'Men_icono' => 'nullable|max:50'
         ];
     }
-
-    public function messages()
+    public function attributes()
     {
-        return [
-            'Men_nombre.required' => 'El campo nombre es requerido',
-            'Men_nombre.unique' => 'El campo nombre ya ha sido registrado.',
-            'Men_url.required'  => 'El campo URL es requerido',
+        return[
+            'Men_nombre' => 'Nombre',
+            'Men_url' => 'URL',
+            'Men_icono' => 'Icóno'
         ];
     }
 }

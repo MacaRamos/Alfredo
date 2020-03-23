@@ -38,6 +38,8 @@ Inicio
   });
   $(function(){
     
+    var mes = @json($mes);
+    console.log(mes);
     var semana = @json($semana);
     var dia = @json($dia);
 
@@ -552,7 +554,7 @@ Inicio
         <div class="card-body">
           <div class="tab-content">
             <div class="tab-pane" id="mes">
-
+              @include('mes')
             </div>
             <!-- /.tab-pane -->
             <div class="tab-pane" id="semana">

@@ -39,12 +39,7 @@ class MenuController extends Controller
     public function guardar(ValidacionMenu $request)//Se cambia la clase Request por mi request
     {
         Menu::create($request->all());
-        $notificacion = array(
-            'mensaje' => 'Menú creado con exito',
-            'tipo' => 'success',
-            'titulo' => 'Memú',
-        );
-        return redirect('admin/menu')->with($notificacion);
+        return redirect('admin/menu')->with('mensaje','Menú creado con exito');
     }
 
     /**
@@ -77,9 +72,15 @@ class MenuController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function actualizar(ValidacionMenu $request)
+    public function actualizar(ValidacionMenu $request, $Men_id)
     {
-        dd('hola');
+        Menu::findOrfail($Men_id)->update($request->all());
+        $notificacion = array(
+            'mensaje' => 'Menú editado con éxito',
+            'tipo' => 'success',
+            'titulo' => 'Menú'
+        );
+        return redirect('admin/menu')->with($notificacion);
     }
 
     /**
