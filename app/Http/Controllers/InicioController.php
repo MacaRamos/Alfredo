@@ -383,11 +383,10 @@ class InicioController extends Controller
 
     private function llenarMes($fechaDia, $sede = null)
     {
-        
+
         $fechaInicio = DateTime::createFromFormat('d-m-Y', $fechaDia->modify('first day of this month')->format('d-m-Y'));
 
         $fechaTermino = DateTime::createFromFormat('d-m-Y', $fechaDia->modify('last day of this month')->format('d-m-Y'));
-        
 
         if ($sede) {
             $especialistas = Especialista::where('Ve_ven_depto', '=', 'V' . $sede)
@@ -405,52 +404,43 @@ class InicioController extends Controller
         $dias = array();
         for ($fecha = DateTime::createFromFormat('d-m-Y', $fechaInicio->format('d-m-Y')); $fecha <= $fechaTermino; $fecha->add(new DateInterval('P1D'))) {
             $agenda = Agenda::where('Age_EmpCod', '=', $this->Emp)
-                            ->where(function ($q) use ($sede) {
-                                if ($sede) {
-                                    $q->where('Age_SedCod', $sede);
-                                }
-                            })
-                            // ->with('especialista')
-                            ->where('Age_Fecha', '=', $fecha->format('d-m-Y'))
-                            ->with('estado')
-                            ->with('cliente')
-                            ->with('lineasDetalle', 'lineasDetalle.articulo')
-                            ->get();
+                ->where(function ($q) use ($sede) {
+                    if ($sede) {
+                        $q->where('Age_SedCod', $sede);
+                    }
+                })
+            // ->with('especialista')
+                ->where('Age_Fecha', '=', $fecha->format('d-m-Y'))
+                ->with('estado')
+                ->with('cliente')
+                ->with('lineasDetalle', 'lineasDetalle.articulo')
+                ->get();
+
+            
+
             
             $i = $fecha->format('N');
-            
-            if (count($agenda) > 0) {
-
-                if ($especialista == null) {
-                    if (count($especialistas) > 0) {
-                        $completado = (count($agenda) * 100) / count($especialistas);
-                    } else {
-                        $completado = 0;
-                    }
-                }
-            }
-
             switch ($i) {
                 case 1:
-                    $dias[$i] = (object)array("Dia" => "Lunes", "Fecha" => $fecha->format('j'));
+                    $dias[$i] = (object) array("Dia" => "Lunes", "Fecha" => $fecha->format('j'), "Estado" => $estado);
                     break;
                 case 2:
-                    $dias[$i] = (object)array("Dia" => "Martes", "Fecha" => $fecha->format('j'));
+                    $dias[$i] = (object) array("Dia" => "Martes", "Fecha" => $fecha->format('j'), "Estado" => $estado);
                     break;
                 case 3:
-                    $dias[$i] = (object)array("Dia" => "Miércoles", "Fecha" => $fecha->format('j'));
+                    $dias[$i] = (object) array("Dia" => "Miércoles", "Fecha" => $fecha->format('j'), "Estado" => $estado);
                     break;
                 case 4:
-                    $dias[$i] = (object)array("Dia" => "Jueves", "Fecha" => $fecha->format('j'));
+                    $dias[$i] = (object) array("Dia" => "Jueves", "Fecha" => $fecha->format('j'), "Estado" => $estado);
                     break;
                 case 5:
-                    $dias[$i] = (object)array("Dia" => "Viernes", "Fecha" => $fecha->format('j'));
+                    $dias[$i] = (object) array("Dia" => "Viernes", "Fecha" => $fecha->format('j'), "Estado" => $estado);
                     break;
                 case 6:
-                    $dias[$i] = (object)array("Dia" => "Sábado", "Fecha" => $fecha->format('j'));
+                    $dias[$i] = (object) array("Dia" => "Sábado", "Fecha" => $fecha->format('j'), "Estado" => $estado);
                     break;
                 case 7;
-                    $dias[$i] = (object)array("Dia" => "Domingo", "Fecha" => $fecha->format('j'));
+                    $dias[$i] = (object) array("Dia" => "Domingo", "Fecha" => $fecha->format('j'), "Estado" => $estado);
                     $semana->semana = $dias;
                     array_push($mes, $semana);
                     $semana = new stdClass;
@@ -458,13 +448,7 @@ class InicioController extends Controller
                     break;
             }
         }
-        // dd($mes[0]->semana[7]->Fecha);
-        // foreach ($mes as $dia => $datos){
-        //     echo $mes.'<br>';
-        //     // foreach ($mes[$dia] as $index => $dato){
-        //     //     echo $dato.'<br>';
-        //     // }
-        // }
+        dd($mes);
         return $mes;
     }
 
