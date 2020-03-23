@@ -448,7 +448,7 @@ class InicioController extends Controller
                     break;
             }
         }
-        dd($mes);
+        // dd($mes);
         return $mes;
     }
 
