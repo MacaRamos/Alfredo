@@ -422,25 +422,25 @@ class InicioController extends Controller
             $i = $fecha->format('N');
             switch ($i) {
                 case 1:
-                    $dias[$i] = (object) array("Dia" => "Lunes", "Fecha" => $fecha->format('j'), "Estado" => $estado);
+                    $dias[$i] = (object) array("Dia" => "Lunes", "Fecha" => $fecha->format('j'));
                     break;
                 case 2:
-                    $dias[$i] = (object) array("Dia" => "Martes", "Fecha" => $fecha->format('j'), "Estado" => $estado);
+                    $dias[$i] = (object) array("Dia" => "Martes", "Fecha" => $fecha->format('j'));
                     break;
                 case 3:
-                    $dias[$i] = (object) array("Dia" => "Miércoles", "Fecha" => $fecha->format('j'), "Estado" => $estado);
+                    $dias[$i] = (object) array("Dia" => "Miércoles", "Fecha" => $fecha->format('j'));
                     break;
                 case 4:
-                    $dias[$i] = (object) array("Dia" => "Jueves", "Fecha" => $fecha->format('j'), "Estado" => $estado);
+                    $dias[$i] = (object) array("Dia" => "Jueves", "Fecha" => $fecha->format('j'));
                     break;
                 case 5:
-                    $dias[$i] = (object) array("Dia" => "Viernes", "Fecha" => $fecha->format('j'), "Estado" => $estado);
+                    $dias[$i] = (object) array("Dia" => "Viernes", "Fecha" => $fecha->format('j'));
                     break;
                 case 6:
-                    $dias[$i] = (object) array("Dia" => "Sábado", "Fecha" => $fecha->format('j'), "Estado" => $estado);
+                    $dias[$i] = (object) array("Dia" => "Sábado", "Fecha" => $fecha->format('j'));
                     break;
                 case 7;
-                    $dias[$i] = (object) array("Dia" => "Domingo", "Fecha" => $fecha->format('j'), "Estado" => $estado);
+                    $dias[$i] = (object) array("Dia" => "Domingo", "Fecha" => $fecha->format('j'));
                     $semana->semana = $dias;
                     array_push($mes, $semana);
                     $semana = new stdClass;
