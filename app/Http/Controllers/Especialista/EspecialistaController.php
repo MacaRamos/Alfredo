@@ -16,18 +16,20 @@ class EspecialistaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request, $Ve_nombre_ven = '')
     {
         $especialistas = Especialista::orderBy('Ve_nombre_ven')
-                                     ->paginate(15);
-        return view('especialista.index', compact('especialistas'));
-    }
-
-    public function filtrarEspecialistas($Ve_nombre_ven = ''){
-        $especialistas = Especialista::where('Ve_nombre_ven', 'like', "%$Ve_nombre_ven%")
-                                    ->orderBy('Ve_nombre_ven')
-                                    ->paginate(15);
-        return view('especialista.table', compact('especialistas'));
+            ->where(function ($q) use ($Ve_nombre_ven) {
+                if($Ve_nombre_ven){
+                    $q->where('Ve_nombre_ven', 'like', "%$Ve_nombre_ven%");
+                }
+            })
+            ->paginate(15);
+        if($request->ajax()){
+            return view('especialista.table', compact('especialistas'));
+        }else{
+            return view('especialista.index', compact('especialistas'));
+        }
     }
 
     /**
@@ -49,11 +51,11 @@ class EspecialistaController extends Controller
      */
     public function guardar(ValidacionEspecialista $request)
     {
-        $departamento = substr($request->Ve_ven_depto,1,1);
+        $departamento = substr($request->Ve_ven_depto, 1, 1);
         $sede = Sede::where('Mb_Sedecod', '=', $departamento)->first();
         $especialista = new Especialista;
         $especialista->Mb_Epr_cod = $this->Emp;
-        $especialista->Ve_cod_ven = strtoupper(explode(" ",$request->nombre)[0].'.'.explode(" ",$request->apellido)[0]);
+        $especialista->Ve_cod_ven = strtoupper(explode(" ", $request->nombre)[0] . '.' . explode(" ", $request->apellido)[0]);
         $especialista->Ve_nombre_ven = strtoupper($request->Ve_nombre_ven);
         $especialista->Ve_rut_ven = $request->Ve_rut_ven;
         $especialista->Ve_ven_dv = $request->Ve_ven_dv;
@@ -65,7 +67,7 @@ class EspecialistaController extends Controller
         $notificacion = array(
             'mensaje' => 'Especialista creado con éxito',
             'tipo' => 'success',
-            'titulo' => 'Especialistas'
+            'titulo' => 'Especialistas',
         );
         return redirect('especialista')->with($notificacion);
     }
@@ -90,8 +92,8 @@ class EspecialistaController extends Controller
     public function editar($Ve_cod_ven)
     {
         $especialista = Especialista::where('Mb_Epr_cod', '=', $this->Emp)
-                                ->where('Ve_cod_ven', '=', $Ve_cod_ven)
-                                ->first();
+            ->where('Ve_cod_ven', '=', $Ve_cod_ven)
+            ->first();
         $sedes = Sede::get();
         return view('especialista.editar', compact('especialista', 'sedes'));
     }
@@ -105,11 +107,11 @@ class EspecialistaController extends Controller
      */
     public function actualizar(ValidacionEspecialista $request, $Ve_cod_ven)
     {
-        $departamento = substr($request->Ve_ven_depto,1,1);
+        $departamento = substr($request->Ve_ven_depto, 1, 1);
         $sede = Sede::where('Mb_Sedecod', '=', $departamento)->first();
         $especialista = Especialista::where('Mb_Epr_cod', '=', $this->Emp)
-                                    ->where('Ve_cod_ven', '=', $Ve_cod_ven)
-                                    ->first();
+            ->where('Ve_cod_ven', '=', $Ve_cod_ven)
+            ->first();
         $especialista->Ve_nombre_ven = strtoupper($request->Ve_nombre_ven);
         $especialista->Ve_rut_ven = $request->Ve_rut_ven;
         $especialista->Ve_ven_dv = $request->Ve_ven_dv;
@@ -121,7 +123,7 @@ class EspecialistaController extends Controller
         $notificacion = array(
             'mensaje' => 'Especialista editado con éxito',
             'tipo' => 'success',
-            'titulo' => 'Especialistas'
+            'titulo' => 'Especialistas',
         );
         return redirect('especialista')->with($notificacion);
     }
@@ -135,8 +137,8 @@ class EspecialistaController extends Controller
     public function eliminar(Request $request, $Ve_cod_ven)
     {
         $especialista = Especialista::where('Mb_Epr_cod', '=', $this->Emp)
-                    ->where('Ve_cod_ven', '=', $Ve_cod_ven)
-                    ->first();
+            ->where('Ve_cod_ven', '=', $Ve_cod_ven)
+            ->first();
         if ($request->ajax()) {
             if ($especialista->delete()) {
                 return response()->json(['mensaje' => 'ok']);

@@ -1,3 +1,4 @@
+
 @extends("theme.$theme.layout")
 @section('titulo')
 Clientes
@@ -17,19 +18,16 @@ Clientes
   $(function(){
   var searchInput = $('#busqueda');
 
-// Multiply by 2 to ensure the cursor always ends up at the end;
-// Opera sometimes sees a carriage return as 2 characters.
-  // var strLength = searchInput.val().length * 2;
-  // searchInput.focus();
-  // searchInput[0].setSelectionRange(strLength, strLength);
 
   $('#busqueda').on('input', function(){
+    var newurl = "{{route('cliente')}}/";
     $.ajax({
-        url: "{{route('filtrarClientes')}}/" + $('#busqueda').val(),
+        url: "{{route('filtrarCliente')}}/" + $('#busqueda').val(),
         success: function(result){
           $("#tabla-data").html(result);
+          window.history.pushState({path:newurl},'',newurl);
         }
-    });        
+    });    
   });
 
 });
@@ -45,6 +43,7 @@ Clientes
           <a href="{{route('crear_cliente')}}" class="btn btn-default">
             <i class="fas fa-plus-circle pr-2"></i>Nuevo
           </a>
+          {{$notificacion['mensaje'] ?? ''}}
         </div>
       </div>
       <div class="col-lg-3">

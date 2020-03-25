@@ -48,7 +48,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['aut
 Route::group(['prefix' => 'especialista', 'namespace' => 'Especialista', 'middleware' => ['auth','superadmin']], function(){
     route::get('','EspecialistaController@index')->name('especialista');
 
-    Route::get('/filtrarEspecialistas/{Ve_nombre_ven?}', 'EspecialistaController@filtrarEspecialistas')->name('filtrarEspecialistas');
+    Route::get('/filtrarFuncionario/{Ve_nombre_ven?}', 'EspecialistaController@index')->name('filtrarFuncionario');
     Route::get('/crear', 'EspecialistaController@crear')->name('crear_especialista');
     Route::post('/guardar', 'EspecialistaController@guardar')->name('guardar_especialista');
     Route::get('/{Ve_cod_ven}/editar', 'EspecialistaController@editar')->name('editar_especialista');
@@ -59,7 +59,8 @@ Route::group(['prefix' => 'especialista', 'namespace' => 'Especialista', 'middle
 Route::group(['prefix' => 'cliente', 'namespace' => 'cliente', 'middleware' => ['auth','superadmin']], function(){
     route::get('','ClienteController@index')->name('cliente');
 
-    Route::get('/filtrarClientes/{Cli_NomCli?}', 'ClienteController@filtrarClientes')->name('filtrarClientes');
+    Route::get('/filtrarCliente/{Cli_NomCli?}', 'ClienteController@index')->name('filtrarCliente');
+
     Route::get('/crear', 'ClienteController@crear')->name('crear_cliente');
     Route::post('/guardar', 'ClienteController@guardar')->name('guardar_cliente');
     Route::get('/{Cli_CodCli}/editar', 'ClienteController@editar')->name('editar_cliente');
@@ -69,8 +70,11 @@ Route::group(['prefix' => 'cliente', 'namespace' => 'cliente', 'middleware' => [
 
 Route::group(['prefix' => 'servicio', 'namespace' => 'servicio', 'middleware' => ['auth','superadmin']], function(){
     route::get('','ServicioController@index')->name('servicio');
+    
+    route::get('/selectDinamico/{Gc_fam_cod?}', 'ServicioController@selectDinamico')->name('selectDinamico');
 
-    Route::get('/filtrarServicios/{Art_nom_externo?}', 'ServicioController@filtrarServicios')->name('filtrarServicios');
+    Route::get('/filtrarServicio/{Art_nom_externo?}/{productosCheckBox?}', 'ServicioController@index')->name('filtrarServicio');
+
     Route::get('/crear', 'ServicioController@crear')->name('crear_servicio');
     Route::post('/guardar', 'ServicioController@guardar')->name('guardar_servicio');
     Route::get('/{Art_cod}/editar', 'ServicioController@editar')->name('editar_servicio');

@@ -17,19 +17,15 @@ Funcionarios
   $(function(){
   var searchInput = $('#busqueda');
 
-// Multiply by 2 to ensure the cursor always ends up at the end;
-// Opera sometimes sees a carriage return as 2 characters.
-  // var strLength = searchInput.val().length * 2;
-  // searchInput.focus();
-  // searchInput[0].setSelectionRange(strLength, strLength);
-
   $('#busqueda').on('input', function(){
+    var newurl = "{{route('especialista')}}/";
     $.ajax({
-        url: "{{route('filtrarEspecialistas')}}/" + $('#busqueda').val(),
+        url: "{{route('filtrarFuncionario')}}/" + $('#busqueda').val(),
         success: function(result){
           $("#tabla-data").html(result);
+          window.history.pushState({path:newurl},'',newurl);
         }
-    });        
+    });
   });
 
   // $("#tabla-data").on('submit', '.form-eliminar', function (e) {

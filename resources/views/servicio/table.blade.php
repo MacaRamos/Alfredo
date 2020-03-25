@@ -3,8 +3,10 @@
         <thead class="border-bottom-3 border-black">
             <tr>
                 <th>Nombre</th>
-                {{-- <th>Duración</th> --}}
+                <th>Duración</th>
                 <th>Precio</th>
+                <th>Clase</th>
+                <th>Familia</th>
                 <th style="width: 100px"></th>
             </tr>
         </thead>
@@ -12,16 +14,18 @@
             @foreach ($servicios as $servicio)
             <tr>
                 <td>{{$servicio->Art_nom_externo}}</td>
-                {{-- @if (isset($servicio->tiempoGeneral->Dur_HorDur))
+                @if (isset($servicio->tiempoGeneral->Dur_HorDur))
                 <td>{{date('H:i:s', strtotime($servicio->tiempoGeneral->Dur_HorDur.':'.$servicio->tiempoGeneral->Dur_MinDur.':00'))}}</td>
                 @else
-                <td>00:00:00</td>
-                @endif --}}
+                <td>-</td>
+                @endif
                 @if (isset($servicio->precio->Ve_lis_pesos))
                 <td><span class="text-right">{{"$".number_format($servicio->precio->Ve_lis_pesos, 0, ',', '.')}}</span></td>
                 @else
                 <td></td>
                 @endif
+                <td>{{$servicio->clase->Gc_cla_desc}}</td>
+                <td>{{$servicio->familia->Gc_fam_desc}}</td>
                 <td>
                     <a href="{{route('editar_servicio', ['Art_cod' => rtrim($servicio->Art_cod)])}}"
                         class="btn-accion-tabla editar tooltipsC" title="Editar este registro">
@@ -45,7 +49,7 @@
 <!-- /.card-body -->
 <div class="card-footer bg-white">
     <div class="dataTables_paginate paging_simple_numbers float-right">
-        {{$servicios->links("pagination::bootstrap-4")}}
+        {{$servicios->links()}}
     </div>
 </div>
 <!-- /.card-footer-->

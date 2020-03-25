@@ -376,3 +376,17 @@ legend {
 .card-body.p-0 .table thead>tr>th:first-of-type {
     padding-left: .45rem;
 }
+
+.bootstrap-datetimepicker-widget table td span {
+    display: inline-block;
+    width: 40px !important;
+    height: 20px !important;
+    line-height: 0px !important;
+    margin: 0 !important;
+    border-radius: 4px !important;
+    padding: 0 !important;
+}
+
+.bootstrap-datetimepicker-widget table td {
+    padding: 0 !important;
+}

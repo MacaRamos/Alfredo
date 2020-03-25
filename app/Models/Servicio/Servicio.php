@@ -28,4 +28,12 @@ class Servicio extends Model
     public function precio(){
         return $this->hasOne(Precio::class, ['Mb_Epr_cod', 'Art_cod'], ['Mb_Epr_cod', 'Art_cod']);
     }
+
+    public function clase(){
+        return $this->hasOne(Clase::class, 'Gc_cla_cod', 'Gc_cla_cod');
+    }
+
+    public function familia(){
+        return $this->hasOne(Familia::class, 'Gc_fam_cod', 'Gc_fam_cod');
+    }
 }

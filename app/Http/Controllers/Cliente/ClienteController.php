@@ -14,18 +14,20 @@ class ClienteController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request, $Cli_NomCli = '')
     {
         $clientes = Cliente::orderBy('Cli_NomCli')
-                                     ->paginate(15);
-        return view('cliente.index', compact('clientes'));
-    }
-
-    public function filtrarClientes($Cli_NomCli = ''){
-        $clientes = Cliente::where('Cli_NomCli', 'like', "%$Cli_NomCli%")
-                                    ->orderBy('Cli_NomCli')
-                                    ->paginate(15);
-        return view('cliente.table', compact('clientes'));
+            ->where(function ($q) use($Cli_NomCli){
+                if($Cli_NomCli){
+                    $q->where('Cli_NomCli', 'like', "%$Cli_NomCli%");
+                }
+            })
+            ->paginate(15);
+            if($request->ajax()){
+                return view('cliente.table', compact('clientes'));
+            }else{
+                return view('cliente.index', compact('clientes'));
+            }
     }
 
     /**
@@ -55,8 +57,9 @@ class ClienteController extends Controller
         $notificacion = array(
             'mensaje' => 'Cliente creado con éxito',
             'tipo' => 'success',
-            'titulo' => 'Clientes'
+            'titulo' => 'Clientes',
         );
+        
         return redirect('cliente')->with($notificacion);
     }
 
@@ -80,7 +83,7 @@ class ClienteController extends Controller
     public function editar($Cli_CodCli)
     {
         $cliente = Cliente::where('Cli_CodCli', '=', $Cli_CodCli)
-                                ->first();
+            ->first();
         return view('cliente.editar', compact('cliente'));
     }
 
@@ -95,8 +98,8 @@ class ClienteController extends Controller
     {
         // dd($request->all());
         $cliente = Cliente::where('Cli_CodCli', '=', $Cli_CodCli)
-                          ->first();
-        
+            ->first();
+
         $cliente->Cli_NomCli = strtoupper($request->Cli_NomCli);
         $cliente->Cli_NumCel = intval($request->Cli_NumCel);
         $cliente->Cli_NumFij = $request->Cli_NumFij;
@@ -105,7 +108,7 @@ class ClienteController extends Controller
         $notificacion = array(
             'mensaje' => 'Cliente editado con éxito',
             'tipo' => 'success',
-            'titulo' => 'Clientes'
+            'titulo' => 'Clientes',
         );
         return redirect('cliente')->with($notificacion);
     }
@@ -119,12 +122,17 @@ class ClienteController extends Controller
     public function eliminar(Request $request, $Cli_CodCli)
     {
         $cliente = Cliente::where('Cli_CodCli', '=', $Cli_CodCli)
-                               ->first();
+            ->with('agendas')
+            ->first();
         if ($request->ajax()) {
-            if ($cliente->delete()) {
-                return response()->json(['mensaje' => 'ok']);
+            if (count($cliente->agendas) > 0) {
+                return response()->json(['mensaje' => 'El cliente no puedo ser eliminado, tiene reservas', 'tipo' => 'error']);
             } else {
-                return response()->json(['mensaje' => 'ng']);
+                if ($cliente->delete()) {
+                    return response()->json(['mensaje' => 'El registro fue eliminado correctamente', 'tipo' => 'success']);
+                } else {
+                    return response()->json(['mensaje' => 'El registro no pudo ser eliminado, hay recursos usandolo', 'tipo' => 'error']);
+                }
             }
         } else {
             abort(404);

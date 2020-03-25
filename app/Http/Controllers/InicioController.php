@@ -172,6 +172,7 @@ class InicioController extends Controller
             if (!$request->sede) {
                 $sedes = Sede::get();
                 $especialistas = Especialista::where('Ve_ven_depto', '=', 'V1')
+                    ->where('Ve_tipo_ven', '=', 'P')
                     ->with('departamento')
                     ->get();
             } else {
@@ -201,6 +202,7 @@ class InicioController extends Controller
                 ->get();
         } else {
             $especialistas = Especialista::where('Ve_ven_depto', '=', 'V1')
+                ->where('Ve_tipo_ven', '=', 'P')
                 ->with('departamento')
                 ->get();
         }
@@ -318,6 +320,7 @@ class InicioController extends Controller
                 ->get();
         } else {
             $especialistas = Especialista::where('Ve_ven_depto', '=', 'V1')
+                ->where('Ve_tipo_ven', '=', 'P')
                 ->with('departamento')
                 ->get();
         }
@@ -394,6 +397,7 @@ class InicioController extends Controller
                 ->get();
         } else {
             $especialistas = Especialista::where('Ve_ven_depto', '=', 'V1')
+                ->where('Ve_tipo_ven', '=', 'P')
                 ->with('departamento')
                 ->get();
         }
@@ -454,7 +458,6 @@ class InicioController extends Controller
 
     public function agendar(Request $request)
     {
-        dd($request->all());
         $validator = Validator::make($request->all(), [
             'mHoraFin' => [new ValidarHoraFinal($request->mHoraInicio)],
         ]);

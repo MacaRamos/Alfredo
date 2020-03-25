@@ -8,7 +8,7 @@ var Alfredo = function() {
                 errorElement: 'div', //default input error message container
                 errorClass: 'invalid-feedback', // default input error message class
                 focusInvalid: false, // do not focus the last invalid input
-                ignore: "", // validate all fields including form hidden input
+                ignore: ":hidden, [contenteditable='true']:not([name])", // validate all fields including form hidden input
                 highlight: function(element, errorClass, validClass) { // hightlight error inputs
                     $(element).closest('.form-control').addClass('is-invalid'); // set error class to the control control
                 },

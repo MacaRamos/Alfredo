@@ -3,6 +3,7 @@
 namespace App\Models\Especialista;
 
 use App\Models\Departamento\Departamento;
+use App\Models\Servicio\DuracionEspecialista;
 use Awobaz\Compoships\Compoships;
 use Illuminate\Database\Eloquent\Model;
 use LaravelTreats\Model\Traits\HasCompositePrimaryKey;
@@ -20,5 +21,10 @@ class Especialista extends Model
     public function departamento()
     {
         return $this->hasOne(Departamento::class, 'Mb_Cod_Dep', 'Ve_ven_depto');
+    }
+
+    public function duracion()
+    {
+        return $this->hasOne(DuracionEspecialista::class, 'Ser_EspCod', 'Ve_cod_ven');
     }
 }

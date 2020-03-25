@@ -25,11 +25,11 @@ $(document).ready(function() {
             data: form.serialize(),
             success: function(respuesta) {
                 console.log(respuesta.mensaje);
-                if (respuesta.mensaje == "ok") {
+                if (respuesta.tipo == "success") {
                     form.parents('tr').remove();
-                    Alfredo.notificaciones('El registro fue eliminado correctamente', '', 'success');
+                    Alfredo.notificaciones(respuesta.mensaje, '', respuesta.tipo);
                 } else {
-                    Alfredo.notificaciones('El registro no pudo ser eliminado, hay recursos usandolo', '', 'error');
+                    Alfredo.notificaciones(respuesta.mensaje, '', respuesta.tipo);
                 }
 
             },
