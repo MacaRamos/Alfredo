@@ -544,7 +544,7 @@ Inicio
             </div>
             <div class="col-lg-4 mb-n1">
               <ul class="nav nav-pills float-right">
-                <li class="nav-item"><a class="nav-link pestanas" href="#mes" data-toggle="tab">Mes</a></li>
+                {{-- <li class="nav-item"><a class="nav-link pestanas" href="#mes" data-toggle="tab">Mes</a></li> --}}
                 <li class="nav-item"><a class="nav-link pestanas" href="#semana" data-toggle="tab">Semana</a></li>
                 <li class="nav-item"><a class="nav-link pestanas" href="#dia" data-toggle="tab">Día</a></li>
               </ul>
@@ -553,9 +553,9 @@ Inicio
         </div><!-- /.card-header -->
         <div class="card-body">
           <div class="tab-content">
-            <div class="tab-pane" id="mes">
+            {{-- <div class="tab-pane" id="mes">
               @include('mes')
-            </div>
+            </div> --}}
             <!-- /.tab-pane -->
             <div class="tab-pane" id="semana">
               @include('semana')

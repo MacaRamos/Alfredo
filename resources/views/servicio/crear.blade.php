@@ -12,13 +12,22 @@ Crear Servicio
 @section('scripts')
 <script src="{{asset("assets/pages/scripts/admin/crear.js")}}"></script>
 <!-- InputMask -->
+<script src="{{asset("assets/$theme/plugins/inputmask/min/jquery.inputmask.bundle.min.js")}}"></script>
 <script src="{{asset("assets/$theme/plugins/moment/moment.min.js")}}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
 @include('includes.mensaje')
 @include('includes.error-form')
 <script>
     $(function(){
+        $('[data-toggle="tooltip"]').tooltip();
         
+        $('#precio').inputmask({
+            alias : "currency", 
+            radixPoint: ",",
+            groupSeparator: ".",
+            digits: 0,
+            numericInput: true
+        });
         $('#Gc_fam_cod').on('change', function(){
             $.ajax({
                 url: "{{route('selectDinamico')}}/"+$(this).val(),
@@ -45,10 +54,10 @@ Crear Servicio
         //         $(this).val(duracion[0]+':'+redondeo.toString());
         //     }
         // });
+               
         $('#duracion').datetimepicker({
             format: 'HH:mm',
-            //disabledTimeIntervals: [[moment({ h: 0 }), moment({ h: 5 })], [moment({ h: 6, m: 45 }), moment({ h: 24 })]],
-            enabledHours: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+            disabledTimeIntervals: [[moment().hour(9).minutes(0), moment().hour(24)]],
             stepping: 15,
             icons: {
                 up: 'fa fa-chevron-up',
@@ -69,8 +78,7 @@ Crear Servicio
 
         $('.form-control.tdDuracion').datetimepicker({
             format: 'HH:mm',
-            //disabledTimeIntervals: [[moment({ h: 0 }), moment({ h: 5 })], [moment({ h: 6, m: 45 }), moment({ h: 24 })]],
-            enabledHours: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+            disabledTimeIntervals: [[moment().hour(9).minutes(0), moment().hour(24)]],
             stepping: 15,
             icons: {
                 up: 'fa fa-chevron-up',

@@ -214,6 +214,7 @@ li.user-header {
 .table td,
 .table th {
     padding: .45rem;
+    vertical-align: middle;
     /* border-top: none;
     border-bottom: 1px solid #f1f1f1;
     border-right: 1px solid #f1f1f1; */
@@ -380,8 +381,8 @@ legend {
 .bootstrap-datetimepicker-widget table td span {
     display: inline-block;
     width: 40px !important;
-    height: 20px !important;
-    line-height: 0px !important;
+    height: 40px !important;
+    line-height: 40px !important;
     margin: 0 !important;
     border-radius: 4px !important;
     padding: 0 !important;
@@ -389,4 +390,5 @@ legend {
 
 .bootstrap-datetimepicker-widget table td {
     padding: 0 !important;
+    border: none;
 }

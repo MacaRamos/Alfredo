@@ -26,7 +26,7 @@ class ValidacionServicio extends FormRequest
         return [
             'Art_cod' => 'required|max:15:unique:ARTMAESTRO,Art_cod,'.$this->route('Art_cod').'',
             'Art_nom_externo' => 'required|max:60',
-            'Gc_fam_cod' => 'required|max:1',
+            'Gc_fam_cod' => 'max:1',
             'Gc_cla_cod' => 'required|max:1',
         ];
     }
