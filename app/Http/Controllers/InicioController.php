@@ -169,7 +169,7 @@ class InicioController extends Controller
                     break;
             }
 
-            if (!$request->sede) {
+            if (!isset($request->sede)) {
                 $sedes = Sede::get();
                 $especialistas = Especialista::where('Ve_ven_depto', '=', 'V1')
                     ->where('Ve_tipo_ven', '=', 'P')
@@ -184,8 +184,8 @@ class InicioController extends Controller
 
             $semana = $this->llenarSemana($fechaInicio, $fechaTermino, $request->sede ?? null, $request->especialista ?? null);
             $dia = $this->llenarDia($fechaDia, $request->sede ?? null);
-            $mes = $this->llenarMes($fechaDia, $request->sede ?? null);
-            return view('inicio', compact('sedes', 'especialistas', 'fechaDia', 'fechaInicio', 'fechaTermino', 'mes', 'semana', 'dia', 'request', 'notificacion'));
+            //$mes = $this->llenarMes($fechaDia, $request->sede ?? null);
+            return view('inicio', compact('sedes', 'especialistas', 'fechaDia', 'fechaInicio', 'fechaTermino', 'semana', 'dia', 'request', 'notificacion'));
         } else {
             return view('seguridad.index');
         }

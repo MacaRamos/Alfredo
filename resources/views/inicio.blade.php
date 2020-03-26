@@ -38,8 +38,7 @@ Inicio
   });
   $(function(){
     
-    var mes = @json($mes);
-    console.log(mes);
+    
     var semana = @json($semana);
     var dia = @json($dia);
 
@@ -428,7 +427,7 @@ Inicio
       <div class="col-sm-3">
         <!-- select -->
         <div class="form-group p-2">
-          <span class="label">Local</span>
+          <span class="label">Local</span>{{$fechaDia->format('d') ?? ''}}
           <select class="form-control" id="sede" name="sede">
             @foreach ($sedes as $sede)
             @if ($sede->Mb_Sedecod == $request->sede)

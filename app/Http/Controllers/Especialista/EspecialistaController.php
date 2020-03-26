@@ -138,12 +138,17 @@ class EspecialistaController extends Controller
     {
         $especialista = Especialista::where('Mb_Epr_cod', '=', $this->Emp)
             ->where('Ve_cod_ven', '=', $Ve_cod_ven)
+            ->with('agendas')
             ->first();
         if ($request->ajax()) {
-            if ($especialista->delete()) {
-                return response()->json(['mensaje' => 'ok']);
+            if (count($especialista->agendas) > 0) {
+                return response()->json(['mensaje' => 'El especialista no puedo ser eliminado, tiene trabajos agendados', 'tipo' => 'error']);
             } else {
-                return response()->json(['mensaje' => 'ng']);
+                if ($especialista->delete()) {
+                    return response()->json(['mensaje' => 'El registro fue eliminado correctamente', 'tipo' => 'success']);
+                } else {
+                    return response()->json(['mensaje' => 'El registro no pudo ser eliminado, hay recursos usandolo', 'tipo' => 'error']);
+                }
             }
         } else {
             abort(404);

@@ -1,3 +1,4 @@
+<div class="card-body table-responsive p-0">
 <table class="table table-bordered-calendar" id="tablaSemana">
   <thead style="background-color: #fafafa;">
     @php
@@ -32,11 +33,6 @@
         </td>
         @else
         <td></td>
-        {{-- <td data-fecha="{{date('d-m-Y', strtotime($dato->Age_Inicio))}}"
-          data-horainicio="{{date('H:i',strtotime($dato->Age_Inicio))}}"
-          data-horafin="{{date('H:i',strtotime($dato->Age_Fin))}}" class="pointer text-center agendar" title="Agendar"
-          data-toggle2="tooltip" data-placement="bottom" data-toggle="modal" data-target="#modalAgenda">
-        </td> --}}
         @endif
         @else
         @if ($dato->Age_Estado == "Z")
@@ -71,79 +67,6 @@
             @endif
             @endforeach
           </div>
-          {{-- BOTONES DROPDOWN OPCIONES --}}
-          {{-- @switch($dato->Age_Estado)
-          @case('B')
-          <div class="btn-group float-right">
-            <button type="button" class="btn-accion-tabla icon-circle-small bg-gray-light dropdown-toggle dropdown-icon"
-              data-toggle="dropdown">
-            </button>
-            <div class="dropdown-menu" x-placement="bottom-start"
-              style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px); min-width: 260px;">
-              <a class="btn btn-app editar" data-key="{{$key}}" data-dia="{{$keyEspe}}">
-                <i class="fas fa-edit editar"></i> Editar
-              </a>
-              <a class="btn btn-app confirmar" data-AgeCod="{{$dia[$key]->espe[$keyEspe]->Age_AgeCod}}"
-                data-fecha="{{date('d-m-Y',strtotime($dato->Age_Fecha))}}"
-                data-horainicio="{{date('H:i',strtotime($dato->Age_Inicio))}}"
-                data-horafin="{{date('H:i',strtotime($dato->Age_Fin))}}" title="Confirmar"><!-- C  confirmado -->
-                <i class="fas fa-check"></i> Confirm
-              </a>
-              <a class="btn btn-app confirmar" data-AgeCod="{{$dia[$key]->espe[$keyEspe]->Age_AgeCod}}"
-                title="Confirmar"><!-- D  sin respuesta -->
-                <i class="fas fa-phone-slash"></i> Sin Resp.
-              </a>
-              <a class="btn btn-app eliminar" data-AgeCod="{{$dia[$key]->espe[$keyEspe]->Age_AgeCod}}">
-                <i class="fas fa-trash-alt"></i> Eliminar
-              </a>
-            </div>
-          </div>
-          @break
-          @case('C')
-          <div class="btn-group float-right">
-            <button type="button" class="btn-accion-tabla icon-circle-small bg-gray-light dropdown-toggle dropdown-icon"
-              data-toggle="dropdown">
-            </button>
-            <div class="dropdown-menu" x-placement="bottom-start"
-              style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px); min-width: 260px;">
-              <a class="btn btn-app editar" data-key="{{$key}}" data-dia="{{$dia}}" data-toggle="modal"
-                data-fecha="{{date('d-m-Y',strtotime($dato->Age_Fecha))}}"
-                data-horainicio="{{date('H:i',strtotime($dato->Age_Inicio))}}"
-                data-horafin="{{date('H:i',strtotime($dato->Age_Fin))}}" data-target="#modalAgenda">
-                <i class="fas fa-edit"></i> Editar
-              </a>
-              <a class="btn btn-app">
-                <i class="fas fa-check"></i> Asiste <!-- E  asiste -->
-              </a>
-              <a class="btn btn-app">
-                <i class="fas fa-times"></i> No Asiste <!-- F  no asiste -->
-              </a>
-              <a class="btn btn-app eliminar" data-AgeCod="{{$dia[$key]->espe[$keyEspe]->Age_AgeCod}}">
-                <i class="fas fa-trash-alt"></i> Eliminar
-              </a>
-            </div>
-          </div>
-          @break
-          @case('E')
-          <div class="btn-group float-right">
-            <button type="button" class="btn-accion-tabla icon-circle-small bg-gray-light dropdown-toggle dropdown-icon"
-              data-toggle="dropdown">
-            </button>
-            <div class="dropdown-menu" x-placement="bottom-start"
-              style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px); min-width: 133px;">
-              <a class="btn btn-app">
-                <i class="fas fa-times"></i> No Asiste <!-- F  no asiste -->
-              </a>
-              <a class="btn btn-app eliminar" data-AgeCod="{{$dia[$key]->espe[$keyEspe]->Age_AgeCod}}">
-                <i class="fas fa-trash-alt"></i> Eliminar
-              </a>
-            </div>
-          </div>
-          @break
-          @default
-          @break
-          @endswitch --}}
-          {{-- FIN BOTONES DROPDOWN OPCIONES --}}
         </td>
         @else
         @if (!isset($dia[$key-1]->espe[$keyEspe]->Age_AgeCod) || (isset($dia[$key-1]->espe[$keyEspe]->Age_AgeCod) &&
@@ -166,3 +89,4 @@
     @endforeach
   </tbody>
 </table>
+</div>

@@ -2,6 +2,7 @@
 
 namespace App\Models\Especialista;
 
+use App\Models\Agenda\Agenda;
 use App\Models\Departamento\Departamento;
 use App\Models\Servicio\DuracionEspecialista;
 use Awobaz\Compoships\Compoships;
@@ -26,5 +27,9 @@ class Especialista extends Model
     public function duracion()
     {
         return $this->hasOne(DuracionEspecialista::class, 'Ser_EspCod', 'Ve_cod_ven');
+    }
+
+    public function agendas(){
+        return $this->hasMany(Agenda::class, 'Age_EspCod', 'Ve_cod_ven');
     }
 }
