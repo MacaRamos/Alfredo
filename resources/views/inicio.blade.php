@@ -427,7 +427,7 @@ Inicio
       <div class="col-sm-3">
         <!-- select -->
         <div class="form-group p-2">
-          <span class="label">Local</span>{{$fechaDia->format('d') ?? ''}}
+          <span class="label">Local</span>
           <select class="form-control" id="sede" name="sede">
             @foreach ($sedes as $sede)
             @if ($sede->Mb_Sedecod == $request->sede)
