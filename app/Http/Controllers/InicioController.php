@@ -9,6 +9,8 @@ use App\Models\Cliente\Cliente;
 use App\Models\Especialista\Especialista;
 use App\Models\Sede\Sede;
 use App\Models\Servicio\Servicio;
+use App\Rules\ValidarDuracionHora;
+use App\Rules\ValidarHoraCliente;
 use App\Rules\ValidarHoraFinal;
 use DateInterval;
 use DateTime;
@@ -420,9 +422,6 @@ class InicioController extends Controller
                 ->with('lineasDetalle', 'lineasDetalle.articulo')
                 ->get();
 
-            
-
-            
             $i = $fecha->format('N');
             switch ($i) {
                 case 1:
@@ -458,8 +457,22 @@ class InicioController extends Controller
 
     public function agendar(Request $request)
     {
+        $codigoCliente = null;
+        if ($request->cliente && $request->celular) {
+            $cliente = new Cliente;
+            $cliente->Cli_NomCli = strtoupper($request->cliente);
+            $cliente->Cli_NumCel = intval($request->celular);
+            $cliente->Cli_NumFij = intval($request->fijo);
+            $cliente->save();
+            $codigoCliente = $cliente->Cli_CodCli;
+        } else {
+            $codigoCliente = $request->Cli_CodCli;
+        }
+
         $validator = Validator::make($request->all(), [
-            'mHoraFin' => [new ValidarHoraFinal($request->mHoraInicio)],
+            'mHoraInicio' => [new ValidarDuracionHora($request->mHoraFin)],
+            'mHoraFin' => [new ValidarHoraFinal($request->mHoraInicio, $request->mOpcionEspecialista)],
+            'Cli_CodCli' => [new ValidarHoraCliente($request->mHoraInicio, $request->mHoraFin)],
         ]);
 
         if ($validator->fails()) {
@@ -472,17 +485,6 @@ class InicioController extends Controller
             return $notificacion;
         }
 
-        $codigoCliente = null;
-        if ($request->cliente && $request->celular) {
-            $cliente = new Cliente;
-            $cliente->Cli_NomCli = strtoupper($request->cliente);
-            $cliente->Cli_NumCel = intval($request->celular);
-            $cliente->Cli_NumFij = intval($request->fijo);
-            $cliente->save();
-            $codigoCliente = $cliente->Cli_CodCli;
-        } else {
-            $codigoCliente = $request->Cli_CodCli;
-        }
         $parametroAgenda = Parametro::where('Nombre', '=', 'Agenda')->first();
 
         $nuevaAgenda = $parametroAgenda->Valor;
@@ -699,11 +701,18 @@ class InicioController extends Controller
                 $q->where('Ser_EspCod', 'like', '%' . $especialista . '%');
             }])
             ->with('tiempoGeneral')
-        //  ->whereHas('tiempoEspecialista', function($q) use ($especialista){
-        //     $q->where('Ser_EspCod', '=', $especialista);
-        //  })
             ->take(5)
             ->get();
+        
+        foreach ($query as $key => $servicio) {
+            $horDur = $servicio->tiempoEspecialista->Ser_HorDur ?? $servicio->tiempoGeneral->Dur_HorDur;
+            $minDur = $servicio->tiempoEspecialista->Ser_MinDur ?? $servicio->tiempoGeneral->Dur_MinDur;
+            if($horDur == 0 && $minDur == 0){
+                
+                unset($query[$key]);
+            }
+        }
+        
 
         $respuesta = array_map(function ($item) {
             return array("label" => trim($item["Art_nom_externo"]),
@@ -712,6 +721,9 @@ class InicioController extends Controller
                 "minDur" => $item["tiempoEspecialista"]['Ser_MinDur'] ?? $item["tiempoGeneral"]['Dur_MinDur']);
         }, $query->toArray());
 
+        
+
         return response()->json($respuesta);
     }
 }
+
